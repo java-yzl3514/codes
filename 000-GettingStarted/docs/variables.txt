@@ -1,0 +1,125 @@
+
+
+ Değişken (variable) :
+    Değişken, bellekte ayrılan bir bölge ile işlem yapılmasını sağlayar yani o bölgeyi temsil eder.
+
+    <type> <name> ;
+  Java'da bir değişken kullanılmadan önce bildirilmelidir.
+  Bir değişkene bildirim noktasında değer verilmesine initialization denir.
+  Bir değişkenin derleyici tarafından görülebildiği kod aralığına "scope" (faaliyet alanı olarak anabiliriz)
+  denir.
+  Bir değişkenin bellekte kalma süresine yani yaratılmasıyla yok edilmesi arasında kalan süreye
+  "storage duration (ömür)" denir
+
+  Java'da 3 çeşit değişken var:
+
+    1- Yerel Değişkenler (local variables)
+    2- Parametre Değişkenleri (parameter variables)
+    3-Sınıf veri elemanları (member variables / instance variables)
+
+  { ile } arasında kalan bölgeye parantezler ile birlikte block(blok) denir.
+  Bu anlamda metodun gövdesi de bir block'tur. Bir metot içerisinde istenildiği kadar
+  içe içe veya ayrık block'lar olabilir.
+
+  Bir block içerisinde bildirilen değişkenlere local variables (yerel değişkenler) denir.Eğer yerel
+  değişkenler aynı türdense bu durumda bildirim virgül atomu (token) ile ayrılarak yapılabilir.
+  Yerel bir değişkenin faaliyet alanı (scope) bildirimin yapıldığı yerden block'un sonuna kadardır.
+
+ Aynı faaliyet alanı içerisinde aynı isimde yerel değişken bildirimi yapılamaz.
+
+ public class LocalVariables {
+
+     public static void main(String[] args) {
+
+
+         int a = 100;
+         {
+             int a = 40; // COMPILE-TIME ERROR
+         }
+
+     }
+ }
+
+
+Farklı blocklarda fakat aynı ana block içerisinde farklı faaliyet alanına sahip iki aynı isimde
+değişken :
+
+public class LocalVariables {
+
+    public static void main(String[] args) {
+
+        {
+            int a = 100;
+
+        }
+
+        {
+            int a = 30;
+        }
+
+
+    }
+}
+
+Farklı faaliyet alanı içerisinde aynı isimde yerel değişken bildirimi geçerlidir :
+
+public class LocalVariables {
+    int a = 900; // Bu ileride ele alınacaktır. YEREL DEĞİŞKEN DEĞİLDİR.
+
+    public static void main(String[] args) {
+
+        int a = 100;
+    }
+
+    public static void foo() {
+
+        int a = 100;
+    }
+}
+
+System.out.print(a);
+  // Ekrana a değişkenin içerisinde olan değeri yazdırır
+System.out.println(a);
+  // Ekrana a değişkenin içerisinde olan değer yazdırır sonuna LineFeed karakteri ekler.
+Böylece yeni satır başlatılır
+
+Java'da değer verilmemiş bir değişken kullanılamaz.
+ Yerel değişkenlere otomatik olarak değer verilmez
+ !! Yerel bir değişkenin kullanılması için faaliyet alanı içerisinde en az bir kez PROGRAMCI
+ tarafından değer verilmiş olması gerekir.
+
+public class LocalVariableValue {
+
+    public static void main(String[] args) {
+
+        int a; // Local Variable Declaration
+
+        System.out.println(a); // COMPILE-TIME ERROR
+
+    }
+}
+
+
+*** Programlamada artık kullanılması önerilmeyen bir kavrama deprecated denir. Bu durumun çeşitli gerekçeleri
+olabilir. BU durum açıkça dokümanante edilmelidir.
+
+ // Identifier oluşturma kurallarını hatırlayınız.
+
+*** Java'ya daha sonra eklenen bazı sözcükler kullanım yerine göre anahtar sözcük ya da değişken
+gibi ele alınırlar. Bu tip sözcükler JLS'de anahtar sözcükler listesinde yer almaz.
+Bu tür sözcüklere programlamada contexual keywords adı verilir
+
+
+public class ContexualKeywords {
+
+    public static void main(String[] args) {
+
+        int var = 100;
+
+
+        var appleCount = 199;
+
+        // var b; // mutlaka değer atanmalı
+
+    }
+}

@@ -1,0 +1,209 @@
+Deyimler (Statements) ve İfadeler (Expressions)
+
+Expression(s)
+  JLS, bir Expression'ı, hesaplandığında/değerlendiğinde (evaluate), bir değer (value) veya bir değişken üreten (variable)
+  ya da bir şey/değer üretmeyen (void) bir sözdizimsel yapı olarak tanımlar. (Değerlendirilen en küçük program birimi).
+  JLS'in en önemli vurgularından biri her Expression'ın statik bir türe sahip olması (static type). Bu tür, derleme zamanında
+  bilinir.
+
+  1 + 2 =>  int
+
+ JLS Expression'ları bizlerin gündelik hayatta yapmış olduğu gibi "aritmetik", "mantıksal" veya "anlamsal" olarak gruplara
+ ayırmak yerine sözdizimsel yapılarına ve operatör önceliğine göre son derece detaylı bir şekilde kategorize eder.
+  - Primary Expression : En temel expression
+    -- Literals : 3.4f, "Java", null
+    -- this
+    -- Parantez içindeki Expression'lar : (a + b), Parantezler *değerlendirme (evaluate)/hesaplama değerlendirme sırasını
+    değiştirmek için kullanılırlar.
+    -- Class Literals : String.class
+  - Class Instance Creation Expression
+  - Array Creation Expression
+  - Field Access Expression
+  - Method Invocation Expression
+  - Array Access Expression : array[3],
+  - Unary Operators
+  - Cast Expressions
+  - Binary Operators Expressions*- (Multiplicative, Additive, Relational, Logical operators etc...)
+  - Conditional Operator : Java'da 3 operand alan tek operatör. JLS'in Conditional Expression olarak
+  adlandırdığı yapıdır.
+  - Assignment Expression
+  - Lambda Expression : Java8 Functional Programming Paradigm
+
+
+   Constant Expressions : Bir Constant Expression, programın gerek kalanını çalıştırmaya gerek kalmadan,
+   derleme sırasında (compile-time) değeri hesaplanabilen bir expression'dır
+
+   JLS bir ifadenin (Expression) sabit olarak kabul edilebilmesi için bazı koşulları sağlaması gerektiğini
+   belirtir :
+     - Primitive türde veya String türde bir literal (sabit)
+        10, "abc"
+     - Bir sabit ifadeyi başka bir türe dönüştüren cast işlemi
+        (short)(5 + 4)
+     - Operandı bir sabit ifade olan unary operatörler
+        -100, !true
+     - Her iki operandı da sabit ifade olan multiplicative, additive ve shift operatörleri
+       10 + 20, "Hello" + "World"
+     - Her iki operandı da sabit ifade olan ralational, equality operatörleri
+      10 < 20
+     - Her iki operandı da sabit ifade olan bitwise, conditional AND/OR operatörleri
+       true || false
+     - Operandları sabit ifade olan conditional operator
+        true ? 5 : 10
+     - Bir sabit değişkene yapılan basit bir referans : Bir değişkenin sabit olması için
+      final olarak bildirilmesi ve initializer'ı (ilk değer) bir derleme zamanı sabiti olması gerekir.
+
+
+       final int h = foo();  ifadesi için:
+        -- h değişkeni final -> Evet
+        -- foo() ifadesi bir Constant Expression mu? -> HAYIR
+       Sonuç olarak h değişkeni JLS tanımına göre bir "sabit değişken" değildir. h, değeri yalnızca
+       bir kez atanabilen, ancak bu atamanın çalışma zamanında yapıldığı sıradan bir final değişkendir.
+
+### Poly Expressions
+
+   "Poly" ifadesi Yunancada "çok" anlamına gelir.(Poly-morphism konusuna da çağrıda bulunmak amaçlandı)
+   Poly Expression, kendiliğinden belirli bir türü olmayan, türünü içide kullanıldığı bağlamdan (context)
+   alan bir ifadedir(expression). Bu anlamda bir Poly Expression birden fazla türe sahip olabilir. Hangi türe sahip
+   olacağı derleyicinin onu nereye atayacağına veya nerede kullanacağına göre belirlenir.
+   Bu bağlama hedef tür (target type) denir. Derleyici Poly Expression gördüğünde, "Bu expression'ın olması gereken hedef tür nedir?" diye sorar ve Expression'ı
+   o türe uygun yorumlar.
+
+   Örnekler:
+             new ArrayList<Integer>(); // JAVA-5
+             new ArrayList<>(); // JAVA-7 // POLY EXPRESSION
+
+             ArrayList<Integer> numbers = new ArrayList<>();
+
+    --Java 8 Öncesi:
+     Aslında Poly Expression kavramının en ilkel hali Java'nın ilk sürümlerinden beri var olarak
+     düşünülebilir : Conditional Operator
+     Java'nın ilk sürümleriyle Koşul Operatörü yazılıp denenebilir. Daha kısıtlı bir kullanım olduğu görülecektir.
+     Örn :
+        boolean condition = true;
+        Number i = condition ? new Integer(1) : new Double(30.);
+
+    --Java 7 (İlk Adım)
+      Diamond Operatörü (<>) ile Poly Expression kavramı daha belirgin hale geldi.
+       Eski Yöntem (Java 5):  ArrayList<Integer> numbers = new ArrayList<Integer>();
+       Java 7 ile : ArrayList<Integer> numbers = new ArrayList<>();
+
+    Burada "new ArrayList<>()" bir Poly Expression'dır. Türü sağ taraftan değil, sol taraftaki
+    hedef türden çıkarılır (Type Inference)
+
+    -- Java 8 (Devrim)
+      Poly Expression terimi resmi olarak Java 8 ile birlikte dilin merkezine oturmuş oldu. Bunun nedeni
+      Lambda Expressions ve Method References. (JSR 335)
+        Motivasyon : Java, çok uzun ve "verbose" olarak eleştirilen annonymous inner class'lardan kurtulmak
+        istiyordu/kullanımını evriltmek istiyordu (backward compatibility unutulmamalı!!). Daha az kodla daha çok
+        iş yapmayı, fonksiyonel programlama paradigmalarını dile entegre etmeyi amaçlıyordu. (Declarative paradigma**)
+
+        Sonuç: Lambda ifadeleri ve metot referansları, kendi başına bir türe sahip olmayan, tamamen hedef türe
+        bağımlı olan saf Poly Expression'lar olarak tasarlandı.
+
+    Örneğin "(a, b) -> a + b" ifadesi bir lambda ifadesidir. Tek başına anlamsızdır ve bir türü yoktur.
+    Ancak bir hedef tür (target type) sağlandığında anında o türe bürünür.
+    Bu ifade için aşağıdaki örneği inceleyiniz :
+
+            @FunctionalInterface
+            public interface Calculator {
+
+                int operate(int x, int y);
+
+            }
+            ..............................
+            @FunctionalInterface
+            public interface MessageBuilder {
+
+                String build(String a, String b);
+
+            }
+            ..................
+
+            Main.java
+            ........
+            Calculator c = (a, b) -> a + b;
+
+            MessageBuilder m =  (a, b) -> a + b;
+            ..........
+
+
+Poly Expression'lar Java kodunu, daha kısa, okunaklı ve daha esnek hale getirmiştir.
+Fonksiyonel Programlama Pradigmasının dile kazandırılmasında kilit rol oynamıştır.
+
+Aşağıdaki makaleleri ve dokümanları okuyunuz :
+
+https://cr.openjdk.org/~dlsmith/jsr335/jsr335-0.9.3/index.html
+https://jcp.org/en/jsr/detail?id=335
+https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html
+https://www.infoq.com/articles/java-local-variable-type-inference/
+-----------------------------------------------------------------------------
+
+Statement(s) / Deyim/Bildirim/Komut
+  JLS, Statement'i programın akışını kontrol eden bir yapı olarak tanımlar.
+  Expression'ların aksine statement'ların bir değer üretmesi beklenmez; temel görevi
+  bir 'eylem' gerçekleştirmesidir.
+
+ JLS'e göre bir Statement'ın yürütülmesi ya normal bir şekilde tamamlanacak (completes normally),
+ ya da bir sebeple aniden tamamlanacak (completes abruptly).
+ Aniden tamamlanma (completes abruptly), genellikle bir "break", "continue", "return" ifadesi veya
+ bir Exception fırlatılmasıyla oluşur.
+
+Bu ayrımlar derleyicinin "unreachable code (ulaşılamayan kod)" gibi hataları tespit etmesi için kritik öneme
+sahip.
+
+   Empty Statement :
+     Boş Deyim. Sadece noktalı virgülden oluşur ve hiç bir şey yapmaz.
+   örn: bknz: EmptyStatement.java
+
+   Labeled Statement:
+     Etiket Deyimi. Bir Statement'ın önüne bir etiket konularak oluturulur. break veya continue ile
+     döngülerden veya blocklardan çıkmak için kullanılır.
+     örn: bknz: LabeledStatement.java
+
+   ExpressionStatement:
+      İfade Deyimi. Belirli türdeki expression'ların sonuna noktalı virgül eklenerek oluşturulur.
+
+       ExpressionStatement:
+          StatementExpression ';'
+
+       StatementExpression:
+          Assignment
+          PrefixIncrementExpression
+          PrefixDecrementExpression
+          PostfixIncrementExpression
+          PostfixDecrementExpression
+          MethodInvocation
+          ClassInstanceCreationExpression
+   Örn:
+       int x = 0;
+
+       x = 90; //assignment
+
+       new ArrayList<>(); // Class instance creation
+
+       x++; // PostfixIncrementExpression
+
+       ++x; // PrefixIncrementExpression
+
+       x--; // PostfixDecrementExpression
+
+       --x; // PrefixDecrementExpression
+
+   if Statement
+   assert Statement
+   switch statement
+   while Statement
+   do Statement
+
+   for Statement
+     Geleneksel for döngüsü, "enhanced for(foreach)"
+   break, continue, return statements
+   throw Statement
+   synchronized Statement
+   try Statement
+   Local Variable Declaration Statement
+
+
+
+
+

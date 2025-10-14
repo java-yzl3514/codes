@@ -1,0 +1,1317 @@
+
+Object Oriented Programming Türkçe karşılığı "Nesne Yönelimli Programlama" olarak ifade edilir.
+
+Bir değişkenin (ya da nesnenin) bellekte yaratılmasıyla(bellekte yer ayrılması) yok edilmesi arasındaki süreye ömür (storage duration) denir.
+Peki, bir değişken için ayrılan bellek bölgesi neresidir ?
+Bir Java uygulaması çalıştırıldığında, ilgili uygulama için iki tane bellek alanı ayrılır : stack, heap.
+Aslında aşağı seviyede başka bellek alanları da ayrılır. Stack ve Heap Java seviyesinde ayrılan alanlar olarak düşünülebilir.
+Stack ve Heap alanları RAM'de organize edilir. (Diğer process'ler gibi) Program çalıştırılırken bu alanların uzunlukları belirlenebilir. Herhangi bir belirleme yapılamazsa
+"default" uzunluklar alınır. Default uzunluklar sistemden sisteme değişebilir.
+    Yerel değişkenler ve parametre değişkenleri stack alanında yaratılırlar. Stack doldur-boşalt yöntemiyle last-in-first-out prensibiyle  çalışan bellek alanıdır.
+  Böylece çalışma zamanında toplamda, bu alanın uzunluğundan daha fazla değişken için yer ayrılabilir.
+
+  Yerel değişekenler,akış kod bakımından bildirim noktasına geldiğinde yaratılır, bildirildiği blok sonunda yok edilir.
+
+  public class App {
+
+      public static void main(String[] args) {
+
+
+          int a; // push a
+          double b; // push b
+
+          {
+              int c; // push c
+              float d; // push d
+              // ...
+          } // pop d -> pop c
+
+          int x;
+
+      } // pop x -> pop b -> pop a
+  }
+
+ ### Sınıf (Class)
+  Nesne Yönelimli Programlamanın temel taşıdır.
+
+ ### Sınıfların Veri Elemanları
+ Sınıf içerisinde, tüm metotların dışında bildirilen değişkenlere sınıf veri elemanları (class data member / member variable) denir.
+ Sınıf veri elemanları metotlarda olduğu gibi erişim belirleyiciye (access modifier) sahip olabilir.
+ (Not: Bu konu ileride ele alınacaktır. Yine metotlarda anlaştığımız gibi bu konuya gelene kadar tüm veri elemanlarımızı public olarak
+ bildireceğiz)
+
+  Veri elemanları erişim belirleyici örn:
+    public class Student {
+        String studentNumber; // default access modifier
+        public int number; // public access modifier
+
+    }
+
+ ----------------------------------------------------------------------------------------------
+Sınıf veri elemanları da tıpkı metotlar gibi static ve non-static olarak bildirilebilirler
+ Örn:
+    public class StaticMemberVariables {
+        public static int staticMemberField;
+        public int nonStaticMemberField;
+    }
+
+---------------------------------------------------------------------------------------------------------
+
+Sınıf içerisindeki bildirimlere sınıfın elemanları members denir. Bu anlamda, veri elemanları ve metotlar sınıfın elemanlarıdır.
+Sınıfın başka elemanları da vardır.Bu elemanlar konular içerisinde ele alınacaktır.
+
+Bir sınıf veri elemanının faaliyet alanı(scope) ve ömrü(storage duration) ileride ele alnıacaktır.
+Sınıf içerisindeki elemanlar aynı türdense, aynı erişim belirleyiciye sahipse ve static veya non-static olma bakımından aynı ise
+virgül atomu(token) ile ayrılarak da bildirilebilir.
+
+    Örn:
+    public class SameLineMemberFieldsDeclaration {
+
+        public int a, b, c;
+        int d;
+        public static double e, f, g;
+
+
+        ....
+    }
+--------------------------------------------------------------------------
+ Java'da sınıf dışında değişken bildirimi geçersizdir. JDK 21+ ile bir kaynak kod dosyası içerisinde doğrudan değişken bildirimi yapılmasına
+ izin veriliyor. Bu durum özel olarak ele alınacaktır.
+
+ örn:
+         int a; // compile-time error
+
+         public class OutOfClassDeclaration {
+         }
+  --------------------------------------------------------------------------------------------
+
+  Sınıf bildirimi aslında bir "tür" bildirimidir.Sınıf bildirimi dışında da tür bildirimleri söz konusudur. (interface, enum, record -- konular içerisinde ele alınacaktır)
+  Bu şekilde yapılan bildirimlere yani programcının bidirdiği türlere "User Defined Type(UDT)" denilmektedir. Bu durumda sınıf da
+  bir UDT'dir.
+
+    Bu anlamda dersimizde şu ana kadar tanımladığımız :
+     App
+     Main
+     SameLineMemberFieldsDeclaration
+     StaticMemberVariables
+     Student
+
+     sınıfları birer UDT'dir yani türdür.
+
+
+Madem ki sınıf bildirimi bir tür bildirimidir, bu durumda sınıf türünden değişkenler bildirilebilir.
+    Daha önceki derslerimizde kullandığımız :
+      java.util.Scanner
+      java.util.Random
+      java.util.Arrays
+      java.lang.StringBuilder
+      java.lang.String
+      ...
+      sınıfları da birer türdür.
+  Anımsanacağı üzere, Scanner türünden oluşturulan nesne üzerinden klavyeden veri okuma işlemleri yapılmıştı.
+
+    Örn:
+    public class App {
+
+        public static void main(String[] args) {
+
+            int number;
+            Student student;
+            Student john;
+            TCP tcpConnection;
+
+        }
+
+    }
+--------------------------------------------------------------------------------------------------------------
+ Java'da türler kategori olarak iki guruba ayrılır : değer türleri (value types), referans türleri (reference types)
+ T bir tür ismi olmak üzere, T türden bir değişken içerisinde bir adres tutuluyorsa T bir referans türüdür, tutulmuyorsa
+ bir değer türüdür.
+
+ Not: Buradaki adres kavramı gerçek bellek adresi olarak yorumlanmamalıdır. Bu bilineceği üzere, güvenlik açığı ortaya çıkartabilir.
+ Bu anlamda bu adres sembolik bir ifadedir. Yani bu değeri sonuç olarak JVM çözümler ve dolayısıyla bu bilgiye kısaca adres diyoruz.Bu bilgi ilgili nesnenin kimliği
+ olarak da yorumlanabilir.
+  Java'da temel türler (primitive/built-in/predefined types) değer türleridir. Yani temel bir türden değişken içerisinde adres
+  tutulmaz. Java'da bir sınıf referans türüdür. Buna göre sınıf türden bir değişken içerisinde adres tutulur. Aslında genel olarak temel türler dışında kalan türler
+  (UDT'ler) referans türlerdir.
+
+  Sınıf türünden değişkenlere referans değişken (reference variable) ya da kısaca referans(reference) denir.Bu anlamda yukarıda söz edilen nesne kimliği açısından, Java
+  seviyesinde adres(address) terimi yerine referans (reference) terimi de kullanılmaktadır. Buna göre bu nesne kimliği kısaca referans bilgi/nesneye referans olan bilgi
+  şeklinde de yorumlanabilir.
+    Reference denildiğinde ya bir adres ya da bir referans değişken kastedilmiş olunur. Buna göre örneğin bir cümlede "reference of an object" gibi bir içerik söz konusuysa,
+    buradaki referans adres anlamındadır; "address of an object is assigned to a reference" gibi bir içerik söz konusuysa, buradaki referans, değişken anlamındadır.
+
+   ??? Peki bir referansa atanacak adres/nesne kimlik bilgisi(object identifier) nasıl elde edilecek ?
+
+   Öyleyse adress ya da kimlik bilgisinin olabilmesi için nesne(object)'ye ihtiyaç vardır.
+   ## Object/Nesne/Instance/örneklem nedir ?
+   - İlgili sınıf türünden bellekte ayrılan alana nesne ya da object denir. Bu anlamda sınıfın kendisi bir "tarif" olarak düşünülebilir.
+   Daha teknik bir ifadeyle "derleme birimi" olarak tanımlanabilir.
+   - Nesneler heap alanında yaratılırlar. Java'da stack üzerinde nesne yaratılmaz. (Bilindiği üzere diziler bir nesnedir. Bu anlamda bazı "JVM optimizasyonları" stack'te geçici
+   dizi yaratımı yapabilir.Fakat bu durum genel bir çalışma biçimi değildir. Garanti değildir.)
+   - Java'da bir nesnenin kendisi tutulmaz, adresi tutulabilir.
+   - Java'da nesne yaratılması "new" operatörü ile yapılır. new operatörünün kullanımına ilişkin genel biçim aşağıdaki gibidir :
+
+          new <sınıf/tür ismi>([argümanlar]);
+
+          Bu operatör özel amaçlı tek operandlı ve önek durumundadır.Operatör,yaratılmış olan nesnenin adresini üretir.Bir nesne ile referans için hangi uzunlukta
+          yer ayrılacağı ileride ele alınacaktır. Bu operatörün bir yan etkisi yoktur.
+
+   - Nesneler derlenme zamanında değil, çalışma zamanında yaratılırlar. (Amaç çalışma zamanına güvenli bir kod bırakabilmek)
+
+örn:
+
+   class App {
+
+       public static void main(String[] args){
+
+            Student s;
+            TCP t;
+
+
+            s = new Student(); // 1
+
+            t = new TCP(); // 2
+       }
+   }
+
+   public class App {
+
+       public static void main(String[] args) {
+
+           int number; // primitive tür - değer tutulacak
+           Student student; // referans tür - adres tutulacak
+           Student john; //  referans tür - adres tutulacak
+           TCP tcpConnection; //  referans tür - adres tutulacak
+
+
+           student = new Student();
+
+           tcpConnection = new TCP();
+
+
+           student = new Student();
+       }
+
+   }
+
+  Yukarıdaki kodda s ve t birer nesne DEĞİLDİR. İlgili türden nesnelerin adreslerini tutan ya da tutacak olan referans değişkenlerdir.
+  Örnekte, 1 ve 2 nolu deyimlerde ilgili türden nesneler yaratılmış ve ilgili türden referans değişkenlere adresleri atanmıştır.Bu durumda
+  bir referans değişkene bir adres atandığında o referans o nesneyi gösteriyor (reference to) duruma gelmiş olur.
+  ----------------------------------------------------------------------------------------------------------------------------------------
+    - Bir nesne ilgili sınıf türünden bir örnektir.Buna İngilizce olarak instance terimi de kullanılır. Bu anlamda nesne yaratma
+    işlemi için de create fiili ile birlikte instantiate fiili de kullanılır.
+    - Referans ve nesne kavramı birbirinden farklıdır.
+    - Her new işlemi yeni bir nesne yaratmak demektir.
+
+  Sınıfın non-static bir veri elemanına sınıf dışından referans ve nokta operatörü ile erişilir. Nokta operatörü iki operandlı ve
+  araek durumundadır. Bu operatörün birinci operandı referans; ikinci operandı non-static bir veri elemanı ise bu durumda o veri
+  elemanına ilişkin değeri üretir. Tabi r-value durumundaysa.
+
+  Sınıfın non-static veri elemanları her nesne yaratıldığında nesnenin içerisinde yaratılırlar.Yani sınıfın non-static veri elemanları
+  nesneye özgüdür ya da başka bir deyişle her nesne için ayrıdır.Bu durumda referans ile non-static bir veri elemanına erişmek aslında
+  referansın gösterdiği nesnenin içerisinde elemana erişmek anlamına gelir.
+
+
+Sınıfın non-static veri alanları nesneye özel olduğundan sınıf ile temsil edilen kavrama ilişkin bir karakteristiği ya da bir
+öz niteliği (attribute) belirtir.Bu durumda bir sınıf non-static veri elemanları ile bir bileşik türdür(compund type)
+ Sınıfın isminin belirlenmesinden, içerisindeki elemanların belirlenmesine kadar olan kısım sınıfın ait olduğu "domain"e göre ele alınır.
+
+ Peki bir referansın uzunluğu ne kadardır?
+  Bir referansın uzunluğu sistemin adresleyebileceği kadardır. 32 bitlik sistemde 4 byte, 64 bitlik sistem 8 byte'tır. Bu anlamda adresler
+  tamsayı formatında olduğundan gösterim biçimleri işaretsiz ikiye tümleme formatıdır.Referansların uzuluğu türe göre değişmez. Bu anlamda bir uygulama
+  için ilgili tüm referansların uzunluğu aynıdır.
+
+
+  Peki bir nesnenin uzunluğu ne kadardır ?
+  Bir nesnenin/object/instance uzunluğu "en az" ilişkin olduğu sınıfın non-static veri elemanlarının toplamı kadardır.
+
+  Non-static bir veri elemanının ömrü ne kadardır ?
+  Non-static bir veri elemanı nesne yaratıldığında yaratılır; nesne yok edildiğinde yok edilir. Java'da nesneler Garbage Colletor tarafından yok edilir.
+
+  Non-static bir veri elemanının faaliyet alanı (scope) nedir ?
+    Bu konular içerisinde ele alınacaktır...
+
+  Sınıfın static bir veri elemanı nesne içerisinde yaratılmaz. Sınıfın static bir veri elemanına sınıf dışından sınıf ismi ve nokta operatörü
+  ile erişilir. Nokta operatörü sınıf ismi ve static veri elemanı ile kullanıldığında veri elemanına ilişkin değişkeni üretir.
+
+  örn:
+
+  public class StaticMemberFields {
+
+      public static int staticValue;
+      public int number;
+  }
+
+  .....
+  public class StaticMemberFieldsApp {
+
+      public static void main(String[] args) {
+
+          StaticMemberFields.staticValue = 100;
+          // StaticMemberFields.number; // Compile-Time Error
+      }
+  }
+
+-------------------------------------------------------------------------
+Sınıfın static veri elemanları sınıfa ilk kez erişim sağlandığında yaratılır ve program sonuna yaşarlar.
+Bu durumda static veri elemanlarının oluşturulduğu bellek alanı JVM specific olarak düşünülmeli fakat genel anlamda heap bölgesi ya da daha
+spesifik olarak method area için kullanılan alan içerisinde yer alabilir.
+
+ *static bir veri elamanına erişmek için bir nesne yaratılması gerekmez.
+ *Static veri elemanlarına yaratıldıklarında ilişkin oldukları türe
+ göre "default" değerler atanır.
+ Örn :
+
+  public class StaticMemberFields {
+
+       public static int staticValue;
+       public int number;
+   }
+
+   .....
+
+ public class StaticMemberFieldsApp {
+
+     public static void main(String[] args) {
+         System.out.println(StaticMemberFields.staticValue); // 0
+     }
+ }
+
+Sınıfın non-static bir veri elemanına sınıf dışından sınıf ismi ile erişilemez.Eğer erişim mümkün olsaydı, sınıfın ilgili elemanı
+hangi nesneye ait olurdu? Bu sebeple erişim derleme-zamanı hatasıdır. Aşağıdaki kodu inceleyiniz ve çalıştırınız :
+
+Örn:
+    public class StaticMemberFieldsApp {
+
+        public static void main(String[] args) {
+            StaticMemberFields.number; // Hangi nesneye ait? // Compile-Time Error
+        }
+    }
+
+Çıktı : java: non-static variable number cannot be referenced from a static context
+------------------------------------------------------------------------------------
+ static keyword'ünün kullanımı (veri elemanı, metot, sınıf ?) bu anlamda şöyle özetlenebilir:
+ static anahtar sözcüğü kullanıldığı sınıf elemanı için "Nesne ihtiyacı olmayan sınıf elemanı" vurgusunu yapar.
+
+Bu anlamda metotlarda "static" anahtar sözcüğünün kullanılması şöyle yorumlanabilir:
+ "İlişkin sınıfa ait bir nesneye ihtiyaç duymadan çalışabilecek bir alt-program/metot"
+
+ static sözcüğünün karşıtı dynamic
+  Buradaki dynamic'lik  bellek faaliyetlerinden olan allocate, deallocate kavramlarıyla ilişkili olarak düşünülebilir.
+  Dikkat edilirse eğitimin başından beri main metodunun static olarak yazdık. Buna göre bu durumu şöyle yorumlayalım :
+  main metodu JVM tarafından çağrılan ve static olması nedeniyle ilişkin sınıfa ait bir nesneye ihtiyaç duymadan doğrudan
+  çalıştırılabilir bir metotdur.
+   main metodu anımsanacağı üzere çalışma zamanında programın başlangıç noktasını/tetikleneceği noktayı belirtir.
+   Buna göre bir sınıfın derlenmesi için main metodu bulundurması şartı yoktur.
+
+----------------------------------------------------------------------------------
+
+   Sınıfın static bir veri elemanına sınıf dığından referans ile de erişilebilir. Aslında bu erişimin sınıf ismi ile erişmekten
+   bir farkı yoktur. Dilin matematiksel anlatımı gereği bu sentaks geçerlidir.Ancak Java programcısının bu şekilde erişmesi
+   kesinlikle TAVSİYE EDİLMEZ. Bu durum java programcısı için adeta bir error gibi değerlendirilmeli dolayısıyla kullanılmamalıdır.
+   Kullanımın ayrıca kodun okunabilirliğini olumsuz etkilediğine dikkat ediniz :
+
+   Örn:
+
+   public class Sample {
+       public static int x;
+       public static boolean y;
+   }
+   .....
+
+   public class App {
+
+       public static void main(String[] args) {
+
+           Sample sample = new Sample();
+
+           sample.x = 10; // Bu şekilde YAZILMAMALI
+           sample.y = false; // Bu şekilde YAZILMAMALI
+
+       }
+
+   }
+-------------------------------------------------------------------------
+  Sınıfın non-static bir metoduna sınıf dışından referans ve nokta operatörü ile erişilebilir. Sınıf ismi ile ERİŞİLEMEZ. Bu anlamda yukarıdaki
+  tanımlamalara istinaden, sınıfın non-static metotlarının nesne ile ilişkisi aşikardır. Bu konu ileride detaylandırılacaktır.
+  Örn:
+
+          public class Sample {
+              public static int x;
+              public static boolean y;
+
+              public void foo(){
+                  System.out.println("Sample.foo()");
+              }
+          }
+
+        ....
+          public class App {
+
+              public static void main(String[] args) {
+
+                  Sample sample = new Sample();
+                  sample.foo();
+              }
+
+          }
+
+
+
+   Sınıfın static metoduna sınıf dışından sınıf ismi ve nokta operatörü ile erişilebilir. Referans ile de erişilebilir fakat bu durum yukarıda belirtildiği
+   gibi TERCİH EDİLMEZ.
+
+            Örn:
+
+            public class Sample {
+                public static int x;
+                public static boolean y;
+
+                public static void bar(){
+                    System.out.println("Sample.bar()");
+                }
+
+                public void foo(){
+                    System.out.println("Sample.foo()");
+                }
+            }
+
+            ....
+
+            public class App {
+
+                public static void main(String[] args) {
+
+                    Sample sample = new Sample();
+                    sample.foo();
+                    sample.bar(); // YAZILMAMALI !
+                    Sample.bar(); // OK !
+
+                }
+
+            }
+
+ non-static metotlar nesne içerisinde tutulmazlar.Yani heap bölgesinde nesne alanı içerisinde yer almazlar.Böyle olsaydı
+ son derece bellek açısından verimsiz ve garbage collector nedeniyle bir süre sonra programın kaybına neden olurdu.
+ Bu metotlar JVM içerisinde Method Area/Metaspace adı verilen bir bellek bölümü içerisinde yer alırlar.Aslında metotlar
+ aşağı seviyede, genel olarak ismine "code section" denilen bir bölümde tutulurlar.
+
+  Yukarıdaki notlarımız sınıf dışından olan başka sınıflar içinden erişimle alakalıydı.
+  Sınıfın non-static bir veri elemanına ait olduğu sınıfın non-static bir metodu içerisinden doğrudan yani nokta operatörü
+  kullanılmadan erişilebilir.
+
+örn:
+
+        public class Sample {
+
+            public static int x;
+            public static boolean y;
+            public int a;
+
+            public static void bar(){
+                System.out.println("Sample.bar()");
+                x = 90;
+                foo(); // Hangi nesne için çalışacak ?
+                a = 90; // Hangi nesnenin veri alanı ?
+            }
+
+            public void foo(){
+                System.out.println("Sample.foo()");
+                bar();
+                a = 10;
+                x = 30;
+            }
+
+            public void tar(){
+                foo();
+            }
+        }
+
+        ...
+
+        public class App {
+
+            public static void main(String[] args) {
+
+                Sample s;
+                s = new Sample();
+
+                s.foo();
+            }
+        }
+-----------------------------------------------------------------------------------------------------------------------
+   #### Constructors
+
+  Bir ctor, bir sınıfın örneği (instance/object) olan bir nesnenin yaratılmasında kullanılır. Bir ctor'un adı, o ctor'un
+  bildirimini içeren sınıfın basit adı(Simple Name) olmak zorundadır yani fully qualified isim olmamalıdır.
+   Örn:
+    public class Person {
+        public ctor.Person(){ // COMPILE-TIME ERROR
+        }
+    }
+
+  Bir ctor, bir sınıfın üyesi (member) değildir. Bu nedenle, bir ctor alt-sınıflar tarafından miras alınmaz.
+  Ctor'lar sınıf örneği oluşturma ifadeleri tarafından çağrılır.(Instance Creation Expressions)
+  Bir ctor'un void dahil olmak üzere bir geri dönüş tipi bildirmesi, derleme zamanı hatasıdır.
+
+  Amaç ?
+  - Tek amaçları, sıınıftan bir nesne yaratılırken o nesneyi başlatmak, yani ilk değer atamalarını yapmak.
+  İsimlendirme Kuralı : Adı, ait olduğu sınıfın adıyla birebir aynı olmalıdır.Bu bir zorunluluktur ve derleyici tarafından
+  kontrol edilir.
+
+  -Üye Değildir : JLS'e göre ctor'lar, alanlar (fields) ve metotlar gibi bir sınıf "üyesi" sayılmaz.Bu teknik ayrımdır
+  ve en önemli sonucu, miras(inheritance) ALINMAMALARIDIR.
+
+  -Geri Dönüş Tipi Yoktur : Asla bir geri dönüş tipi belirtmezler. Çünkü görevleri bir değer döndürmek DEĞİL.Bellekte
+  oluşturulan nesneyi yapılandırmaktır.
+
+  Bir sınıf örneği oluşturma ifadesinin (new ...) (Class Instance Creation Expression) işleyişi aşağıdaki gibidir :
+  1- Bellek Ayrılır : İlk olarak, yeni nesne için bellekte (heap alanında) yer ayrılır.Eğer yeterli alan yoksa, bu ifade
+  OutOfMemoryError fırlatarak(throw) aniden sonlanır(abnormally). Bu yeni nesne, hem kendi sınıfında hem de tüm üst sınıflarında
+  bildirilen bütün örnek değişkenlerini (non-static - instance fields) içerir.
+
+  2- Varsayılan Değerler Atanır: Yeni nesne için bellekte yer ayrılırken, nesnenin örnek değişkenlerine varsayılan değerleri atanır.
+  3- Argümanlar Değerlendirilir : Ctor metoda gönderilen argümanlar soldan sağa doğru değerlendirilir.
+  4- Kurucu Metot Çağrılır : Son olarak, belirtilen sınıf tipinin seçilmiş ctor'ı çağrılır.
+
+
+
+  Sorumluluk Derleyicide:  new <Type-Name>() yazıldığında, JLS'te (yukarıda belirtilen) belirtilen adımların yürütüleceğini GARANTİ
+  altına alan mekanizma derleyici ve JVM'dir. Doğrudan bir metot çağrılmaz, bir nesne yaratma talimatı verilir.
+
+  Garanti Altında Başlatma: 2. adımdaki "varsayılan değerlerin atanması" ve 4.adımdaki "ctor çağrılması" adımları sayesinde bir
+  nesne referansı elde edildiğinde, onun "en azından" varsayılan değerlerle veya ctor metot içinde belirlenen değerlerle
+  başlatılmış olduğu GARANTİ EDİLİR.
+
+ Eğer bir ctor argüman almıyorsa ya da parametresiz olarak bildirilmişse bu ctor'a "DEFAULT CTOR/NO-ARG CTOR" denir.
+ Default ctor, eğer sınıf tasarımcısı(programcı) herhangi bir ctor bildirmemişse, derleyici tarafından .class dosyasına dahil edilir.
+ Böylelikle herhangi bir ctor bildirilmemişse, kaynak kod satırında ilgili tür tür için sanki default ctor bildirilmiş gibi kod yazılır.
+  Herhangi bir ctor bildirimi (decalaration) yapılmışsa derleyici default ctor yazmaz.
+
+
+Örn :
+
+  public class Employee {
+      public String firstName;
+      public String lastName;
+      public String ssn;
+      public java.time.LocalDate birthDate;
+      public java.time.LocalDate employmentDate;
+
+  }
+  ...
+  public class EmployeeApp {
+      public static void main(String[] args) {
+
+          Employee employee = new Employee();
+
+          System.out.println(employee.firstName);
+          System.out.println(employee.lastName);
+          System.out.println(employee.ssn);
+          System.out.println(employee.birthDate);
+          System.out.println(employee.employmentDate);
+      }
+  }
+
+Output :
+  null
+  null
+  null
+  null
+  null
+
+
+#### this Keyword
+
+Employee sınıfına eklenmiş olan ctor'ın parametre adları sınıf nesnesi için bildirilen veri alanları adlarıyla aynı olduğu durumda
+ctor içerisinde ilgili veri alanlarına atama işlemi gerçekleştirilirken, bu işlemin redundant assignment olduğu yani ilgili parametre
+alanı için kendi kendisine atama işleminin yapılmış olacağı görülecektir. Bu durumda ilgili veri alanına nasıl atama gerçekleştirlecek ?
+Aşağıdaki programı inceleyiniz :
+
+public class Employee {
+    public String firstName;
+    public String lastName;
+    public String ssn;
+    public java.time.LocalDate birthDate;
+    public java.time.LocalDate employmentDate;
+
+    public Employee(String firstName, String lastName, String ssn){
+        firstName = firstName;
+        lastName = lastName;
+        ssn = ssn;
+    }
+}
+...
+public class EmployeeApp {
+      public static void main(String[] args) {
+
+          Employee employee = new Employee();
+
+          System.out.println(employee.firstName);
+          System.out.println(employee.lastName);
+          System.out.println(employee.ssn);
+          System.out.println(employee.birthDate);
+          System.out.println(employee.employmentDate);
+      }
+  }
+
+Çözüm : this keyword
+
+public class Employee {
+    public String firstName;
+    public String lastName;
+    public String ssn;
+    public java.time.LocalDate birthDate;
+    public java.time.LocalDate employmentDate;
+
+    public Employee(String firstName, String lastName, String ssn){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ssn = ssn;
+    }
+}
+
+Soru: Önceki derslerde anımsanacağı üzere metotlar aslında "code/text blocklarına" yazılmaktalar. Bu durumda ilgili metot içerisinde
+bulunamayan bir symbol/identifier nasıl sınıf içerisinde aranmış olacak ?
+
+Yüksek seviyede this anahtar sözcüğü için yapılan tanım basittir: "o anki nesneyi temsil eder". Ancak bu ifadedinin ardında, program
+derlendiğinde ve çalıştığında bellek yönetimi ve metot çağrılarının nasıl işlediğine dair temel bir mekanizma yatar. this anahtar sözcüğünün
+neden static metotlarda kullanılamadğını anlamak için bu mekanizmayı kavramak gerek.
+
+Instance (Örnek) metotları: this Nasıl ve Neden var olur ?
+ public class Car {
+    public String color;
+
+    public Car(String color){
+        this.color = color;
+    }
+
+    public void paint(String newColor){
+           this.color = newColor;
+    }
+
+ }
+
+ ....
+
+   Car car1 = new Car("Red");
+   Car car2 = new Car("Blue");
+
+   Bellekteki Durum
+   new Car(...) komutu çalıştığında, JVM belleğin Heap alanında o nesne için yer ayırır.
+   Bu bellek alanı, o nesneye ait olan tüm instance değişkenlerini içerir.
+   car1 ve car2 için Heap'te iki ayrı bellek bölgesi vardır.Birinin color alanı "Red", diğerininki "Blue" değerini tutar
+
+   #Metot Çağrısı Anı: car1.paint("White");
+   En kritik nokta burasıdır. paint() metodunun derlenmiş kodu (bytecode), bellekte sadece bir yerde durur. Her nesne için bu kod
+   kopyalanmaz.Peki , bu tek bir kod parçası car1'in mi yoksa car2'nin mi color alanını değiştireceğini nereden bilir?
+
+   işte this burada devreye giriyor. Derleyici bir instance metot çağrısını şu şekilde dönüştürür:
+    1. Metodun alacağı bariz parametreleri hazırlar.
+    2. Bu parametrelerin yanına, metodun üzerinde çağrıldığı nesnenin bellek adresini gizli bir parametre olarak ekler.
+    3. Metot  çağrısı yapıldığında, bu gizli referans, metodun çalıştığı, Call Stack (Stack Area) üzerindeki o anki çerçeveye (stack frame)
+    yerleştirilir.Bu referansın metodun içindeki adı this'tir.
+    Bytecode'a bakılırsa eğer instance metotlarındaki bu this referansı aload_0 şeklinde gözlemlenebilir.
+    Yani, car1.paint("White") çağrısı, kavramsal olarak arka planda şuna benzer bir anlama gelir:
+       Car.paint(car1, "White");
+     Metodun içindeki this.color = newColor; satırı çalıştığında JVM şu adımları izler:
+      - "Bana this referansını ver : aload_0" (Burada car1'in bellek adresi)
+      - "Bu adresteki bellek bölgesine git."
+      - "O bölgenin içindeki color alanını bul ve değerini "White" yap."
+    this, paylaşılan metot kodunu,Heap'teki belirli bir nesnenin veri alanına bağlayan "TEMEL KÖPRÜDÜR". O almadan, metot hangi nesnenin
+    verisi üzerinde çalışacağını bilemez.
+    #Static Metotlar: this Neden mümkün değil ?
+
+        public class CarFabricate{
+            static int producedCarCount = 0;
+
+            public static void carProduced(){
+                producedCarCount++;
+            }
+        }
+        ....
+
+        CarFabricate.carProduced();
+
+        # Bellekteki Durum
+        static değişkenler (producedCarCount), nesnelere ait değildir. Doğrudan sınıfa aittirler ve bellekte sınıfla ilişkilendirilmiş
+        özel bir alanda (Metaspace gibi) TEK BİR KOPYA olarak tutulurlar.
+
+
+        # Metot Çağrısı Anı : CarFabricate.carProduced();
+        Bu metodu çağırmak için CarFabricate nesnesine (new CarFabricate()) ihtiyamız YOKTUR. Çağrı, bir nesne referansı üzerinden değil,
+        doğrudan sınıfın kendisi üzerinden yapılır.
+        Derleyici bu çağrıyı gördüğünde:
+        1. Metodun çağrılması için gerekli kodu üretir.
+        2. Bu sefer metoda gönderilecek GİZLİ NESNE REFERANSI YOKTUR. Çünkü ortada bir nesne yoktur.
+
+    Metot çağrıldığında ve carProduced()'ın kod bloğu çalıştığında, Çağrı Yığınında (Call Stack) bu metot için bir çerçeve
+    oluşturulur, fakat bu çerçevenin içinde this adında bir referans bulunmaz.
+
+    Eğer static bir metot içinde this kullanmaya çalışılırsa, JVM'e şu anlamsız soruyu sormuş oluruz :
+     "this.color = "Black""
+     JVM'in cavabı şu olurdu : "Hangi 'this'?Bana bir nesne referansı vermedin ki onun color alanına gideyim.
+     Ortada çalışacağım bir nesne yok. " Bu da şu diagnostik mesaja karşılık gelir. "...this cannot be referenced from a static context"
+
+   static bir metodun çağrılma mekanizması, instance metotlarından farklı olarak bir nesne örneğine ait referans içermez.
+   Bu referans olmadan, nesneye özgü alanlara erişmek imkansızdır. Bu nedenle Java, bu mantıksal hatayı önlemek için static metotlar
+   içerisinde this anahtar sözcüğünün kullanımını derleme zamanında yasaklar.
+
+  Buna göre JLS this için aşağıdaki tanımlamayı yapar :
+  "this anahtar kelimesi yalnızca bir instance/örnek metodunun, bir örnek ilklendiricisinin (instance initializer) veya
+  bir kurucu metodun (ctor) gövdesinde ya da bir sınıfın örnek değişkenin (instance variable) ilklendirisinde
+  kullanılabilir.Başka bir yerde geçerse bir derleme zamanı hatası oluşur."
+
+
+  # Receiver Parameter : this
+  Java 8 ile birlikte dile eklenen "receiver parameter", bir metodun ve kurucu metodun* parametre listesinin en başında yer alabilen, özel,
+  yapay bir parametredir.Bu parametre metodun üzerinde çalıştığı nesneyi, yan this referansını temsil eder.
+
+  Bir metodun veya kurucu metodun biçimsel parametre listesi, bir receiver(alıcı) parametre içerebilir. Receiver parametre,
+  bir instance metodu veya bir iç sınıfın(inner class) kurucu metodu için kullanılan "isteğe bağlı sözdizimsel bir araçtır".Bu
+  parametre üzerinde metot çağrılan nesneyi (bir instance metodunda) veya yeni nesnenin hemen dışındaki çevreleyen örneği(instance) (bir
+  iç sınıfın kurucu metodunda) temsil eder.
+
+  ReceiverParamater :
+  {Annotation} Type [identifier.] this
+
+ Receiver parametresi, biçimsel parametre listesinde en başta yer almalıdır. Reveiver parametresinin tipi, metodun veya
+ kurucu metodun içinde bildirildiği sınıf veya arayüz(interface) olmalıdır.Receiver parametresinin adı this olmak zorundadır.
+
+ static bir metodun veya iç sınıf olmayan bir sınıfın kurucu metodunun biçimsel parametre listesinde bir receiver parametre
+ bildirmek derleme-zamanı hatasıdır.
+
+Receiver parametre, metot imzası amacıyla kullanılmaması anlamında biçimsel bir parametre değildir.Bir metot çağrıldığında,
+receiver parametreye bir argüman değeri atanmaz.this anahtar kelimesi her zamanki gibi receiver nesneye bağlanır.
+Receiver parametresinin tek amacı, temsil edilen nesnenin tipinin kaynak kodda belirtilmesine izin vermektir. Böylece
+bu tip  notasyonlar(annotations)
+ile donatiılabilir.
+  Basitçe maddelere dökelim :
+   1. İsteğe bağlı bir araçtır. özel durumlar için dile eklenmiş sözdizimsel bir kolaylık.
+   2. Konumu ve Adı sabittir.
+   3. static metotlarda kullanılmaz.
+   4.Metot imzasının değiştirmez. :: Kritik nokta.
+   5. Tek amacı vardır: Annotation
+
+Yani yukarıda bahsettiğimiz "gizli parametrenin" açıkça bildirilmesi olarak düşünülebilir.this referansının, bir metodun
+gizli ilk parametresi olduğu konseptinin resmi olarak kabul edilmiş ve kodda görünür kılınmış halidir.Ancak bu görünürlük,
+metodun çalışma şeklini veya çağrılma biçimini değiştirmek için değil, yalnızca derleme zamanı kontrolleri ve kod analizi için
+this referansına notasyonlar(annotations) ekleyebilmek için vardır.
+
+**** ANNOTATIONS AÇIKLAMA
+   Java 8'den önce, notasyonları(annotations) kullanabileceğimiz yerler oldukça kısıtlıydı. En yaygın kullanım
+   TYPE
+   FIELD
+   METHOD
+   PARAMETER
+   CONSTRUCTOR
+
+   Notasyonlar her zaman bir bildirime ekleniyordu.Yani, bir metodun, bir veri alanının veya bir sınıfın tanımında kullanılıyordu.
+
+   Bir tipin kullanıldığı herhangi bir yere notasyon ekleyemiyorduk.
+   Örneğin : List<String> içindeki String'in null olamayacağını belirtmek.
+
+   Java 8 Devrimi:
+      ElementType.TYPE_USE bu sorunu çözmek için getirildi. Anlamı şudur:
+      Bu notasyon, sadece bir şeyin tanımında değil, bir tipin kullanıldığı her yerde uygulanabilir.
+     Bu, düşünce yapımızı 'bir bildirimi etiketlemekten', 'bir tipin kendisini etiketlemeye' çevirmiş oldu.
+     Neden Bu Kadar Önemli ?
+
+     ElementType.TYPE_USE, Checker Framework gibi statik analiz araçlarının önünü açmıştır. Bu araçlar, kodunuzu TYPE_USE ile işaretlenmiş
+     notasyonlara göre analiz ederek çok daha derin ve kapsamlı hatalar bulabilir.
+
+     Örn:
+     List<String> list denildiğinde, derleyici sadece list referansının null olup olmadığıyla ilgilenir.Ama List<@NonNull String> list dediğimizde,
+     Checker Framework gibi bir araç, list.add(null) gibi bir kod yazıldığında derleme zamanında uyarabilir.
+
+     Özetle:
+      ElementType.TYPE_USE Java'daki notasyonları basit birer etiket olmaktan çıkarıp, Java'nın tip sistemini genişleten, daha güvenli ve ifade gücü
+      yüksek kodlar yazmamızı sağlayan güçlü bir mekanizmaya dönüştürmüştür. Receiver parameterlar da bu gücü kullanan modern Java özelliklerinden sadece biridir.
+      Checker Framework : https://checkerframework.org/
+      ------------------------------------------------------------------------------------------------------------------------------------------
+
+
+   Örn :
+
+   public class Point {
+       public double x; // instance variable
+       public double y; // instance variable
+
+       public Point(int xCoordinate, int yCoordinate){
+           x = xCoordinate;
+           y = yCoordinate;
+       }
+
+       public Point(double xCoordinate, double yCoordinate){
+           x = xCoordinate;
+           y = yCoordinate;
+       }
+   }
+
+   yukarıdaki kodda int parametreli ctor, double parametreli ctor'u nasıl çağırabilir ?
+
+
+
+   this anahtar kelimesi, aynı sınıf için bildirilmiş özel metotlar olan ctor'ların birbirlerini çağırması için de kullanılır. Bilindiği üzere ctor'lar identifier ile
+   çağrılamazlar.
+
+     public class Point {
+           public double x; // instance variable
+           public double y; // instance variable
+
+           public Point(int xCoordinate, int yCoordinate){
+               this((double) xCoordinate,yCoordinate);
+           }
+
+           public Point(double xCoordinate, double yCoordinate){
+               x = xCoordinate;
+               y = yCoordinate;
+           }
+       }
+
+     ---------------------------------------------------------------------------------------------------------------------
+#Class Sınıfı ve Nesnesi
+
+   Nesne Oluşturma Sürecinin Yorumlanması:
+    Temelde üç faza ayrılabilir :
+    1- Sınıf Yükleme ve Başlatma (Class Loading & Initialization)
+    2- Nesne için Bellek Ayrılması (Instance Allocation)
+    3- Nesne Başlatma (Instance Initialization)
+
+public class BeeApp {
+
+    public static void main(String[] args) {
+
+        Bee bee = new Bee();
+    }
+}
+
+Bir sınıfın nesnesi oluşturulmadan önce o sınıfın JVM tarafından yüklenmesi(loading), bağlanması(linking) ve
+başlatılması(initializing)  gerekir.
+- Sınıfın Yüklenmesi: Yukarıdaki örnek için new Bee() komutu, Bee sınıfının "aktif olarak kullanıldığı" durumlardan
+biridir.Eğer Bee sınıfı daha önce yüklenmemişse, JVM classpath üzerinden Bee.class dosyasını bulur, yükler ve bellekte
+bu sınıfa ait bir Class nesnesi oluşturur.
+- Statik Başlatıcılar (Static Initializers) : Sınıf başlatıldığı anda, o sınıfa ait tüm static alanlar ve static
+başlatıcı blokları tanımlandıkları sırada çalıştırılır. Bu işlem, o sınıftan kaç tane nesne yaratılırsa yaratılsın,
+"sadece bir kez" gerçekleşir.
+
+Bu anlamda bir sınıfın yüklenmesinin tetiklenmesi, o sınıfın static üyelerine ilk erişim ile gerçekleşir. *
+
+ * Sınıfın sabit veri alanları bu durumu tetiklemez.
+
+JVM, sınıfın başlatılma sürecini tamamladıktan sonra new operatörünün ikinci görevine geçer: nesne için bellek ayırmak.
+  - Heap'te Yer Ayrılması : Bee nesnesinin içereceği tüm alanlar (hem kendi alanları hem de üst sınıflardan miras aldığı
+  alanlar) için Heap belleğinde yeterli miktarda yer ayrılır.
+  - Sıfırlama (Zeroing/Zerowish) : Java'da güvenlik ve öngörülebilirlik için, ayrılan bu bellek bloğu tamamen sıfırlanır.
+  Bu işlem, tüm primitive tip alanlara varsayılan değerlerini ve tüm referans tipli alanlara null değerini atar.Bu
+  geliştiricinin atanmamış bir alan yüzünden rastgele bellek değerleriyle karşılaşmasını engeller.
+
+ Bellek ayrılıp sıfırlandıktan sonra, nesnenin asıl başlatma süreci başlar.Bu süreç constructor tarafından yönetilir ve
+ belirli bir sırayı takip edir.
+ 1- Üst sınıfın contsructor'ının Çağrılması : Eğer varsa, ,üst sınıfın constructor'ı çağrılır.(eğer kodda super(...)
+ ile açıkça, belirtilmemişse super() çağrısı derleyici tarafından eklenir.) Bu zincir Object sınıfına kadar devam edecek.
+ 2- Alan başlatıcıları (Field Initializers) :  Sınıf içinde tanımlandığı anda değer atanan alanlar (int age = 30; gibi)
+ ve örnek başlatma blokları ( {... } non-static initialization blocks) kaynak kodda yazıldıkları sırada çalışır.
+ 3- Constructor Metot Gövdesi : Son olarak, constructor metodunun gövdesindeki kodlar çalışır.
+
+  ## Class Literal
+  Class Literal Java'da sıkça kullanılan önemi bazen gözden kaçırılan temel bir özelliktir.
+  Bir class literal, bir tipe ait java.lang.Class nesnesini derleme zamanında (compile-time), güvenli ve doğrudan elde
+  etmenin yoludur.Sözdizimi, bir tipi adının sonuna .class eki getirilerek oluşturulur.
+    Derleme Zamanı Güvenliği (Compile-Time Safety)
+   Bu, class literal'in en büyük avantajıdır. Bir tip için .class kullanıldığında, Java derleyicisi o tipin gerçekten
+   var olup olmadığını kontrol eder. Eğer OlmayanBirSınıf.class gibi bir ifade yazılırsa, kod derlenmez.Bu durum,
+   Class.forName("com.packet.ClassName") yönteminden çok daha güvenli yapar. Class.forName() ile bir sınıf isminden
+   yüklenirse ve eğer o sınıf çalışma zamanında bulunamazsa, ClassNotFoundException fırlatır.
+
+        // Class ballClass = Ball.class;
+        // Class.forName("com.paket.ClassName");
+
+   # Sınıf Başlatmayı Tetiklemez.
+   Bir tipe .class ile erişmek, o sınıfın başlatıcılarının (statik bloklar ve static alan atamaları) çalışmasını tetiklemez
+   Sınıf sadece JVM tarafından yüklenir(loading), ancak başlatılmaz(initialization).
+    Class.forName() metodu ise varsayılan olarak sınıf yükler ve başlatır. Bu statik blokların hemen çalıştırılmasına
+    neden olur.
+   # Performans
+   Genellikle .class literalini kullanmak, Class.forName() ile String tabanlı bir arama yapmaktan daha performanslıdır.
+   Çünkü derleyici ve JVM tipi doğrudan çözebilir.
+
+   #Generic'ler ile uyum
+    Class literal'ler generic tiplerle uyumlu çalışır. Class<String> gibi bir referans oluşturarak, bu Class nesnesi
+    üzerinden yapacağınız işlemlerde (örneğin newInstance()) tür güvenliği sağlanır.
+
+     public class Bee {
+
+         public Bee(){
+             System.out.println("Bee(): Bee is created");
+         }
+
+         public Bee(int value){
+             System.out.println("Bee(int): Bee is created. Value :" + value);
+         }
+
+         public void sound(){
+             System.out.println("Vzzzz !");
+         }
+     }
+
+     main method :
+    try {
+                Class<Bee> beeClass = Bee.class;
+                //Bee bee = beeClass.newInstance(); // Deprecated
+                Constructor<Bee> declaredConstructor = beeClass.getDeclaredConstructor(int.class);
+                Bee bee = declaredConstructor.newInstance(10);
+                bee.sound();
+            } catch (Exception ex) {
+                //...
+            }
+
+   #Kullanım Alanları
+      Şu senaryolarda genellikle kullanılır :
+
+      1. Reflection :
+       Bir sınıfın metotlarını alanlarını veya constructor'larını çalışma zamanında incelemek veya çağırmak için Class
+       nesnesine ihtiyaç duyulur.
+
+    public class Bee {
+
+        public Bee(){
+            System.out.println("Bee(): Bee is created");
+        }
+
+        public Bee(int value){
+            System.out.println("Bee(int): Bee is created. Value :" + value);
+        }
+
+        public void sound(){
+            System.out.println("Vzzzz !");
+        }
+
+        public void bar(){
+
+        }
+    }
+ ...
+ public class BeeApp {
+
+     public static void main(String[] args) {
+
+         Class<Bee> beeClass = Bee.class;
+
+         System.out.println("Bee class methods : ");
+         Method[] methods = beeClass.getDeclaredMethods();
+
+         for(int i = 0; i < methods.length; i++){
+             System.out.println(methods[i].getName());
+         }
+
+     }
+ }
+
+ Output :
+ Bee class methods :
+ sound
+ bar
+
+ 2. Anotasyonlar/Notasyon(Annotations)
+    Bir sınıfa, metoda veya alana eklenmiş anotasyon bilgilerine erişmek için kullanılır.
+
+ 3. Tip Güvenli Generik API'ler (Type-Safe Generic APIs) :
+ Birçok kütüphane ve framework, hangi tiple/türle çalışacaklarını belirtmek için Class nesnesini parametre olarak alır.
+    - Loglama Kütüphaneleri (Logging): Hangi sınıftan loglama yapıldığını belirtmek için:
+     örn:
+         import org.slf4j.Logger;
+         import org.slf4j.LoggerFactory;
+
+         public class MyService{
+            private static final Logger logger = LoggerFactory.getLogger(MyService.class);
+         }
+
+     - JSON/XML Serileştirme (Serialization): Bir JSON string'ini hangi nesne tipine dönüştüreceğini belirtmek için:
+
+     JSON : {
+                "name" : "Hector",
+                "age" : 10
+           }
+
+            // Gson Library
+            Gson gson = new Gson();
+            String json = "{ \"name\" : \"Hector\", \"age\": 10 }";
+            Dog dog = gson.fromJson(json, Dog.class);
+
+       - Veritabanı/ORM Araçlar: Sorgu sonuçlarını hangi nesneye eşleyeceğini(map) belirtmek için.
+
+      4. Primitive Tipler ve Wrapper Sınıflar Arasındaki Fark
+       bknz : ClassLiteralApp.java
+       Primitive tipler için olan class literal'ler, onların sarmalayıcı (wrapper) sınıflarından farklıdır.
+
+  # Initialization Blocks (Başlatma Blokları)
+   Java'da başlatma blokları, bir sınıfın veya nesnenin başlatılması sırasında çalışan, isimsiz kod bloklarıdır.
+   Constructor'lara benzer şekilde initialization görevini üstlenirler ancak farklı zamanlarda ve amaçlarla
+   tetiklenirler.
+     1. Static Initialization Block : Sınıf yüklendiğinde bir kez çalışır.
+     2. Instance (Non-static) Initialization Block: Her nesne oluşturulduğunda çalışır.
+
+     Static Initialization Block
+      Statik bloklar, static anahtar kelimesi ile tanımlanır ve bir sınıf JVM tarafından belleğe ilk kez yüklendiğinde
+      çalıştırılır.
+
+      JLS'e göre:
+       Tanımlama : Bir sınıfın gövdesinde static {...} şeklinde tanımlanır.
+       Çalışma Zamanı : Bir sınıfın "ilklendirilmesi" (initialization) gerektiğinde çalışır.
+         Bu durumlar aşağıdaki gibidir:
+         - Sınıftan new anahtar kelimesiyle bir nesne oluşturulduğunda
+         - Sınıfın static bir metoduna erişildiğinde
+         - Sınıfın static bir veri alanına erişildiğinde veya değer atandığında (eğer bu alan final değilse)
+       Çalışma Sayısı : Bir sınıf, aynı ClassLoader tarafından yalnızca bir kez ilklendirilir.Dolayısıyla, statik
+       bloklar parogramın yaşam döngüsü boyunca sadece bir defa çalışır.
+
+       Kısıtlamalar :
+         - İçerisinde this veya super anahtar kelimeri kullanılamaz,çünkü bu blok nesneye değil sınıfa aittir.
+         - Doğrudan instance değişkenlerine veya metotlarına erişemez. Yalnızca static üyelere erişebilir.
+         - Eğer bir static blok içerisinde kontrol dışı bir istisna (unchecked exception) fırlatılırsa, bu durum
+         aşağıdaki örnekte görüldüğü gibi ExceptionInInitializerError hatasına yol açar ve sınıf bir daha kullanılamaz
+         hale gelir.
+
+
+    Örn:
+    public class InitializerError {
+
+        static {
+            int a = 5 / 0;
+        }
+    }
+
+    ...
+    public class InitializerErrorApp {
+
+        public static void main(String[] args) {
+
+
+            try{
+                new InitializerError();
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+
+            System.out.println("Continue");
+
+            new InitializerError();
+        }
+    }
+ Output :
+ Exception in thread "main" java.lang.ExceptionInInitializerError
+ 	at InitializerExceptionApp.main(InitializerExceptionApp.java:14)
+ Caused by: java.lang.ArithmeticException: / by zero
+ 	at InitializerException.<clinit>(InitializerException.java:11)
+ 	... 1 more
+
+    Static Block Kullanım Amaçları
+     Statik bloklar, basit bir atama ile yapılamayacak kadar karmaşık olan  static değişkenlerin ilklendirilmesi için
+     kullanılır.
+    1. Karmaşık Statik Değişken Atama
+        Bir static koleksiyonu (Map, List vb) bir dosyadan okunan verilerle veya bir algoritma ile doldurmak gerektiğinde
+        kullanılabilir.
+
+     Örn:
+     /**
+      * Aşağıdaki sınıfta bir dosyadan okunan konfigürasyon parametrelerinin bir dosyadan okunarak
+      * Map türünden bir veri yapısının initialize edilmesini örnekler.
+      */
+     public class StaticBlockExampleCase1 {
+             public static final java.util.Map<String,String> CONFIG_MAP;
+
+             static {
+                 System.out.println("Static block is running: Configuration is loading ...");
+                 CONFIG_MAP = new HashMap<>();
+                 // Reading File Logic...
+                 CONFIG_MAP.put("api.url", "https://api.example.com");
+                 CONFIG_MAP.put("configX", "configX_value");
+                 //....
+             }
+     }
+
+     2.Native Kütüphanelerin Yüklenmesi
+      Java'nın C/C++ gibi dillerle yazılmış kütüphaneleri kullanması gerektiğinde System.loadLibrary() metodu çağrılır.
+      Bu işlem sınıf yüklendiğinde sadece bir kez yapılmalıdır.
+
+
+   public class NativeLibraryApp {
+
+       static {
+
+           try{
+               System.loadLibrary("opencv_java");
+           }catch (UnsatisfiedLinkError e){
+               System.out.println("Native Library can not be loaded");
+               System.exit(1);
+           }
+
+       }
+
+
+       //...
+   }
+     3. JDBC Driver'larının Kaydedilmesi
+        Eski JDBC yaklaşımlarında, veritabanı sürücüsü sınıfının statik bloğu, kendisini
+        DriverManager'e kaydederdi.
+           // ...
+           Class.forName("com.mysql.cj.jdbc.Driver");
+           satırı bu statik bloğu tetiklemek için kullanılırdı.
+
+
+     ## Instance (Non-static) Initialization Block (Örneklem Başlatma Bloğu)
+        Bu bloklar, bir sınıftan her yeni nesne oluşturulduğunda, constructor'dan hemen önce çalışır.(Bu ifade kaynak
+        kod seyiyesinde geçerlidir.)
+
+        #JLS'e göre:
+           Tanımlama : Bir sınıfın gövdesinde { ... } şeklinde tanımlanır.
+           Çalışma Zamanı : new anahtar kelimesi ile bir nesne oluşturulduğunda
+           Çalışma Sırası : Nesne oluşturma sürecinde aşağıdaki adımlar izlenir :
+              1. üst sınıfın (superclass) constructor'ı çağrılır (super())
+              2. Nesne değişkenlerine ilk değerleri atanır.
+              3. Instance başlatma bloğu çalışır *
+              4.Constructor'un geri kalan bloğu çalışır.
+
+          ** Aslında derleyici, bu bloğun/blokların kodunu her bir constructor'ın başlangıcına super() çağrısından sonra
+          kopyalar.
+       Örn:
+       public class NonStaticInitialization {
+
+           public int value;
+           public boolean flag;
+
+           {
+               System.out.println("Non-static.initialization.block.1");
+           }
+
+           {
+               System.out.println("Non-static.initialization.block.2");
+           }
+
+           public NonStaticInitialization(){
+
+           }
+
+           public NonStaticInitialization(int value){
+
+           }
+
+       }
+
+       ByteCode : "javap -c NonStaticInitialization.class"
+            Compiled from "NonStaticInitialization.java"
+            public class NonStaticInitialization {
+              public int value;
+
+              public boolean flag;
+
+              public NonStaticInitialization();
+                Code:
+                   0: aload_0
+                   1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+                   4: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+                   7: ldc           #13                 // String Non-static.initialization.block.1
+                   9: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+                  12: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+                  15: ldc           #21                 // String Non-static.initialization.block.2
+                  17: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+                  20: return
+
+              public NonStaticInitialization(int);
+                Code:
+                   0: aload_0
+                   1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+                   4: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+                   7: ldc           #13                 // String Non-static.initialization.block.1
+                   9: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+                  12: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+                  15: ldc           #21                 // String Non-static.initialization.block.2
+                  17: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+                  20: return
+            }
+
+        Erişim: Hem static hem de instance üyelere erişebilir. this anahtar kelimesini kullanabilir.
+
+        # Kullanım Amaçları
+         Instance blokları nadiren kullanılır, ancak en önemli kullanım amacı, birden fazla constructor arasında kod
+         tekrarını önlemektir.
+
+         1. Constructor'lar Arası Ortak Kod Paylaşımı (DRY- Don't Repeat Yourself prensibi):
+            Eğer bir sınıfın birden fazla constructor'ı varsa ve hepsi aynı başlatma kodunu içeriyorsa, bu ortak bir
+            instance bloğuna taşınabilir. Bu, kod tekrarını önler ve bakımı kolaylaştırır.
+            Bu bilgi ışığında kod okunaklılığını azaltacak şekilde kodlama yapılmamalıdır. Birden constructor olması
+            durumunda mümkünse en geniş/kapsamlı constructor'ın seçilmesi ve bütün initialization işlemlerinin bu
+            constructor gövdesinde yapılması ve diğer constructor'lardan bu constructor'ın çağrılması daha uygun bir
+            yöntem olabilir.
+
+Örn :
+        public class LogEntry {
+
+            public final String entryId;
+            private final long timestamp;
+            private String message;
+
+
+            {
+                this.entryId = java.util.UUID.randomUUID().toString();
+                this.timestamp = System.currentTimeMillis();
+            }
+
+            public LogEntry(String message){
+                this.message = message;
+            }
+
+            public LogEntry(){
+                this("Default Message");
+            }
+        }
+
+        .... Daha iyi bir yazım örneği aşağıdaki sınıfta görülebilir :
+
+        public class LogEntry {
+
+            public final String entryId;
+            private final long timestamp;
+            private String message;
+
+            public LogEntry(String message){
+                this.entryId = java.util.UUID.randomUUID().toString();
+                this.timestamp = System.currentTimeMillis();
+                this.message = message;
+            }
+
+            public LogEntry(){
+                this("Default Message");
+            }
+        }
+
+       2. Anonymous Inner Classes Initialization(Anonim İç Sınıfların Başlatılması)
+        Anonim sınıfların açık bir constructor'ı olamaz. Bu nedenle, onlar için constructor benzeri bir mantık
+        çalıştırmanın tek yolu instance başlatma bloklarıdır.
+
+        Örn:
+        java.util.List<String> list = new java.util.ArrayList<>(){
+                   {
+                       add("Item 1");
+                       add("Item 2");
+                   }
+
+               };
+
+     # Çalışma Sırası (Execution Order)
+        Sınıf yüklenmesi sırasında bir defaya mahsus static başlatma blokları çalışacak.
+        Sonrasında eğer nesne oluşturma söz konusuysa instance başlatma blokları çalışacak. Tekrar bir nesne oluşturma
+        söz konusuysa, sınıf yüklenmiş olduğundan ötürü instance başlatma blokları çalışacak.
+----------------------------------------------------------------------------------------
+  !! JDK 22'den önce bir gövdesinde, bir constructor çağrısından önce herhangi bir deyim(statement) yazılamaz !
+  Yani constructor çağrıları first statement olmak zorundadır.
+
+  JDK 22 ile constructor'a gönderilen argümanların değerlerinin başka constructor'a gönderilmeden test edilmesi durumunun
+  önü açılarak ve first statment olması zorunluluğu esnetilerek dile özellik olarak kazandırılmıştır.
+  JDK 22'den önce, bu durum ilgili constructor çağrılarının yapıldığı satırda metotların çağrımının gerçekleşmesi için
+  argümanların öncelikle değerlendirmeye(evaluate) alınması yeteneğinden faydalanılarak yapıyordu.
+
+------------------------------------------------------------------------------------------------------------------------
+ JDK 22'den önce, first statement kuralının olması, non-static initialization bloklarının içindeki kodların ilgili
+ constructor çağrısını yapan constructor gövdesine kopyalanmasını önler. Çünkü bilindiği üzere non-static initialization
+ bloklar içerisindeki kodlar ctor'dan önce çalışır.Bu durum first statement kuralıyla uyuşmaz.
+
+
+ Örn :
+
+    public class LogEntryInstanceBlock {
+
+        public final String entryId;
+        private final long timestamp;
+        private String message;
+
+
+        {
+            this.entryId = java.util.UUID.randomUUID().toString();
+            this.timestamp = System.currentTimeMillis();
+        }
+
+        public LogEntryInstanceBlock(String message){
+            this.message = message;
+        }
+
+        public LogEntryInstanceBlock(){
+            this("Default Message");
+        }
+    }
+
+    ....
+Bytecode :
+  Compiled from "LogEntryInstanceBlock.java"
+  public class LogEntryInstanceBlock {
+    public final java.lang.String entryId;
+
+    public LogEntryInstanceBlock(java.lang.String);
+      Code:
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: aload_0
+         5: invokestatic  #7                  // Method java/util/UUID.randomUUID:()Ljava/util/UUID;
+         8: invokevirtual #13                 // Method java/util/UUID.toString:()Ljava/lang/String;
+        11: putfield      #17                 // Field entryId:Ljava/lang/String;
+        14: aload_0
+        15: invokestatic  #23                 // Method java/lang/System.currentTimeMillis:()J
+        18: putfield      #29                 // Field timestamp:J
+        21: aload_0
+        22: aload_1
+        23: putfield      #33                 // Field message:Ljava/lang/String;
+        26: return
+
+    public LogEntryInstanceBlock();
+      Code:
+         0: aload_0
+         1: ldc           #36                 // String Default Message
+         3: invokespecial #38                 // Method "<init>":(Ljava/lang/String;)V
+         6: return
+  }
+
+   Bytecode Boyutu ve Derleyicinin Rolü
+     Non-static blok kullanmak bytecode'u küçültmez. Tam tersine, eğer mantığı birden fazla ctor'a dağıtmak yerine tek
+     bir yerde toplamak için kullanılıyorsa bytecode boyutu birebir aynı olur.
+      Bunun nedeni, non-static bloğun Java derleyicisi için bir yazım kolaylığı olmasıdır. Derleyici, non-static bloğun
+      içindeki kodu alır ve sınıf içindeki her bir ctor'un içine super() çağrısından hemen sonraya kopyalar.
+      ** Bu anlamda non-static bloğun amacı bytecode'u optimize etmek değil, kaynak kodu optimize etmektir.
+
+    Asıl Odaklanılması Gereken Optimizasyonlar
+      - Algoritma Verimliliği
+       - Veritabanı ve Ağ Çağrıları
+       - Gereksiz Kütüphane
+       - Bellek Yönetimi
+
+       Non-static blokların tek amacı, insanlar için daha iyi kod yazmaktır, makine için daha iyi kod üretmek değil.
+----------------------------------------------------------------------------------------------
+
+public class Initializers {
+
+    public static final int VALUE = 100;
+
+    public final int finalValue = 900;
+
+    static {
+        System.out.println("Initializers.static.block");
+    }
+}
+
+public class InitializersApp {
+
+    public static void main(String[] args) {
+        final int CONST = 34;
+        System.out.println(CONST);
+
+        System.out.println(Initializers.VALUE);
+
+    }
+}
+
+Yukarıdaki InitializersApp programı çalıştırılırsa  System.out.println(Initializers.VALUE); satırının Initializers
+sınıfındaki static initializer bloğunu tetiklemediği görülecektir. Bir veri alanının hem static hem de final
+anahtar sözcükleriyle nitelenmesi bu veri alanını sınıf SABİTİ haline getirir ve Constant Expression olarak yorumlanır.
+Dolayısıyla derleyici System.out.println(Initializers.VALUE); satırını aslında System.out.println(100); olarak yazar.
+--------------------------------------------------------------------------------------------------------------------------

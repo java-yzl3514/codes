@@ -1,0 +1,62 @@
+0- x satır, y kolondan oluşan bir çok boyutlu int türden diziyi klavyeden okuyan ve bu dizinin elemanlarının
+toplamını hesaplayan programı yazınız.
+  Default değerler
+  x: 3,
+  y: 4 olarak düşünülebilir.
+
+1- ArrayUtil isimli, yardımcı metotları barındıran bir sınıf bildirin. Bu sınıf içinde
+generateRandomIntArray isimli metodu yazınız.
+Metot parametresiyle, dizi boyutunu, random olarak oluşturulacak sayı aralığını alsın.
+   generateRandomIntArray(length, from, to)
+
+2- ArrayUtil sınıfına aşağıdaki imzalara sahip metotları yazınız:
+   print(int[]);
+   print(other primitives...)
+   ...
+   print(int[][])
+   ...
+TODO
+3- ArrayUtil sınıfında tek-boyutlu uygun primitive türde diziler için min, max ve avg metotlarını yazınız
+TODO
+4- ArrayUtil sınıfında removeDuplicates isimli metodu yazınız
+   removeDuplicates, mükerrer elemanları 1 defa yazmalı.
+
+5- ArrayUtil sınıfında sort metotları yazınız. (Araştırma- Sort Algorithms)
+5.1- ArrayUtil sınıfı içerisinde evenBeforeOddSort isimli ve parametresiyle tek boyutlu int türden dizi alan
+ve bu diziyi çift sayıları tek sayılardan öncelikli indexlere ya da küçük indexlerde olacak şekilde
+konuşlandıran metodu yazınız. (Not: çift sayılar ve tek kendi aralarında sıralanmak zorunda)
+ bknz : ArrayUtil.java
+
+5.2- Bubble Sort
+     https://www.youtube.com/watch?v=Iv3vgjM8Pv4&list=RDIv3vgjM8Pv4&start_radio=1
+5.3- Selection Sort
+     https://www.youtube.com/watch?v=hFhf9djnM5A&list=RDhFhf9djnM5A&start_radio=1
+5.4- Insertion Sort
+      https://www.youtube.com/watch?v=QdQmAdyfmDI&list=RDQdQmAdyfmDI&start_radio=1
+5.5- Quick Sort
+      https://www.youtube.com/watch?v=3San3uKKHgg&list=RD3San3uKKHgg&start_radio=1
+5.6- Merge Sort
+5.7- Heap Sort
+5.8- Bucket Sort
+
+
+6- ArrayUtil sınıfında search metotları yazınız. (Araştırma- Search Algorithms)
+6.1- Binary Search
+6.2-....*
+
+TODO
+7- Parametresiyle aldığı 10'luk tabanda bir sayının digitlerini içeren int[] türden dizi için, ilgili
+gösterimin yapıldığı sayıya 1 ekleyen addOne isimli metodu yazınız:
+Örn:
+      Input          Output
+      [1,2,3,4]  => [1,2,3,5]
+      [9,9,9,9]  => [1,0,0,0,0]
+
+======================================================================================================
+- Bonus:  Sudoku  uygulaması yazınız.
+======================================================================================================
+
+
+Recursive Method Calls
+0 - factorial hesabı yapan programı, recursive metot çağrım yaöntemiyle yazınız.
+1- fibonacci serisinin belli bir adetini (bu limit kullanıcından alınacak), standart çıktıya yazdıran programı, recursive metot çağrım yaöntemiyle yazınız.

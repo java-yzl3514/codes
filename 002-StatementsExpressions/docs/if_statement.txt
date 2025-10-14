@@ -1,0 +1,135 @@
+
+Koşullu Dallanma (Conditional Branching) deyimidir.
+Program akışını çalışma zamanı sırasında belirli koşullara bağlamayı amaçlayan deyimdir.
+if-then:
+if(boolean-condition-expression)
+   statement(s);
+
+
+statement(s): tek deyim ya da compound statement(bileşik deyim) olabilir. Eğer bileşik deyimse curl braces (block) içinde yazılmalıdır.
+boolean-condition-expression true ise if gövdesi çalıştırılacak. false ise çalıştırılmayacak.
+
+Single Statement
+ if(2 < 30)
+    System.out.println("2 < 30");
+
+ Compound Statement
+    if(2 < 30) {
+               System.out.println("2 < 30");
+               System.out.println("In if");
+           }
+
+
+if-then-else
+
+ if(boolean-condition-expression)
+    statement;
+  else
+    statement;
+
+    if(boolean-condition-expression){
+        statements;
+     } else {
+        statements;
+     }
+
+statement(s): tek deyim ya da compound statement(bileşik deyim) olabilir. Eğer bileşik deyimse curly braces (block) içinde yazılmalıdır.
+boolean-condition-expression true ise if gövdesi çalıştırılacak. false ise else gövdesi çalıştırılacak
+
+if-then veya if-then-else deyimleri bittiğinde akış kaldığı yerden devam eder.
+
+
+dangling-else problem:
+
+int i = 2, j = 3, k = 4;
+
+        if(i > j)
+            if(i > k)
+                System.out.println("A");
+        else
+                System.out.println("B");
+
+        if(i > j)
+            if(i > k)
+                System.out.println("A");
+            else
+                System.out.println("B");
+
+Yukarıdaki if deyimlerinin çıktısını yazdırınız.
+
+Yukarıdaki yazılan if-then statement'ıyla aşağıdaki yazım tarzını kıyaslayınız ve çıktıları
+karşılaştırınız:
+      if (i > j) {
+                if (i > k)
+                    System.out.println("A");
+            } else
+                System.out.println("B");
+
+Aşağıdaki kodu çalıştırınız :
+        if(i > j)
+            if(i > k)
+                System.out.println("A");
+        else System.out.println("C");
+        else System.out.println("B");
+
+ Yukarıdaki if statment'larını çalıştırınız ve sonuçları açıklayınız.
+
+ else cümleciği (else clause) daima eşleştirilmemiş if cümleciğine (if clause) bağlanır.
+
+
+if-then-chaning
+ boolean condition = true;
+
+
+        if(condition)
+            if(condition)
+                if(condition)
+                    ;
+
+ Aşağıdaki if-then-else statment'ını inceleyiniz :
+   if (condition) {
+             System.out.println("A");
+         } else {
+             if (!condition) {
+                 System.out.println("B");
+             } else {
+                 if (condition) {
+                     System.out.println("C");
+                 }else {
+                     if(condition){
+                         System.out.println("D");
+                     }else {
+                         System.out.println("E");
+                     }
+                 }
+             }
+         }
+
+
+Yukarıdaki if-else merdiveninin daha temiz yazımı aşağıdaki gibidir. Lütfen kıyaslayınız:
+
+        if (condition) {
+            System.out.println("A");
+        } else if (!condition) {
+            System.out.println("B");
+        } else if (condition) {
+            System.out.println("C");
+        } else if (condition) {
+            System.out.println("D");
+            //....
+        } else
+            System.out.println("E");
+
+Eğer if-then-else bloklarında tek statement'lık iş yapılacaksa genellikle block parantezlerinin
+kullanılmaması tercih edilir.
+
+        if (condition)
+            System.out.println("A");
+        else if (!condition)
+            System.out.println("B");
+        else if (condition)
+            System.out.println("C");
+        else if (condition)
+            System.out.println("D");
+        else
+            System.out.println("E");

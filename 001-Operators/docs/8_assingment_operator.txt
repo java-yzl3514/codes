@@ -1,0 +1,13 @@
+Simple Assignment Operator = (basit atama)
+Compound Assignment Operators (bileşik atama) (op=)
+
+-- Right-Associative
+ a=b=c ifadesi a = (b=c) şeklinde yorumlanır.
+
+ İlk operand (Sol operand) değişken olmalıdır. Aksi halde Compile-Time Error
+ Sağ operandın tipi, sol operandın tipine assignment-compatible olmak zorundadır.  Aksi halde Compile-Time Error
+ Çalışma zamanında önce sağ ifade sonra sol değişken belirlenip,
+  değer dönüşümü (widening/narrowing/boxing/unboxing) uygulanarak yazılır.
+
+Compound Assignment Operators (bileşik atama) (op=)
+*= /= %= += -= <<= >>= >>>= &= ^= |=

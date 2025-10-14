@@ -1,0 +1,21 @@
+BINARY NUMERIC PROMOTION
+
+Binary aritmetik ve karşılaştırma operatörleri ( +, -, *, /, %, <, >, <=, >=, ==, !=, ^, |, &) iki operand'ı
+belirli bir "en geniş" türe yükselterek ortak bir türde işlem yapar.
+
+Kurallar :
+  double: Eğer operand'lardan birisi double ise, diğeri önce double'a yükseltilir sonuç double olur
+  float: Eğer operand'lardan birisi float ise, diğeri önce float'a yükseltilir sonuç float olur
+  long: Eğer operand'lardan birisi long ise, diğeri önce long'a yükseltilir sonuç long olur
+  int: Eğer operand'lardan birisi int ise, diğeri önce int'e yükseltilir sonuç int olur
+
+  Not : Operand'lar byte/short/char ise, her biri önce unary numeric promotion ile int'e çıkarılır sonra
+  yukarıdaki kural takip edilir.
+
+  Neden ?
+    Donanım Uyumluluğu
+      Modern CPU'lar genellikle 32-bit (int) veya 64-bit (long/double) genişlikte işlem yapar. Küçük tamsayıları
+      bu genişliklere yükselterek, ekstra donanım desteği gerekmeden hesaplamalar standartlaştırılır ve hızlandırılır
+
+   Basitlik ve Tutarlılık
+

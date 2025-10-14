@@ -1,0 +1,682 @@
+
+Java'da ki switch, tek bir değerin birden çok olası değerle karşılaştırılmasına dayalı
+olarak program akışını yönlendiren bir kontrol yapısıdır.
+
+
+Temel Kavram : Çok Yönlü Dallanma (Multi-way Branching)
+  Bilgisayar programlarının en temel yapı taşlarından biri koşullu mantıktır. Bu durum şüphesiz
+  if-else deyimini hatırlatabilir.Ancak bazen bir değişkenin değerine göre (if-else durumunun doğası
+  gereği koşulladığı 2 durum: true/false) 2'den çok daha fazla yol ayrımına gitmemiz gerekebilir.
+
+
+  if(day == 1)
+    ....
+    else if(day == 2)
+    ...
+    else if(day == 3)
+    ...
+    //devam ediyor....
+
+  Yukarıdaki if-then-else zinciri birkaç sorunu ortaya çıkarır:
+  -- Okunabilirlik : Zincir uzadıkça kodun okunması ve anlaşılması zorlaşır.Kodun asıl niyetinin
+  "tek bir değere göre seçim yapmak" olduğu kaybolur. Fakat bazı durumlarda if-else zinciri
+  kaçınılmazdır yani switch'e geçirilmesi mümkün olmayabilir. Bu durumda çözüm statement'lar üzerinden
+  aranmaktan çıkabilir yani problem çözüm tasarımının gözden geçirilmesi gerekebilir.
+  -- Verimlilik : En kötü durumda (The Worst Case),program doğru koşulu bulana kadar tüm if koşullarını
+  sırayla yapar.Bu, lineer bir arama performansına yol açabilir (O(n))
+  -- Bakım Zorluğu : Yeni bir durum eklemek ya da çıkartmak zincirin yapısını bozma riski taşır.
+
+  Switch Gerekliliği:
+    switch yapısı "çok yönlü dallanma" problemini daha zarif ve verimli bir şekilde çözmek için ortaya
+    çıkmıştır:
+    1. Niyeti Açıkça Belirtme (Intent) : switch kullanmak programcıya, "bir değişkenin değerine göre aşağıdaki
+    durumlardan birini seç" mesajını net bir şekilde verir. Bu, okunabilirliği artırır.
+    2. Performans Optimizasyonu : switch, derleyiciye optimizasyon için (doğru yerde kullanılırsa) büyük bir fırsat sunar.
+    Yani derleyici if-else zincirindeki gibi lineer arama yapmak yerine, çok daha verimli olan "jump tablosu(jump table/lookuptable)"
+    gibi mekanizmalar kullanabilir. Bu sayede seçimi sabit bir zamanda (O(1)) veya logaritmik zamanda (O(logn)) gerçekleştirebilir
+    3. Söz Dizimi:
+
+    switch(acceptable-type-expression){
+            case <acceptable-type-constant-expression> :
+
+            case <acceptable-type-constant-expression> :
+
+            ....
+       }
+
+  Tarihsel Gelişim :
+    switch Java'nın kendisi gibi zamanla olgunlaşmış ve değişmiştir.
+
+    1. Java 1.0 Geleneksel switch Statement
+     Java'nın ilk versiyonu,switch deyimini doğrudan C/C++'dan miras almıştır. JLS bu yapıyı bu yapıyı bir "statement"
+     olarak tanımlar.
+     -- Desteklenen tipler: primitive tamsayı türlerinden byte, short, char ve int türlerini ve bu türlerin sarmalayıcı (wrapper)
+     türleri.
+     -- En önemli ve tehlikeli olabilecek özelliği : Fall-through
+        Bir case bloğunun sonuna break statement konulmazsa, kontrol bir sonraki case bloğuna düşer ve oradaki kodları da
+        çalıştırmaya devam eder. Bu bazen bilinçli olarak kullanılsa da unutulan break statement'ları nedeniyle mantık
+        hatalarının en yaygın kaynaklarından biri olmuştur.
+---------------------------------------------------------------
+Örn:
+public static void main(String[] args) {
+        switch (2){
+            case 2:
+                System.out.println("2");
+                break;
+            case 1 :
+                System.out.println("1");
+                break;
+            default:
+                System.out.println("Unknown");
+                break;
+        }
+        System.out.println("after switch");
+        return;
+    }
+---------------------------------------------------------------
+Fall-through :
+  public static void main(String[] args) {
+          switch (2){
+              case 2:
+                  System.out.println("2");
+              case 1 :
+                  System.out.println("1");
+              default:
+                  System.out.println("Unknown");
+          }
+          System.out.println("after switch");
+          return;
+      }
+---------------------------------------------------------------
+long is not supported : COMPILE-TIME ERROR
+ public static void main(String[] args) {
+        switch (2L){
+            case 2:
+                System.out.println("2");
+                break;
+            case 1 :
+                System.out.println("1");
+                break;
+            default:
+                System.out.println("Unknown");
+                break;
+        }
+        System.out.println("after switch");
+        return;
+    }
+---------------------------------------------------------------
+Unmatching Case
+
+public static void main(String[] args) {
+
+        int selector = 10;
+        switch (selector){
+            case 2:
+                System.out.println("2");
+                break;
+            case 1 :
+                System.out.println("1");
+                break;
+            default:
+                System.out.println("Unknown");
+                break;
+        }
+
+        System.out.println("after switch");
+        return;
+    }
+----------------------------------------------------
+case etiketlerinde Constant Expression kullanılmalı
+Aşağıdaki kod derleme zamanı hatası üretir:
+
+public static void main(String[] args) {
+
+        int selector = 10;
+        int label1 = 30;
+        int label2 = 60;
+
+        switch (selector){
+            case label1:
+                System.out.println("2");
+                break;
+            case label2 :
+                System.out.println("1");
+                break;
+            default:
+                System.out.println("Unknown");
+                break;
+        }
+
+        System.out.println("after switch");
+        return;
+    }
+-------------------------------------------------------
+case label'larda kullanılacak değişkenler constant variable'a dönüştürülürse constant expression
+elde edilmiş olunur:
+
+    public static void main(String[] args) {
+
+        int selector = 10;
+        final int label1 = 30;
+        final int label2 = 60;
+
+        switch (selector){
+            case label1:
+                System.out.println("2");
+                break;
+            case label2 :
+                System.out.println("1");
+                break;
+            default:
+                System.out.println("Unknown");
+                break;
+        }
+
+        System.out.println("after switch");
+        return;
+    }
+---------------------------------------------------
+
+case label'ı block parantezleri içerisinde yazılabilir.Bu zorunlu değildir. Bu durum daha önce ele alınan if ve loop
+statmentlarında olduğu gibi single/multi statement koşullamasına gerek duymaz. Genellikle gerek duyulmadan yazılır fakat
+okunabilirlik için kullanımı tercih edilebilir.
+
+ 2. Java 5 : Enum desteği
+  Java 5 ile birlikte enum türleri dile eklenmiş oldu. switch yapısı da enum tiplerini desyekleyecek
+  şekilde güncellendi.Bu, tamsayı sabitleri (literal) kullanmak yerine daha tip-güvenli (type-safe) ve
+  okunabilir kod yazmayı sağlar.
+
+örn:
+_________________________________________--
+public static void main(String[] args) {
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer to match a weekday :");
+        int day = Math.abs(keyboard.nextInt()) % 7;
+
+
+        switch (day) {
+            case 0:
+                System.out.println("Monday");
+                break;
+            case 1:
+                System.out.println("Tuesday");
+                break;
+            case 2:
+                System.out.println("Wednesday");
+                break;
+            case 3:
+                System.out.println("Thursday");
+                break;
+            case 4:
+                System.out.println("Friday");
+                break;
+            case 5:
+                System.out.println("Saturday");
+                break;
+            case 6:
+                System.out.println("Sunday");
+                break;
+        }
+
+    }
+    ______________________________________________
+
+Aşağıdaki kodu okuyunuz. Çalıştırmadan önce eleştiriniz :
+public static void main(String[] args) {
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        int day;
+        do {
+            System.out.println("Please enter an integer to match a weekday -1 to quit :");
+            day = keyboard.nextInt();
+            if(day == -1){
+                break;
+            }
+
+            switch (Math.abs(day) % 7) {
+                case 0:
+                    System.out.println("Monday");
+                    break;
+                case 1:
+                    System.out.println("Tuesday");
+                    break;
+                case 2:
+                    System.out.println("Wednesday");
+                    break;
+                case 3:
+                    System.out.println("Thursday");
+                    break;
+                case 4:
+                    System.out.println("Friday");
+                    break;
+                case 5:
+                    System.out.println("Saturday");
+                    break;
+                case 6:
+                    System.out.println("Sunday");
+                    break;
+            }
+        } while (day != -1);
+
+
+    }
+-------------------------------------------------------
+public static void main(String[] args) {
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+
+        while (true) {
+            System.out.println("Please enter an integer to match a weekday -1 to quit :");
+            int day = keyboard.nextInt();
+            if (day == -1) {
+                break;
+            }
+            switch (Math.abs(day) % 7) {
+                case 0:
+                    System.out.println("Monday");
+                    break;
+                case 1:
+                    System.out.println("Tuesday");
+                    break;
+                case 2:
+                    System.out.println("Wednesday");
+                    break;
+                case 3:
+                    System.out.println("Thursday");
+                    break;
+                case 4:
+                    System.out.println("Friday");
+                    break;
+                case 5:
+                    System.out.println("Saturday");
+                    break;
+                case 6:
+                    System.out.println("Sunday");
+                    break;
+            }
+        }
+
+
+    }
+ -------------------------------------------------------------------
+
+Enums:
+
+public enum Day {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+
+public static void main(String[] args) {
+
+        Day day = Day.FRIDAY;
+        switch (day) {
+            case MONDAY:
+                System.out.println("Monday");
+                break;
+            case TUESDAY:
+                System.out.println("Tuesday");
+                break;
+            case WEDNESDAY:
+                System.out.println("Wednesday");
+                break;
+            case THURSDAY:
+                System.out.println("Thursday");
+                break;
+            case FRIDAY:
+                System.out.println("Friday");
+                break;
+            case SATURDAY:
+                System.out.println("Saturday");
+                break;
+            case SUNDAY:
+                System.out.println("Sunday");
+                break;
+        }
+    }
+
+-------------------------------------------------------------
+
+3. Java 7 : String Support
+   String nesnelerinin switch ile birlikte kullanımı Java 7 ile birlikte gelmiştir.
+   Bu kodun okunabilirliğini önemli ölçüde artıran bir "syntactic-sugar" olarak ifade edilebilir.
+   String nesneleri için aslında derleyici String'in hashCode() ve equals() metodlarını kullanarak
+   verimli bir switch oluşturur.
+
+örn:
+
+ String day = "MONDAY";
+        switch (day){
+            case "MONDAY":
+                System.out.println("MONDAY");
+                break;
+            case "TUESDAY":
+                System.out.println("TUESDAY");
+                break;
+            //....
+        }
+
+örn: Aşağıdaki kod Language Level JDK 6 ile çalıştırılırsa COMPILE-TIME ERROR alındığı görülecektir :
+
+public static void main(String[] args) {
+
+        String day = "MONDAY";
+        switch (day) {
+
+        }
+    }
+
+4. Java 12 & 13 : switch Expression doğuşu (preview)
+
+  Geleneksel switch statement'ının sorunları üzerine :
+   - verbosity: Her case için tekrarlayan break deyimleri
+   - Hata Eğilim : unutulan break'lerin neden olduğu fall-through özelliği
+   - Kapsam Sorunları : Bir case bloğunda tanımlanan değişkenin diğer case bloklarında
+   da görünür olması (initialize edilmemiş olsa dahi)
+
+   örn:
+    public static void main(String[] args) {
+           String day = "MONDAY";
+           switch (day){
+               case "MONDAY":
+                   int a  = 90;
+                   System.out.println("MONDAY");
+                   break;
+
+               case "TUESDAY":
+                   a = a * 4;
+                   System.out.println("TUESDAY");
+                   break;
+           }
+
+       }
+       --------------------------------------------
+       public static void main(String[] args) {
+               String day = "MONDAY";
+               switch (day){
+                   case "MONDAY":
+                       int a = 90; // initialize
+                       System.out.println("MONDAY");
+                       break;
+
+                   case "TUESDAY":
+                       a  = 12; // assignment
+                       a = a * 4;
+                       System.out.println("TUESDAY");
+                       break;
+               }
+    -------------------------------------------------------
+    --- Değer Döndürmeme : switch bir değer hesaplayıp, değişkene atmak için kullanıldığında
+    ya her case içinde atama işlemini tekrarlamak gerekecek ya da switch bir metot içerisindeyse
+    metot geri dönüş değeri için geçici bir değişkene atamayı gerektiriyordu.
+
+   Bu sorunları çözmek için "Project Amber" kapsamında switch expression JEP 325 ile
+   (https://openjdk.org/jeps/325) Java 12'de bir preivew özellik olarak sunuldu.
+
+5. Java 14 : switch Expression standartlaştırılması.
+
+   Java 12 & 13 üzerinden preview olarak sunulan bu özellik geri bildirimlerle olugunlaştırılıp
+   Java 14'de JEP 361 (https://openjdk.org/jeps/361) ile standart bir dil özelliği haline geldi.
+
+6. Java 17, 21+ : Pattern Matching
+   Java 17'de JEP 406 (https://openjdk.org/jeps/406) ile Pattern Matching özelliği preview olarak geldi ve Java 21'de standartlaştı.
+   Bu özellik switch'in yeteneklerini kökten değiştirdi:
+   -- null Kontrolü : case null ile null durumunu doğrudan kontrol etme imkanı
+   -- Type Pattern
+   -- Guarded Patterns
+
+örn: null kontrolü :
+public static void main(String[] args) {
+        String str = null;
+        switch (str){
+            case null:
+                System.out.println("Null");
+                break;
+            case "A":
+                System.out.println("A");
+                break;
+        }
+    }
+
+
+-*------------------------------------------------------------
+Fall-through'dan yararlanma
+
+public static void main(String[] args) {
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer in [1-7] to match weekday or weekend : ");
+        int day = keyboard.nextInt();
+
+        switch (day){
+            case 1:
+                System.out.println("Weekday");
+                break;
+            case 2:
+                System.out.println("Weekday");
+                break;
+            case 3:
+                System.out.println("Weekday");
+                break;
+            case 4:
+                System.out.println("Weekday");
+                break;
+            case 5:
+                System.out.println("Weekday");
+                break;
+            case 6:
+                System.out.println("Weekend");
+                break;
+            case 7:
+                System.out.println("Weekend");
+                break;
+            default:
+                System.out.println("Invalid Day");
+                break;
+        }
+
+    }
+
+THEN [FALL-THROUGH]:
+
+ public static void main(String[] args) {
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer in [1-7] to match weekday or weekend : ");
+        int day = keyboard.nextInt();
+
+        switch (day){
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                System.out.println("Weekday");
+                break;
+            case 6:
+            case 7:
+                System.out.println("Weekend");
+                break;
+            default:
+                System.out.println("Invalid Day");
+                break;
+        }
+
+    }
+
+WITH EXPRESSION !!!!
+
+public static void main(String[] args) {
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer in [1-7] to match weekday or weekend : ");
+        int day = keyboard.nextInt();
+
+        String result  = switch (day){
+            case 1,2,3,4,5 -> "Weekday";
+            case 6,7 -> "Weekend";
+            default -> "Invalid Day";
+        };
+
+        System.out.println(result);
+
+    }
+
+
+ Modern Java, fall-through hatasını ortadan kaldırmak ve kodu daha okunabilir yapmak için (arrow ->)
+ gösterimini tanıtmıştır.
+
+ -> operatörü, case etiketiyle çalıştırılacak kod arasında net bir ayrım sağlar. Sağ tarafında
+ tek bir ifade(expression) veya bir kod bloğu {....} olabilir. break ihtiyacını tamamen ortadan
+ kaldırır.
+
+
+Kapsamlılık !!!!:
+ Bu, switch'in bir ifade olarak kullanıldığında ortaya çıkan çok önemli bir bilgisayar bilimi
+ kavramıdır.
+ Bir switch ifadesi, değer üretmek zorunda olduğundan, derleyici seçici ifadenin tüm olası değerlerinin
+ case etiketleri tarafından kapsandığından emin olmak zorundadır. Bu durum, default bloğunu çoğu zaman
+ zorunlu kılar veya enum gibi sonlu türlerde tüm olasılıkların listelenmesini gerektirir.
+ Bu özellik, tür güvenliğini artırır.
+ *** çalışma zamanı hatalarını derleme zamanı hatalarına dönüştürür ***
+
+
+Örn:
+
+COMPILE-TIME ERROR
+DIAGNOSTIC : switch expression does not cover all possible input values
+ String result  = switch (day){
+            case MONDAY,SUNDAY,FRIDAY -> "Day";
+            case SATURDAY, TUESDAY, THURSDAY -> "Java Day";
+        };
+---------------------------------------------------------------------
+
+default zorunluluğu :
+
+public static void main(String[] args) {
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer in [1-7] to match weekday or weekend : ");
+        int day = keyboard.nextInt();
+
+        String result  = switch (day){
+            case 1, 2,3,4,5 -> "Weekday";
+            case 6,7 -> "Weekend";
+            ?? default ???
+        };
+
+        System.out.println(result);
+
+    }
+----------------------------------------------------------------------------
+Exercises : Yukarıdaki switch expression ve statament'ı ile yazılmış problem çözümünü if-then-else
+statement'ı ile yazmaya çalışınız.
+
+Alt Seviye Çalışma Biçimi (JVM Bytecode)
+
+ Daha önce java derleyicisinin switch için bazı optimizasyonlar yaptığını belirtmiştik.
+ Bu anlamda javac switch için JVM'in anlayacağı bytecode'a çevirirken iki temel strateji
+ kullanır :
+
+ 1. lookupswitch Bytecode Komutu :
+   case etiketleri arasındaki farkların büyük ya da seyrek olduğu durumlarda bu komut
+   tercih edilebilir*.
+
+   case etiketlerini ve bunlara karşılık gelen atlama adreslerini içeren "sıralı" bir "anahtar-değer"
+   listesi oluşturulur. Çalışma zamanında switch'e gelen değer bu sıralı listede (genellikle binarysearch yöntemi)
+   aranır.
+   İkili arama (binarysearch) nedeniyle arama O(logn) yani logaritmik zamanda gerçekleştirilir.
+   Bu durum if-then-else zincirinin O(n) performansından daha iyidir.
+ Örn:
+  Source Code :
+
+  String day = "MONDAY";
+          switch (day){
+              case "MONDAY":
+                  System.out.println("MONDAY");
+                  break;
+              case "TUESDAY":
+                  System.out.println("TUESDAY");
+                  break;
+              //....
+          }
+  ------
+  Bytecode:
+
+  ....
+  11: lookupswitch  { // 2
+            -2015173360: 36
+             -259361235: 50
+                default: 61
+           }
+   ....
+
+NOT: Yukarıdaki bytecode SwitchStatement.class üzerinden alınmıştır.
+   Tüm bytecode'a erişmek için :  "javap -c SwitchStatement.class"
+*: JVM geliştirme stratejileri değişebilir.
+   ---------------------------------------------------------------
+
+2. tableswitch Bytecode Komutu :
+    Bu yöntem en verimli yöntemdir diyebiliriz. case etiketlerinin yoğun ve sıralı
+    olduğu durumlarda bu komut tercih edilebilir*.
+
+    case etiketlerinin minimum ve maximum etiketleri arasında bir dizi (array) veya bir tablo
+    oluşturulur. Çalışma zamanında switch'e gelen değer, bu tablodaki bir indekse doğrudan karşılık gelir.
+    Bu indeksteki değer programın atlayacağı (jump) kod adresidir.
+
+    Bu doğrudan bir erişim olduğundan O(1)-sabit zaman karmaşıklığındadır.
+
+Source Code :
+       ....
+       int x = 2;
+
+        switch (x){
+            case 1:
+                System.out.println("MONDAY");
+                break;
+            case 2:
+                System.out.println("TUESDAY");
+                break;
+            case 3:
+                System.out.println("WEDNESDAY");
+                break;
+        }
+        ....
+        Bytecode :
+        ....
+        tableswitch   { // 1 to 3
+                             1: 136
+                             2: 147
+                             3: 158
+                       default: 166
+                  }
+          ....
+
+*: JVM geliştirme stratejileri değişebilir.
+
+
+Java, C'den miras olarak aldığı basit ama hataya açık bir kontrol akışı olan switch statement'ı, Java 14 ve sonrası
+ile birlikte gelen derleyici tarafından güvenliği sağlanan, okunabilir ve güçlü bir değer üreten switch expression'a
+evriltmiştir.
+  Gereklilik : if-then-else zincirlerinin okunaksızlığına ve potansiyel verimsizliğine karşı daha yapısal ve optimize
+  edilebilir bir çözüm sunmak.
+
+  Öneri-Modern Java : Mümkün olan her durumda, özellikle bir değer ataması yapılıyorsa, geleneksel switch statement yerine switch
+  expression tercih edilmelidir. Sağladığı derleme zamanı garantileri, artan okunabilirlik, azalan hata olasılığı tercih edilme
+  nedenlerini oluşturur.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

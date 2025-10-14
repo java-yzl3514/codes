@@ -1,0 +1,133 @@
+Klavyeden Okuma Yapılması
+
+ Java'da klavyeden (aslında stdin üzerinden okuma yapmak) okuma yapmak için pek çok sınıf ve metot bulunmaktadır.
+ Biz uygulamalarımızda ağırlı olarak java.util.Scanner isimli sınıftan faydalanacağız.
+ Bu sınıfın uygun veri türü için nextXXX metotlarını kullanacağız.
+ ** Belirli konulara gelene kadar bu kullanımlar birer kalıp biçiminde düşünülmelidir.
+
+ Eğer istenilen türden veri girişi yapılmazsa exception oluşur.
+ Klavyeden int türden değer okuma kalıbında değerler arasında en az bir tane whitespace karakterler olacak şekilde
+ girilmelidir.
+
+örn:
+ java.util.Scanner keyboard = new java.util.Scanner(System.in); // stdin
+        System.out.println("Please enter an integer value : ");
+
+        int value = keyboard.nextInt();
+        System.out.println("You entered " + value);
+
+Örn: Aşağıdaki programda int değerler girilirken boşluk bırakarak giriniz ve ardından ENTER'a
+basarak çıktıyı kontrol ediniz.
+Örnek Girdi : 10 34 [ENTER]
+
+  java.util.Scanner keyboard = new java.util.Scanner(System.in); // stdin
+          System.out.println("Please enter two integers values : ");
+
+          int value = keyboard.nextInt();
+          int value2 = keyboard.nextInt();
+          System.out.println("You entered : " + value);
+          System.out.println("And : " + value2);
+
+ Beklenilen formatta veri girilmezse exception oluşur. Bu durumlar ileride ele alınacaktır.
+ Programın robust olması için gerekli yöntemler tartışılacaktır. Şimdilik klavyeden veri
+ alındığında doğrudan istenilen değerler girilecek şekilde düşünülecektir.
+
+ Scanner sınıfı JavaSE sınıfıdır.
+ Yazımlarda import statement'ı görmediğimizden sınıfların "Fully Qualified" isimleri tercih
+ edilecektir.
+ Kaynak kodda simple name atıfları import statement'ından sonra kullanılmaya başlanacaktır.
+
+
+Kullanıcıdan alınan iki int türünden sayının toplamını standart çıkıya yazdıran programı yazınız.
+
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter two integers to add :");
+
+        int number1 = keyboard.nextInt();
+        int number2 = keyboard.nextInt();
+        int result = number1 + number2;
+        System.out.println("Result = " + result);
+
+
+örn: Kullanıcıdan alınan int türden bir sayıyı pozitif, negatif ve sıfır olma durumunu kontrol eden
+programı yazınız :
+
+          java.util.Scanner keyboard = new java.util.Scanner(System.in);
+          System.out.println("Please enter an integer : ");
+          int value = keyboard.nextInt();
+
+          if(value > 0)
+              System.out.println("Positive");
+          else if (value == 0)
+              System.out.println("Zero");
+          else if(value < 0)
+              System.out.println("Negative");
+
+Yukarıdaki programın aşağıdaki biçimde yazılması okunaklılığı artırıyor gibi görünsede gereksiz
+if kontrollerinin yapıldığı görülecektir. Programcıda ayrık yani birbiriyle ilişkisi olmayan durumların
+kontrolü yapılıyor algısını oluşturacaktır.
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer : ");
+        int value = keyboard.nextInt();
+
+        if(value > 0)
+            System.out.println("Positive");
+        if (value == 0)
+            System.out.println("Zero");
+        if(value < 0)
+            System.out.println("Negative");
+
+örn: Kullanıcıdan alınan int türden sayının 6'dan, 10'dan ve 22'den büyük olma durumlarını ekrana
+yazdıran programı yazınız:
+
+Program aşağıdaki biçimde else clause kullanılarak yazılırsa hatalı olur. Çünkü girilen sayı
+yeterince büyükse 10'dan ve 22'den büyük olma durumları ekrana yazdırılmayacak. Böyle durumlarda
+ayrık if deyimlerinin kullanılması else clause kullanılmaması gerekir.
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer : ");
+        int value = keyboard.nextInt();
+
+        if(value > 6)
+            System.out.printf("%d > 6%n", value);
+        else if(value > 10)
+            System.out.printf("%d > 10%n", value);
+        else if(value > 22)
+            System.out.printf("%d > 22%n", value);
+
+Doğrusu: Ayrık(Discrete) yazım
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer : ");
+        int value = keyboard.nextInt();
+
+        if(value > 6)
+            System.out.printf("%d > 6%n", value);
+        if(value > 10)
+            System.out.printf("%d > 10%n", value);
+        if(value > 22)
+            System.out.printf("%d > 22%n", value);
+
+
+Örn : Katsayıları klavyeden girilen ikinci dereceden denklemin köklerini bulan ve ekrana yazdıran
+programı yazınız.
+
+   ax^2 + bx + c = 0
+   Delta = b^2 - 4ac
+
+   Delta > 0 ise :
+           x1 = -b + sqrt(Delta) / 2a
+           x1 = -b - sqrt(Delta) / 2a
+   Delta = 0 ise :
+          x1=x2= -b / 2a
+   Delta < 0 ise
+       Gerçek kök yok ! -> "No real root !"
+
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+
+Primitive türlerin referans tür karşılıkları
+
+  Boolean       boolean
+  Byte          byte
+  Short         short
+  Integer       int
+  Long          long
+  Float         float
+  Double        double
+  Character     char

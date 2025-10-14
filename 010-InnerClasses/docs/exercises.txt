@@ -1,0 +1,38 @@
+
+0-  Daha önce yazdığımız GeometricObject hiyerarşisinden herhangi bir sınıfı immutable hale getirin.
+    Adlandırma Immutable- ön ekiyle olmalı. (Örn: ImmutableCircle)
+0.1- Tasarladığınız sınıfı record olarak tekrar yazın.
+0.2- İki yazım tarzını/tasarımı karşılaştırın ve gözlemlerinizi yazın.
+---------------------------------------------------------------------------------------------------------
+1-
+  # Senaryo
+ Belirli bir boyutta sabitlenmiş bir nesne dizisini yöneten "Sequence" adında bir sınıf tasarlayınız.Bu sınıf,
+ eklendikçe nesneleri sırayla depolamalıdır.Temel amaç, bu Sequence sınıfının iç veri yapısını dış dünyaya ifşa etmeden
+ elemanları üzerinde güvenli bir şekilde gezinilmesini sağlayan bir mekanizma oluşturmaktır.
+
+ # Problem Tanımı
+   Sequence sınıfının elemanları arasında ileriye doğru haraket edebilen "iterator" (çağrışım: gezgin/gezinme)
+   işlevselliğini sağlamanız gerekmektedir. Bu işlevsellik, Iterator Design Pattern'e uygun olarak geliştirilmelidir.
+
+ # Gereksinimler ve Kısıtlamalar
+  1. Kapsüllemenin Korunması (Encapsulation): Sequence sınıfının içindeki Object[] dizisi kesinlikle private kalmalıdır.
+  Dışarıdan hiçbir kod bu diziye doğrudan erişememeli ve onu değiştirememelidir.
+
+  2. Arayüz Tasarımı (Interface Definition): Iterator mantığını standartlaştırmak için aşağıdaki metotları içeren
+  "Selector" adında bir interface oluşturulmalıdır.
+     - boolean end(): Dizinin sonuna gelinip gelinilmediğini kontrol
+     - Object current(): Mevcut elemana geri döner
+     - void next(): Sonraki elemana geçer
+
+  3. Inner Class Kullanımı : Selector arayüzünü uygulayan sınıf, Sequence sınıfının için de mi yoksa ayrı bir sınıf olarak
+  mı tasarlanmalı düşünün ve uygulayın
+
+  4. Gösterim : Bir main metodu yazarak Sequence sınıfını test ediniz. 10 elemanlı bir Sequence oluşturun, içine [0-9]
+  aralığında sayıları (String ya da Integer) ekleyin ve ardından tasarınımıza uygun iterator metodunu kullanarak
+  tüm elemanları aralarında birer boşluk bırakarak ekrana yazdırınız.
+
+2- SequenceSelector sınıfın implementasyonunu devam ettiriniz.
+
+3- Builder Design Pattern
+
+

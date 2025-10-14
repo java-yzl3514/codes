@@ -1,0 +1,382 @@
+Access Control (implementation hiding)
+Abstraction***
+Encapsulation (Kapsülleme)
+  En önemlisi veriyi saklamaya çalışacağız.
+
+package : the library unit.
+
+
+Erişim kontrolünün temel amacı, bir türe(sınıf, ayayüz, vb) veya bir üyeye (veri alanı, metot, ctor ) erişimin uygun olup
+olmadığını belirlemektir.
+    JLS'in ilgili bölümü (Determining Accesibility),bir türe veya üyeye erişimin mümkün olup olmadığını belirleyen
+    kuralları ortaya koyar. Erişebilirlik, iki temel faktöre bağlıdır :
+     1. Erişilmek istenen tür veya üyenin bildirildiği yer.
+     2. Erişimin denendiği yer(kodun konumu)
+
+    Paketler : Mantıksal Gruplama
+    Erişim kontrolünün temelini paketler oluşturur.Bir paket, ilgili türlerin (sınıflar, arayüzler vb) bir araya getirildiği
+    isim alanıdır.
+
+    JLS paketleri "birbiriyle ilişkili türlerden oluşan bir grup" olarak tanımlar. Bir derleme birimi (.java dosyası),
+    package bildirimi ile hangi pakete ait olduğunu belirtir. Eğer bir package bildirimi yoksa, derleme birimi "isimsiz bir paketin"
+    (unnamed/default package) parçası olur.Erişebilirlik kurallarının çoğu "aynı pakette olma" durumuna bağlıdır.
+
+    Java Erişim Belirteçleri
+
+    public -> protected -> (default/friendly) -> private
+
+    1. public
+
+    JLS'e göre, bir üye veya tür public olarak bildirilmişse, ona her yerden erişilebilir.Tek bir şart vardır :
+    Üye barındıran türe erişilebilir olmalıdır.
+
+   Aşağıdaki kod örneğinde Bar sınıfının ilgili metodundan Foo sınıfına erişim olmadığından f1 metodu public olarak
+   bildirilmiş olsa dahi, türe erişimin (public class Foo) olmamasından dolayı derleme zamanı hatası oluşur.
+
+   Örn:
+   package public_access;
+
+   class Foo {
+
+       public void f1(){
+
+       }
+   }
+
+   //....
+   package public_access.other;
+
+   public class Bar {
+
+
+       public void f2(){
+
+           public_access.Foo foo = new public_access.Foo();
+           foo.f1();
+
+
+       }
+   }
+-------------------------------------------------------------------------
+ Yukarıdaki örnek ve tanımlama, public bir metoda (üye, ctor vb) erişmek için önce onun sınıfına erişilmesi gerektiği
+ anlamında gelir.Eğer sınıfın kendisi public değilse*, farklı bir paketten o sınıfın public metoduna zaten ulaşamazsınız
+
+ 2. protected
+ Bu konuyu inheritance konusuyla ele alacağız. Bknz: Project Reusability
+
+ 3. Paket Erişimi (default/friendly)
+  Bir erişim belirteci (access modifier) yazılmadğında geçerli olan varsayılan durumdur.
+  JLS'de bu durumu public, protected veya private olmayan her şey olarak tanımlar.
+   JLS : "Eğer üst seviye (top-level) bir sınıf veya arayüz, ya da bir ctor veya veri alanı üye; public, protected veya private
+   olarak bildirilmemişse, o zaman paket erişimine sahiptir"
+
+   Paket erişimine sahip bir üyeye sadece bildirildiği paketin içindeki koddan erişilebilir.
+
+package friendly_access;
+
+class A {
+}
+....
+package friendly_access;
+
+class B { // friendly_access modifier
+
+    void f(){ // friendly_access modifier
+        A a = new A(); // friendly_access
+
+    }
+}
+.....
+
+package main;
+
+public class DriverAccess {
+
+    public static void main(String[] args) {
+
+        friendly_access.A a = new friendly_access.A(); // COMPILE-TIME ERROR
+
+    }
+}
+
+4. private (Özel)
+   En kısıtlayıcı erişim seviyesidir.
+    JLS, private bir üyeye erişimin son derece basit bir kurala bağlı olduğunu belirtir.
+     .  private bir üye(member) ve ctor, sadece kendi bildirimini çevreleyen üst seviye
+     türün(top-level) gövdesi içinde erişilebilirlerdir.
+
+  Sınıf ve Arayüz(Interface) Erişimi
+
+  Üst seviye (nested olmayan-top-level) bir sınıf veya arayüz için sadece iki erişim seviyesi mümkündür.
+  public : Sınıf herhangi paketten erişilebilir.
+  Paket Erişimi: Sınıf sadece bildirildiği paketin içinden erişilebilir.
+
+ Bir top-level sınıf private veya protected olamaz.Bu erişim belirleyicileri yalnızca sınıflara uygulanabilir.
+
+ Paket İsimlendirmeleri (Package Naming)
+
+ Java'da paketler  yalnızca kodun mantıksal olarak gruplanmasını sağlamakla kalmaz, aynı zamanda dünya genelindeki
+ tüm java geliştiricileri tarafından yazılan kodlar arasında tür isimlerinin (type names) benzersizliğini garanti
+ altına alan bir isim alanı (namespace) mekanizmasıdır.
+ İsimlendirme Kuralı : Ters Alan Adı (Reversed Domain Name)
+
+ Evrensel olarak kabul görmüş en iyi uygulama, paket isimlerinin ilgili çalışılan kuruluşa ait internet alan adının
+ (domain name) tersine çevrilmiş haliyle başlatmaktır. Bu yöntem,paket isimlerinin küresel olarak benzersiz olmasını da
+ sağlar.
+  JLS, bu kuralı doğrudan zorunlu kılmaz ama ilgili bölümde şunu tavsiye eder :
+  "Geliştiriciler, yayınlanmış iki paketin aynı isme sahip olma olasılığını önlemek için adımlar atmalıdır"
+
+    Kuralın Yapısı:
+      1. Üst Düzey Alan Adı (Top-Level Domain) : com, org, gov, edu, tr gibi alan adının en son kısmı ile
+      başlanır.
+      2. Kuruluş Alan Adı (Domain Name) : Alan adının geri kalanı ters sırada eklenir.
+      3. Proje/Grup Adı: Kuruluşa ait spesifik bir proje, ürün veya grup adı eklenir.
+      4. Alt Paketler: Gerekirse daha fazla alt gruplama için ek seviyeler oluşturulur.
+
+      ** Tüm paket ismi küçük harflerle yazılmalıdır. Paket ismindeki kelime ayrıştırmaları ya da alt paket
+      oluşturmaları "." (nokta) karakteri ile sağlanır.
+      . ile ayrıştırılan seviyeler işletim sistemi dosya sisteminde ilgili dosya yolu ayracına dönüştürülür.
+
+      Örn:
+      Google'ın GSON kütüphanes için alan adı google.com ise, paket adı com.google.gson olur.
+      Apache Software Foundation'ın Commons Lang projesi için alan adı apache.org ise, paket adı
+      org.apache.commons.lang3 olur
+    ------------------------------------------------------------------------------------------------------
+    !!!  Biz derslerimizde Bilge Adam çatısı altında olduğumuzdan ve Bilge Adam kuruluşuna ait domain adı
+      bilgeadam.com olduğundan ve biz de Bilge Adam içinde bir grubu oluşturduğumuzdan (YZL3514) paket adı
+      com.ba.yzl3514 veya com.bilgeadam.yzl3514 olur.
+      Bundan sonraki derslerimizde mutlaka paket oluşturacağız ve sınıflarımızı bu paketler içinde
+      konuşlandıracağız.
+      Derste birlikte aldığımız karar neticesinde com.ba.yzl3514 kök paket adını kullanacağız.
+      -------------------------------------------------------------------------------------------------
+      İsim Çakışmaları (Collisions)
+      Bir sınıfın adı aslında bağlı bulunduğu paketle birlikte anılır. Buna Tam Nitelikli İsim (Fully-Qualified Name- FQN)
+      denir.
+
+     İsim çakışması, aynı basit isme (simple name) sahip iki farklı türün aynı dosyada kullanılmaya çalışılmasıyla ortaya
+     çıkar. Paketler bu sorunu yönetmek için bir çözüm sunar.
+       1- Basit İsim (Simple Name): Türün kendi adıdır. Örn: A, List, Foo, Car, Student, Employee vb...
+       2- Tam Nitelikli İsim (Fully-Qualified Name- FQN): Türün paket adıyla birlikte tam adıdır. java.util.List
+
+       JLS, isimlerin nasıl yorumlandığını ilgili bölümde (Names and Identifiers) tanımlar. Bir türün gerçek kimliği her
+       zaman onun tam nitelikli ismidir.
+       Çakış Senaryosu:
+       Hem java.util hem de java.awt paketlerinde List adında bir sınıf bulunur.
+       - java.util.List: Bir koleksiyon arayüzü
+       - java.awt.List : Grafiksel kullanıcı arayüzü (AWT) için bir bileşen.
+
+       Eğer bir dosyada her ikisi de import edilmeye çalışılırsa aşağıdaki örnek gibi derleme zamanı hatası
+       oluşur.
+
+       Örn :
+       package com.ba.yzl3514.collision;
+
+       import java.util.List;
+       import java.awt.List; // COMPILE-TIME ERROR
+
+       public class CollisionScene {
+
+       }
+  --------------------------------------------
+  JLS Referansı : Single-Type Import Declaration
+   JLS, bu durumu açıkça yasaklar : Eğer tekli bir import bildirimi, basit ismi zaten derleme biriminde
+   bildirilmiş bir türü içeri aktarıyorsa, bu bir derleme zamanı hatasıdır.
+
+   Çözüm : Tam Nitelikli İsim Kullanımı
+     Bu tür bir çakışmayı çözmek için, türlerden birini veya her ikisini de kodun içinde tam nitelikli ismiyle
+     kullanmak gerekir.
+
+      örn:
+      package com.ba.yzl3514.collision;
+
+      import java.util.ArrayList;
+      import java.util.List;
+
+      public class CollisionScene {
+
+          public void process(){
+              List<String> stringList = new ArrayList<>();
+              //...
+              java.awt.List awtList = new java.awt.List(); // FQN usage
+          }
+      }
+--------------------------------------------------------------
+ import Bildirimi (Import Declaration)
+  import bildirimi, geliştiricinin diğer paketlerdeki türlere sürekli tam nitelikli isimlerini yazmak zorunda
+  kalmadan, sadece basit isimleriyle erişmesini sağlayan bir "kolaylıktır"
+
+  import bildirimi C/C++ daki #include gibi kaynak kodu dosyaya yapıştırmaz. Oluşturulan bytecode üzerinde
+ hiçbir etkisi yoktur ve çalışma zamanı performansını etkilemez.import, yalnızca derleyiciye bir talimattır.
+ Derleyiciye, kod içerisinde karşılaştığı basit bir ismin hangi pakete ait olduğunu nasıl bulacağını söyler.Derleyici,
+ bu bilgiyi kullanarak basit ismi tam nitelikli isme çevirir ve bytecodu'u bu tam nitelikli isimle oluşturur.
+
+Compiled from "CollisionScene.java"
+public class com.ba.yzl3514.collision.CollisionScene {
+  public com.ba.yzl3514.collision.CollisionScene();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public void process();
+    Code:
+       0: new           #7                  // class java/util/ArrayList // DIKKAT !!!
+       3: dup
+       4: invokespecial #9                  // Method java/util/ArrayList."<init>":()V // DIKKAT !!!
+       7: astore_1
+       8: new           #10                 // class java/awt/List
+      11: dup
+      12: invokespecial #12                 // Method java/awt/List."<init>":()V
+      15: astore_2
+      16: return
+}
+------------------------------------------------------------------------------------------------------
+
+import Çeşitleri
+JLS, dört tür import bildirimi tanımlar :
+ 1- Tekli Tür import Bildirimi (Single-Type Import)
+   Sözdizimi : import paket.adi.SinifAdi;
+   Örnek : import java.util.ArrayList;
+  Belirtilen tek bir public türün basit ismini mevcut derleme birimine dahil eder.Bu en net ve en çok
+  tercih edilen import yöntemidir.Çünkü kodun hangi sınıfları kullandığını açıkça belirtir.
+
+ 2- İsteğe Bağlı import Bildirimi (Import-on-Demand)
+   Sözdizimi: import paket.adi.*;
+   Örnek: import java.util.*;
+
+    package com.ba.yzl3514.collision;
+
+    import java.util.*;
+
+    public class CollisionScene {
+
+        public void process(){
+            List<String> stringList = new ArrayList<>();
+            //...
+            java.awt.List awtList = new java.awt.List();
+        }
+    }
+
+    Belirtilen paketteki tüm public türlerin basit isimlerini kullanılabilir hale getirir. Derleyici, kodda
+    karşılaştığı ve başka bir şekilde çözemediği bir basit isim için bu paketin içine bakar.
+    NOT : Bu bildirim, alt paketleri (java.util.concurrent vb) içeri aktarmaz. Yalnızca belirtilen paketin kendi
+    türlerini kapsar.
+
+  3- Tekli Static import Bildirimi (Single-Static-Import)
+   Sözdizimi : import static paket.adi.SınıfAdı.staticUyeAdi;
+   Örnek: import static java.lang.Math.PI;
+   Belirtilen bir sınıfın public static bir üyesine (alan veya metot) sınıf adı kullanmadan doğrudan erişim
+   sağlar.PI değerini Math.PI yerine sadece PI olarak kullanabiliriz.
+  Örn :
+
+  package com.ba.yzl3514;
+
+
+  import static java.lang.Math.PI; // Single-Static-Import
+
+  public class StaticImport {
+
+      public static void main(String[] args) {
+
+          double radius = 12.4;
+
+          System.out.println(PI * radius * radius);
+
+      }
+  }
+
+---------------------------------------------------------------------------
+ İsteğe Bağlı Static import Bildirimi (Static-Import-on-Demand)
+ Sözdizimi : import static paket.adi.SinifAdi.*;
+ Örnek : import static java.lang.Math.*;
+  Belirtilen bir sınıfın tüm public static üyelerine sınıf adı olmadan erişim sağlar. Bu sayede
+  sin(), cos(), PI gibi tüm Math üyelerini doğrudan kullanabiliriz.
+ Örn:
+package com.ba.yzl3514;
+
+import static java.lang.Math.*; // Static-Import-on-Demand)
+
+public class StaticImport {
+
+    public static void main(String[] args) {
+
+        double radius = 12.4;
+
+        System.out.println(PI * radius * radius);
+        System.out.println(sin(334.));
+
+    }
+}
+
+Otomatik (Implicit) import'lar.
+ Her java kaynak dosyası, derleyici tarafından otomatik olarak yapılan bazı import'lara sahiptir.
+  - java.lang paketi: Bu paket her zaman otomatik olarak import java.lang.*; şeklinde içeri aktarılır.
+  String, Integer, System gibi temel sınıfları bu yüzden import etmeden kullanabiliriz.
+  - Mevcut Paket : Bir sınıf, kendi paketindeki diğer tüm public türleri import etmeden, basit isimleriyle
+  kullanabilir.
+  bknz : friendly_access paketi içindeki A ve B sınıflarının kullanımına. B sınıfında A basit isminin import
+  edilmeden kullanıldığını göreceksiniz.
+
+   package friendly_access;
+
+   class A {
+   }
+     ....
+     package friendly_access;
+
+     class B {
+
+         void f(){
+             A a = new A(); // import gerektirmemiştir !!!!
+
+         }
+     }
+---------------------------------------------------------------------------------------------------------
+ java.lang paketi
+  Bir geliştiricinin bu pakete bakarken sezmesi gereken ana fikir şudur: "Bunlar, Java'da program yazabilmem için
+  dilin bana sunduğu temel, vazgeçilmez yapı taşlarıdır.Onlar olmadan Java, Java olmazdı"
+  JLS Referansı : Compilation Unit
+   JLS'e göre, her derleme birimi (.java dosyası) sanki en başında import java.lang.*; bildirimi varmış gibi işlem görür.
+   Bu, paketin içindeki tüm public türlerin, herhangi bir import ifadesi yazmaya gerek kalmadan doğrudan kullanılanilabilmesi
+   sağlar. Bu java.lang'in dilin ayrılmaz bir parçası olduğunun en net teknik göstergesidir.
+    *** lang ismi, language(dil) kelimesinin kısaltmasıdır. Bu paketin kurucuları, buradaki sınıfları doğrudan dilin
+    bir uzantısı olarak görmüşlerdir.
+
+
+    java.lang paketinin incelenmesi
+    1- Evrenin merkezi : Object sınıfı.
+     Anlamı ve geliştirici sezgisi : Bu sınıf, Java'daki tüm nesne hiyerarşisinin köküdür. Bir geliştirici Object gördüğünde
+     şunu sezmelidir: "Java'da her şey, en temelde bir Object'tir" (Everything is an object). Bu, referans tipleri için
+     ortak bir payda ve temel davranışlar (equals, hashCode, toString) sunan evrensel bir atadır.
+     -- equals(), hashCode(), toString(), wait(), getClass() gibi metotların her Java nesnesinde bulunduğunu ve gerektiğinde
+     ezilmesi(override) gerektiğini bilmek KRİTİKTİR.
+      JLS, Object sınıfının tüm sınıflar için nihai üst sınıf olduğunu belirtir.
+
+    Tek bir kök sınıfa sahip olma fikri, nesne yönelimli dillerin (özellikle Smalltalk) bir mirasıdır. Her şeyin bir nesne
+    olması önermesi, dilin modelini tutarlı ve basit hale getirir.Bu tasarım, polimorfizmi en üst düzeyde mümkün kılar.
+   2- İlkel Türlerin Nesne Dünyasındaki Elçileri: Sarmalayıcı Sınıflar (Wrapper Classes)
+
+   3- Metinlerin Değişmez Starı : String Sınıfı.
+   Anlamı ve Geliştirici Sezgisi: String, yazı/metin verilerini temsil eder. Geliştiricinin en temel sezgisi şu olmaldır :
+   "String nesneleri değişmezdir(immutable)". Bir string üzerinde yapılan her değişiklik aslında yeni bir String nesnesi
+   yaratır.
+   4- İşletim Sistemiyle Konuşanlar : System, Runtime
+    Anlamı ve geliştirici sezgisi : Bu sınıflar, JVM'in dolayısıyla java programının, üzerinde çalıştığı işletim sistemi ve
+    donanım ile olan arayüzüdür. Geliştirici, System.out.println yazdığında şunu sezmelidir:
+    "Programın dışındaki dünyaya, standart çıktı(stdout) akışına bir veri gönderiyorum"
+
+    System: Standart giriş/çıkış/hata akışlarına (in,out, err),sistem özelliklerine, getProperties(), ortam değişkenlerine
+    getenv() ve programı sonlandırma exit() gibi temel OS işlevlerine erişim saçlar.
+    Runtime: JVM'in çalışma zamanı ortamını temsil eder. Bellek yönetimi totalMemory(), freeMemory(), gc(),
+    işlemci sayısı, availableProcessors() ve işletim sisteminde yeni bir süreç başlatma exec() gibi daha alt seviye
+    kontrollere olanak tanır.
+    -------------------------------------------------------------------------------------------------------
+  Bir derleme biriminde public erişim belirtecine sahip en fazla 1 class bildirimi yapılabilir.
+  public olarak bildirimi yapılan sınıfın adı da derleme birimi dosyasının adıyla birebir aynı olmak zorundadır.
+  Bir derleme birimi içerisinde public sınıf bildirimi zorunlu değildir.
+
+   Ne ? ve Nasıl ? Ayrıştırılması
+   Interface ve Implementation Separation
+
+
+

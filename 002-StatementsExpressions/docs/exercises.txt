@@ -1,0 +1,33 @@
+Exercises :
+1- Kullanıcıdan alınan int türden sayının basamakları toplamını ekrana yazdıran
+uygulamayı yazınız.
+   çözüm : DigitSumApp.java
+2- gcd (Greatest Common Divisor) - Euclid Algorithm (Öklit Algoritması)
+   çözüm : GreatestCommonDivisorApp.java
+3- Collatz Hipotezi - https://tr.wikipedia.org/wiki/Collatz_san%C4%B1s%C4%B1
+
+    Bu hipotez, pozitif bir tamsayıya uygulanan belirli basit kuralların eninde sonunda 1'e
+    ulaşacağını öne süren, henüz kanıtlanmamış bir hipotezdir.
+    Kurallar :
+      0- Eğer sayı çift ise ikiye böl,
+      1- Eğer sayı tek ise onu üç ile çarp ve bir ekle
+ Kullanıcıdan alınan int türden bir sayı 1'e ulaşana kadar her adımı ve sonunda toplam
+  kaç adım sürdüğünü ekrana yazdırdan uygulamayı yazınız.
+   çözüm: CollatzHypothesisApp.java
+
+4- Kullanıcıdan alınan int türden onluk tabanda alınan sayının ikilik tabandaki karşılığını
+string veya array kullanmadan sadece sayısal işlemlerle hesaplayan ve sonucu ekrana yazdıran
+programı yazınız.
+   çözüm : DecimalToBinaryRepresentationApp.java
+
+5- Kullanıcıdan alınan int türden sayının tersini ekrana yazdıran uygulamayı yazınız.
+   çözüm :  TODO
+
+6-FactorialApp.java uygulaması için aşağıdaki düzenlemeleri yapınız :
+ Kullanıcı 0 girene kadar tekrar tekrar kullanıcıdan hesaplanacak n! değerini isteyen
+ uygulamaya dönüştürünüz.
+ Çözümü IterativeFactorialApp.java sınıfı içerisinde yazınız.
+
+7- While döngüsüyle çözülmüş tüm sorularımızı for döngüsüyle çözünüz.
+
+

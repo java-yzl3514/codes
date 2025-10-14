@@ -1,0 +1,242 @@
+ Literals
+
+  Literal, programlama dillerdinde sabit bir değeri doğrudan temsil eden (representation) yazım
+  biçimi.
+  Bir değişkene atanan gerçek değeri ifade eder.
+
+  int x = 42;
+
+  int   // keyword
+   x    // identifier
+   =    // operator
+   42   // literal
+   ;    // separator
+
+   String message = "Hello";
+
+     String     // Reference Type--- identifier
+     message    // identifier
+     =          // operator
+     "Hello"    // literal
+     ;          // separator
+
+
+    Literal'ler, derleyici tarafından doğrudan yorumlanan sabit veri anlamına gelir.
+    Literal'lerin bir türü olmak zorundadır ve tür bilgisini taşırlar.
+
+    Java'da literal'ler, derleme zamanı sabit anlamına gelir. Her bir literal bir veri türüne
+    karşılık gelir.
+
+
+
+   Primitive Types
+    -- Numeric Types
+       -- Integers  (Whole Numbers)
+          -- byte   -> 1 Byte
+          -- short  -> 2 Bytes
+          -- int    -> 4 Bytes
+          -- long   -> 8 Bytes
+       -- Real Numbers (Floating-Points)
+          -- float  -> 4 Bytes
+          -- double -> 8 Bytes
+       -- Character
+          -- char   -> 2 Bytes
+    -- Boolean Types
+          -- boolean -> ~ (VM dependent)
+
+
+
+
+   Literal:
+      IntegerLiteral
+      FloatingPointLiteral
+      BooleanLiteral
+      CharacterLiteral
+      StringLiteral
+      NullLiteral
+      TextBlock --> Java 17
+
+
+
+      IntegerLiterals
+        Java'da 2'lik (Base 2),8'lik (Base 8), 10'luk (Base 10) ve 16'lık (Base 16) tabanlarda
+        sayı gösterimi literal olarak yapılabilir.
+
+       IntegerLiteral :
+          DecimalIntegerLiteral
+          HexIntegerLiteral
+          OctalIntegerLiteral
+          BinaryIntegerLiteral
+
+
+       DecimalIntegerLiteral:
+          DecimalNumeral [IntegerTypeSuffix]
+
+      IntegerTypeSuffix:
+        l L
+
+
+      DecimalNumeral:
+         0
+         NonZeroDigit [Digits]
+         NonZeroDigit Underscores Digits
+
+        Digit:
+          0
+          NonZeroDigit
+
+        NonZeroDigit:
+          1,2,3,4,5,6,7,8,9
+
+
+     HexIntegerLiteral:
+         HexNumeral [IntegerTypeSuffix]
+
+     HexNumeral:
+       0 x HexDigits
+       0 X HexDigits
+
+     HexDigits:
+       HexDigit
+       HexDigit [HexDigitsAndUnderscores] HexDigit
+
+     HexDigit:
+      0 1 2 3 4 5 6 7 8 9 A B C D E F a b c d e f
+
+
+     OctalIntegerLiteral:
+       OctalNumeral [IntegerTypeSuffix]
+
+
+     OctalNumeral:
+       0 OctalDigits
+       0 Underscores OctalDigits
+
+
+      OctalDigit:
+        0 1 2 3 4 5 6 7
+
+
+     BinaryIntegerLiteral:
+      BinaryNumeral [IntegerTypeSuffix]
+
+
+     BinaryNumeral:
+       0 b BinaryDigits
+       0 B BinaryDigits
+
+       BinaryDigits
+         BinaryDigit
+         BinaryDigit [BinaryDigitsAndUnderscore]  BinaryDigit
+
+      BinaryDigit:
+      0 1
+
+
+FloatingPointLiteral
+  DecimalFloatingPointLiteral
+  HexaDecimalFloatingPointLiteral
+
+ DecimalFloatingPointLiteral:
+    Digits . [Digits] [ExponentPart] [FloatTypeSuffix]
+    . Digits [Exponent] [FloatTypeSuffix]
+    Digits ExponentPart [FloatTypeSuffix]
+    Digits [ExponentPart] FloatTypeSuffix
+
+
+   ExponentPart:
+     ExponentIndicator SignedInteger
+
+    ExponentIndicator:
+    e E
+
+    SignedInteger:
+     [Sign] Digits
+
+    Sign:
+    + -
+
+    FloatTypeSuffix:
+     f F d D
+
+
+  HexaDecimalFloatingPointLiteral:
+    ****HexSignificand BinaryExponent [FloatTypeSuffix]
+
+  HexSignificand:
+    HexNumeral [.]
+    0 x [HexDigits] . HexDigits
+    0 X [HexDigits] . HexDigits
+
+BinaryExponent:
+ BinaryExponentIndicator SignedInteger
+
+ BinaryExponentIndicator:
+    p P
+
+
+BooleanLiteral
+ true false
+
+
+CharacterLiteral:
+   'SingleCharacter'
+   'EscapeSequence'
+
+
+*  Açılış tırnağından sonra ve kapanış tırnağından önce bir LineTerminator yer alırsa
+ bu derleme zamanı hatasıdır.
+
+ Örnek :
+    char lineTerminator = '\u000A'; // COMPILE_TIME ERROR
+
+* Karakter literalleri yalnızca UTF-16 kod birimlerini (Code Unit) temsil ederler.
+Bu anlamda \u0000 ve \uFFFF arasındaki değerlerle sınırlıdırlar bu da BMP olarak
+adlandırılır. (Basic Multilingual Plane)
+\uFFFF'ten daha büyük karakterler supplementary karakterler olarak adlandırılır.
+Bu durumda bir çift char (array) ile temsil edilebilirler ya da API durumuna göre int kullanılabilir
+çünkü bir karakter 16-bit ile temsil edilmekte. Bir çift karakter 32-bit lik bir alan harcayacaktır
+
+
+StringLiteral
+  " {StringCharacter} "
+ Çift tırnak içerisinde tek satırda bölünmeden yazılan yazı değerini temsil eden sabittir/dizgedir.
+
+
+ TextBlock
+       Java-15
+       Üçlü çift-tırnak ile (""") açılıp kapanan, sıfır ya da daha fazla karakter içeren bir dizgedir.
+       https://openjdk.org/jeps/378
+       char ve String'ten farklı olarak içerisinde LineTerminator barındırabilirler.Bu durum derleyicinin
+       tokenizing sürecini etkilemez.
+
+EscapeSequence
+     \ddd -> Octal character
+     \uxxxx -> Hexadecimal Unicode Character
+     \ b  -> \u0008
+     \ s -> \u0020 -> JDK 15
+     \ t -> Horizontal Tab \u0009
+     \ n -> linefeed -> \u000a
+     \ f -> form feed -> \u000c
+     \ r -> carriage return \u000d
+     \LineTerminator
+     \ " -> \u0022
+     \ ' -> \u0027
+     \ \ -> \u005c
+
+
+    OctalEscape
+       \ OctalDigit
+       \ OctalDigit OctalDigit
+       \ ZeroToThree OctalDigit OctalDigit
+
+
+ NullLiteral
+    null
+
+  primitive türler için kullanılamaz. Detayları daha sonra tartışılacaktır.
+
+
+
+
+

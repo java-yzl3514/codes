@@ -1,0 +1,199 @@
+
+Bilgisayar Biliminde iterasyon (iteration), bir dizi veya kod bloğunun belirli bir koşul
+sağlandığı sürece tekrarlanmasıdır.
+Bir işin yinelemeli yapılmasını sağlayayan akış kontrol deyimlerine döngü(loop) deyimleri
+denir. Döngüler, iterasyonel algoritmaların temel taşıdır.
+Bir görevi otomatikleştirmek, veri yapıları üzerinde gezinmek (traversal),
+hesaplamaları tekrarlamak ve bir sistemin durumunu ardışıl olarak değiştirmek için
+kullanılırlar.
+Etkili bir döngü 3 temel bileşen içerir :
+- Başlatma (Initialization) : Döngüye girmeden önce döngü kontrol değişken(ler)inin ilk değerlerinin
+ayarlandığı aşama.
+- Koşul (Condition/Termination) : Döngünün her iterasyonunun başında kontrol edilen ve döngünün
+devam edip etmeyeceğini belirleyen mantıksal ifade(boolean-condition-expression).Bu koşul false
+olduğunda döngü sonlanır.Döngünün sonlanacağının garanti edilmesi (termination) algoritmanın
+doğruluğu için kritiktir.
+- Durum Değişimi(Update/Progress) : Genellikle her iterasyonun sonunda çalışan ve döngü
+kontrol değişkenini sonlanma koşuluna yaklaştıran ifade.Bu adım olmazsa sonsuz döngü (infinite loop) oluşabilir
+Sonsuz döngüler kasıtlı olarak termination ifadesinin belirtilmemesiyle oluşturulabilir. Bu istemli bir harekettir ve
+hata olarak yorumlanmamalıdır. Bazı durumlar içinde sonlanması beklenen döngünlerin sonsuz olarak çalışması
+mantıksal bir hatadır.
+
+sonsuz bir while döngü örneği:
+while(true){
+
+}
+
+Aşağıdaki döngü derlenmez.
+Derleyici diagnostik mesajı : Unreacheable Statement (Erişilemeyen Deyimler) olarak verilir ve
+derleme yapılmaz.
+while(false)
+{
+   // COMPILE-TIME ERROR
+}
+
+Sonsuz bir döngü kurulduysa bu döngü deyiminden sonra yazılan kodlar derleme zamanı hatası oluştururlar
+Sonsuz Döngü Deyiminden sonra yazılan deyimler "Unreachable Statement" olarak yorumlanır.Derleyicinin
+diagnostik mesajı da budur.
+
+...
+while(true){
+
+}
+System.out.println("continue");
+---------------------------
+
+Java'da döngü deyimi oluşturmak için 3 statement'tan yararlanılır :
+ - while (while statement)
+ - do-while (do statement)
+ - for (Traditional For Statement / Enhanced For Statement)
+
+
+
+
+While Statement
+   En temel ön-koşullu (pre-condition) döngüdür.
+
+  while(boolean-condition-expression)
+     statement(s);
+
+Tekil (single) deyimlerde block parantezi kullanımı zorunlu değildir.
+
+While döngüsü koşul ifadesi (boolean-condition-expression) doğru olduğu sürece yinelenen
+döngü deyimidir. Akış while döngü deyimine geldiğinde koşul kontrol edilir; yanlış üretilirse
+döngüye girilmez.
+
+while döngüsü, tekrar sayısının başlangıçta bilinmediği ancak sonlanma koşulunun net olduğu durumlar
+için idealdir.
+
+ n-kez dönen döngü deyimi :
+
+ public static void main(String[] args) {
+
+
+         java.util.Scanner keyboard = new java.util.Scanner(System.in);
+
+         System.out.println("Enter an integer to count : ");
+         int n = keyboard.nextInt();
+         int i = 0;
+
+         while(i < n){
+             System.out.printf("%d ", i);
+             ++i;
+         }
+
+         System.out.printf("%nAfter Loop, i = %d%n", i);
+         System.out.println("Tekrar Yapıyor musunuz ?????");
+
+
+     }
+
+Programcılar tarafından kullanılan bir başka n-kez dönen döngü deyimi :
+
+     java.util.Scanner keyboard = new java.util.Scanner(System.in);
+
+           System.out.println("Enter an integer to count : ");
+           int n = keyboard.nextInt();
+
+           while(n-- > 0)
+               System.out.printf("%d ", n);
+
+           System.out.printf("%nAfter Loop, n = %d%n", n);
+           System.out.println("Tekrar Yapıyor musunuz ?????");
+
+
+
+örn : Kullanıcıdan aldığı int türden tamsayının basamak sayısını hesaplayan ve ekrana yazdıran
+programı yazınız :
+
+public static void main(String[] args) {
+
+
+        java.util.Scanner keyboard = new java.util.Scanner(System.in);
+        System.out.println("Please enter an integer to digit count :");
+        int n = keyboard.nextInt();
+
+        int digitCount;
+        if(n == 0)
+            digitCount = 1;
+        else {
+            digitCount = 0;
+            while (n != 0) {
+                ++digitCount;
+                n /= 10;
+            }
+        }
+
+        System.out.printf("Digit Count = %d%n", digitCount);
+
+    }
+
+### do-while Döngüsü
+ Bu döngü bir son-koşullu (post-condition) döngüdür.
+
+  do
+    statement(s);
+   while(boolean-condition-expression);
+
+ while döngüsünden temel farkı  boolean-condition-expression'un döngü bloğu çalıştırıldıktan
+ sonra kontrol edilmesidir. Bu nedenle,do-while döngüsünün gövdesi(tekrarlanması istenen deyimler bloğu)
+ koşul ne olursa olsun "en az bir kez" çalıştırılır.
+
+ Bu döngü, bir işlemin en az bir defa yapılması gerektiği ve devam edip etmeme kararının bu işlem
+ sonucunda elde edilen veriye göre verileceği durumlarda tercih edilir. En yaygın kullanım alanı,
+ kullanıcıdan geçerli bir girdi alınana kadar tekrar eden girdi doğrulama işlemleri.
+
+örn: Kullanıcıdan 1 ile 10 arasında bir sayı girilmesini isteyen, geçerli bir sayı girilene kadar bu istemi tekrarlayan
+programı yazınız.
+
+### for döngüsü
+  for döngüsü, iterasyonun üç temel bileşenini (bknz : "Etkili bir döngü 3 temel bileşen içerir" : başlatma, koşul, durum değişimi )
+  tek bir satırda toplayan, daha yapısal ve daha okunabilir bir döngüdür.
+  İki formu vardır : temel for ve geliştirilmiş (Enhanced) for.
+
+  Temel for (Basic For Statement)
+  JLS, en temel for'u
+     for([ForInit] ; [boolean-condition-expression] ; [ForUpdate] ) Statement(s);
+   olarak tanımlar
+
+   *Tekil (single) deyimlerde block parantezi kullanımı zorunlu değildir.
+   * Yukarıdaki köşeli parantezler bu 3 bileşenin opsiyonel(isteğe bağlı) olduğunu bildirir. Buna göre
+   for(;;){
+
+   }
+   ifadesi yazılabilir ve anlamı sonsuz döngüdür.
+
+
+   ForInit: Döngü başlamadan sadece bir kez çalıştırılan başlatma ifadesi. Genellikle döngü sayacını tanımlar.
+   boolean-condition-expression : her iterasyonun başında kontrol edilen sonlanma koşulu.
+   ForUpdate: Her iterasyonun gövdesi çalıştırıldıktan sonra çalıştırılan durum güncelleme ifadesi.
+
+   *JLS : ForInit kısmı için yazılabilecek ifadelerin , (virgül) token'ıyla ayrıştırılmış StatementExpression'lardan
+      oluşabileceğini ve LocalVariableDeclaration olabileceği bildirir.
+   *JLS : ForUpdate kısmı için yazılabilecek ifadelerin , (virgül) token'ıyla ayrıştırılmış StatementExpression'lardan
+   oluşabileceğini bildirir.
+   Bu anlamda StatementExpressionForLoop.java sınıfındaki kullanımları inceleyiniz.
+
+   Temel for döngüsü, tekrar sayısının başlangıçta bilindiği veya kolayca hesaplanabildiği durumlar için
+   en uygun yapıdır.Diziler(array) veya listeler gibi veri yapılarında index tabanlı gezinme için standart bir
+   araçtır.
+
+  ** Enhanced for deyimi, Iterable interface'i tartışıldıktan sonra ele alınacaktır. Çünkü bu for döngüsü
+  yüksek seviyeli bir soyutlama sunar ve bu soyutlamanın anlaşılması için ilgili temel konuların tartışılması gerekmektedir.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

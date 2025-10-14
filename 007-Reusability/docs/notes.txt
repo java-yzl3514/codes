@@ -1,0 +1,869 @@
+
+Encapsulation
+Inheritance
+Polymorphism
+
+"Data abstraction"
+
+Bu kavramlar, Nesne Yönelimli Programlamanın 3 temel direği olarak bilinirler.
+OOP'in nihai amacı karmaşıklığı yönetmektir. Bu üç kavram, bu amaca hizmet eden, birbirine bağlı üç temel stratejidir.
+
+Encapsulation:  Sorumluluk Sahibi Atomlar.
+
+Kapsülleme, OOP evreninin temel parçacığıdır. Bu kavram olmadan her şey dağılır.
+Kapsüllemenin ruhu, sorumluluk ve sır saklamaktır. Tıpkı biyolojideki,bir hücre gibi, bir nesne kendi verisini
+(durumunu-state) ve bu veri üzerinde çalışan metotları (davranışlar-behavior) bir zarla çevreler.Bu zar, nesnenin
+iç dünyasını dış dünyanın karmaşasından korur.
+ "Veriyi ve o veriyi işleyen kodu ayrılmaz bir bütün haline getirmek"
+ "Verinin tutarsız veya geçersiz bir duruma düşmesini engeller"
+
+
+ Geliştirici Sezgisi : "Bu nesne kendi işinden sorumludur.Ona ne yapacağını söylerim, nasıl yapacağını kendi içinde
+ halleder.İç detaylarını bilmeme gerek yok."
+
+ Kapsülleme, Java'da erişim belirteçleri (private, protected, public) ile teknik olarak zorunlu kılınır.
+  - Veri (Alanlar) : Genellikle private olarak tanımlanır. Bu, veriye sadece ve sadece o sınıfın kendi metotları tarafından
+  doğrudan erişilebileceği anlamına gelir.
+  - Davranış (Metot) : Dış dünyaya sunulan hizmetler (API) public olarak tanımlanır.Bu metotlar private verilere erişim için
+  "kapı" görevi görür.
+
+
+package com.ba.yzl3514.db;
+
+public class Database {
+
+    public void connect(){
+        // NASIL YAPILACAK ?????
+        doConnect();
+    }
+
+    private void doConnect(){
+        // ....
+
+    }
+
+    public void getData(){
+
+    }
+}
+
+
+  package com.ba.yzl3514.main;
+
+  import com.ba.yzl3514.db.Database;
+
+  public class Driver {
+
+      public static void main(String[] args) {
+
+          Database database = new Database();
+          database.connect(); // NE YAPILACAK
+          database.getData();
+      }
+  }
+
+.....
+package com.ba.yzl3514.domain.pre;
+
+import java.time.LocalDate;
+
+/**
+ *
+ * @author Onder Sahin
+ *
+ */
+public class Employee {
+
+    private String firstName;
+    private String lastName;
+    private String ssn;
+    private LocalDate birthDate;
+    private String citizenNumber;
+
+
+    public Employee(String firstName, String lastName, String ssn, String citizenNumber) {
+        this(firstName, lastName, ssn, citizenNumber, null);
+    }
+
+    public Employee(String firstName, String lastName, String ssn,  String citizenNumber, LocalDate birthDate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.ssn = ssn;
+        this.birthDate = birthDate;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setCitizenNumber(String citizenNumber) {
+        this.citizenNumber = citizenNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public String getCitizenNumber() {
+        return citizenNumber;
+    }
+}
+
+
+package com.ba.yzl3514.domain.pre;
+
+/**
+ *
+ *
+ *
+ * @author Onder Sahin
+ *
+ */
+public class Student {
+
+    private String firstName;
+    private String lastName;
+    private String studentNumber;
+    private String citizenNumber;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
+    }
+
+    public void setCitizenNumber(String citizenNumber) {
+        this.citizenNumber = citizenNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getCitizenNumber() {
+        return citizenNumber;
+    }
+
+    public String getStudentNumber() {
+        return studentNumber;
+    }
+}
+
+
+ ## Composition
+
+ has-a relation
+
+ package com.ba.yzl3514.domain.pre;
+
+ /**
+  *
+  *
+  *
+  * @author Onder Sahin
+  *
+  */
+ public class FullName {
+     private String firstName;
+     private String middleName;
+     private String lastName;
+
+     public FullName(String firstName, String lastName) {
+         this(firstName, null, lastName);
+     }
+
+     public FullName(String firstName, String middleName, String lastName) {
+         this.firstName = firstName;
+         this.middleName = middleName;
+         this.lastName = lastName;
+     }
+
+     public String getFirstName() {
+         return firstName;
+     }
+
+     public void setFirstName(String firstName) {
+         this.firstName = firstName;
+     }
+
+     public String getMiddleName() {
+         return middleName;
+     }
+
+     public void setMiddleName(String middleName) {
+         this.middleName = middleName;
+     }
+
+     public String getLastName() {
+         return lastName;
+     }
+
+     public void setLastName(String lastName) {
+         this.lastName = lastName;
+     }
+ }
+
+
+package com.ba.yzl3514.domain.pre;
+
+import java.time.LocalDate;
+
+/**
+ *
+ * @author Onder Sahin
+ *
+ */
+public class Employee {
+
+    // Every employee has-a name.
+    private FullName fullName;
+    private String ssn;
+    private LocalDate birthDate;
+    private String citizenNumber;
+
+
+    public Employee(FullName fullName, String ssn, String citizenNumber) {
+        this(fullName, ssn, citizenNumber, null);
+    }
+
+    public Employee(FullName fullName, String ssn, String citizenNumber, LocalDate birthDate) {
+        this.fullName = fullName;
+        this.ssn = ssn;
+        this.birthDate = birthDate;
+    }
+
+    public FullName getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(FullName fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getCitizenNumber() {
+        return citizenNumber;
+    }
+
+    public void setCitizenNumber(String citizenNumber) {
+        this.citizenNumber = citizenNumber;
+    }
+}
+
+package com.ba.yzl3514.domain.pre;
+
+/**
+ *
+ *
+ *
+ * @author Onder Sahin
+ *
+ */
+public class Student {
+    // Every student has-a name.
+    private FullName fullName;
+    private String studentNumber;
+    private String citizenNumber;
+
+    public Student(FullName fullName, String citizenNumber, String studentNumber){
+        this.fullName = fullName;
+        this.citizenNumber = citizenNumber;
+        this.studentNumber = studentNumber;
+    }
+
+
+    public FullName getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(FullName fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getStudentNumber() {
+        return studentNumber;
+    }
+
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
+    }
+
+    public String getCitizenNumber() {
+        return citizenNumber;
+    }
+
+    public void setCitizenNumber(String citizenNumber) {
+        this.citizenNumber = citizenNumber;
+    }
+}
+
+package com.ba.yzl3514.main;
+
+
+import com.ba.yzl3514.domain.pre.Employee;
+import com.ba.yzl3514.domain.pre.FullName;
+
+public class Driver {
+
+    public static void main(String[] args) {
+
+
+        FullName name = new FullName("John", "Doe");
+        Employee employee =
+                new Employee(name, "SSN-9999111", "123123123");
+    }
+}
+------------------------------------------------------------------------------
+ !!! com.ba.yzl3514.domain.pre.ecommerce paketini inceleyiniz .
+-----------------------------------------------------------------------------
+
+    Association, Aggregation ve Composition nesne yönelimli programlamada "sınıflar arasındaki ilişkileri" tanımlamanın
+    farklı yollarıdır.
+    Bu ilişkileri, en genelden en özele doğru giden bir hiyerarşi gibi düşünebiliriz.
+
+    Association -> Aggregation -> Composition
+
+    Yani her Composition aynı zamanda bir Aggregation'dır ve her Aggregation aynı zamanda bir Association'dur.Ama tersi
+    doğru değildir.
+
+    Association (İlişki/Bağlantı)
+    Bu, sınıflar arasındaki en genel ve en zayıf ilişki türüdür. Bir sınıfın diğer sınıfın nesnesini kullandığı herhangi
+    bir durumu ifade eder. Aralarında bir sahiplik veya "parça-bütün" ilişkisi olmak zorunda değildir.
+        Anahtar Kelime : "uses-a" veya "knows-a"
+        Yaşam Dönügüsü : Tamamen bağımsızdır. Bir nesne yok olduğunda diğeri bundan etkilenmez.
+        Örn: Doctor ve Patient ilişkisi .
+
+    Aggregation (Gruplama)
+     Bu ilişki Association'ın daha özel bir halidir. Bir "parça-bütün" ilişkisini temsil eder. Ancak bu zayıf bir sahipliktir.
+
+       Anahtar Kelime : "has-"
+       Yaşam Döngüsü : Yine bağımsızdır. Bu en önemli özelliğidir. Bütün (whole) nesnesi yok olsa bile, parça (part)
+                       nesneleri var olmaya devam eder.
+        Örn: Deparment ve Professor ilişkisi .
+
+     Composition (Bileşim)
+      Composition, Aggregation'un daha özel ve güçlü bir halidir. Bu da bir "parça-bütün" ilişkisidir. Ancak burada
+      çok güçlü bir sahiplik vardır.
+        Anahtar Kelime : "part-of" veya " owns-a"
+        Yaşam Döngüsü: Bağımlıdır. Parça bütünden bağımsız var olamaz. Bütün (whole) nesnesi yok edildiğinde, ona ait
+                        parça (part) nesnesi/nesneleri de yok olur.
+       Örn: House ve Room ilişkisi .
+
+       #### Kalıtım (Inheritance)
+          Bu ilişkiye OOP'da "is-a" ilişkisi de denilmektedir. Bu ilişki ile varolan bir sınıfın kodlarına dokunmadan
+          genişletme (extension) yapılabilir. Bu ilişkiye Türkçe olarak türetme/kalıtım ilişkisi diyeceğiz. Örneğin
+          analitik düzlemde bir çemberi temsil eden bir sınıf yazacak olalım. Anımsanacağı gibi daha önce yazdığımız
+          Circle sınıfı sentetik geometride bir çemberi temsil etmektedir(representation). Yani elimizde daha önceden
+          yazılmış ve test edilmiş bir sınıf bulunmaktadır. Böylelikle analitik düzlem için oluşturmak isteyeceğimiz yeni
+          çember sınıfı için bir taban oluşturabilir. "Analytical circle is a circle.", AnalyticalCircle isimli bir sınıf
+          Circle sınıfından türetilebilir. Bu anlamda bu ilişki SOLID ilkelerinden Open Closed Principle'ın mottosu olan
+          open for extension closed for modification cümlesi ile de karşılanmaktadır.
+
+             A sınıfından B sınıfı türetilmiş olsun (B is an A).Bu durumda A sınıfına B sınfının taban sınıfı (Base Class);
+             B sınıfına is A'nın bir türemiş sınıfı (Derived Class) denir. Java'da base class yerine daha çok super class,
+             derived class yerine daha çok sub class terimleri kullanılır. Bu terimlerle birlikte OOP'da base class yerine
+             parent class, derived class yerine child class terimleri de kullanılabilmektedir. B is an A ilişkisinin
+             sınıf şemasını çizmek istersek :
+               bknz : b_is_an_a.png
+
+            Bir dizi türeme de söz konusu olabilir:
+               bknz : c_is_a_b_is_an_a.png
+
+               c_is_a_b_is_an_a.png dosyasında görüleceği üzere, C'nin taban sınıfı(Super Class) dendiğinde doğrudan taban
+               sınıfı (direct super class) anlaşılır.Yani C'ni taban sınıfı B'dir. Burada A C'nin dolaylı taban sınıflarından
+               biridir(indirect super class). Burada "C'nin taban sınıflarından biri A'dır" veya "A, C'nin taban sınıfıdır"
+               cümleleri YANLIŞTIR. Bu cümlelerin doğrusu C'nin dolaylı taban sınıflarından biri A'dır Çünkü C'nin taban
+               sınıfı B'dir.
+                *Java'da çoklu türetme (multiple-inheritance) yoktur.
+               Örneğin, Vehicle kavramı taşıma özelliğine sahip olsun. Bu domain'de bir deniz aracı, denize ilişkin özelliklerin
+               yanında taşıma özelliğine de sahip olduğundan "Marine Vehicle is a Vehicle" önermesi söylenebilir. Benzer
+               şekilde bir gemi, bir deniz aracı olarak nitelendirilebilir. Bu ilişkiye ilişkin şema aşağıdaki gibi olabilir :
+               bknz:   vehicle_hierarchy.png
+
+             vehicle_hierarchy.png'ye dikkat edilirse Vehicle'dan aşağıya doğru inildikçe özelleşme(specialization) Vehicle'a
+             doğru çıkıldıkça genelleşme (generalization) söz konusu olmaktadır.Bir sınıfın birden fazla (doğrudan) taban
+             sınıfı olması durumuna çoklu türetme (multiple-inheritance) denir.Java'da bir sınıfın yalnızca bir tane taban
+             sınıfı vardır. Bu anlamda Java'da çoklu türetme (multiple-inheritance) yoktur. İleride göreceğimiz arayüzler
+             (interfaces) ile çoklu türetme belirli ölçüde desteklenmektedir.Yani Java'da çoklu türetmenin olmaması bir eksiklik
+             oluşturmaz. Örneğin Vehicle hiyerarşisinde deniz uçağı (float plane) hem deniz aracı hem de hava aracı değildir.
+             Deniz uçağı hava aracıdır.Bu anlamda deniz uçağı için çoklu türetme söz konusu olmaz.
+             Bir sınıf kendisinden doğrudan ya da dolaylı olarak türetilemez. Yani türetme işleminde döngüsellik söz konusu
+             değildir.
+
+              Java'da türetme "extends" anahtar sözcüğü ile yapılır. Türetme işleminde taban sınıfın elemanları türemiş sınıfa
+              aktarılmış olur. Yani bu elemanlara türemiş sınıf türünden referans ile erişilebilir.
+
+            Türetme ilişkisinde nesnesel bir kapsama söz konsudur. Bu ilişkide türemiş sınıf nesnesi içerisinde taban sınıf
+            kadarlık bir bölüm de bulunur. Yani türemiş sınıf nesnesi yaratıldığında nesnesel olarak kapsadığı taban sınıf
+            nesnesi de yaratılmış olur. Bu anlamda ele alındığında türemiş sınıfa eklenmiş veri elemanları ile aslında taban
+            sınıf nesnesi genişletilmiş (extension- extends) olur. Bu durumda türemiş sınıf nesnesinin uzunluğu en az taban
+            sınıf nesnesinin uzunluğu + türemiş sınıfa eklenen non-static veri elemanlarının uzunluğu kadardır. Aslında
+            türemiş sınıfa eklenen non-static veri elemanları ile bir nesne genişletilmiş olur.
+                bknz: derived_class_object_memory.png
+
+
+
+        Derlenmiş bir java sınıfının private üyelerini bytecode seviyesinde görebilmek için :
+        javap -c -p <class_name.class>
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+   Bu ilişkilerin önemi, Inheritance'ın alternatifi olmaları ve farklı tasarım senaryolarına çözüm sunmalarıdır.
+   Her ikisi de kodun yeni kullanılabilirliğini (code reusability) artırmayı hedefler.Ancak bunu tamamen farklı
+   felsefelerle yaparlar.
+     Yukarıda da belirttiğimiz üzere temel ayrım şudur :
+        Inheritance :  Bir IS-A ilişkisini modeller.
+        Composition :  Bir  HAS-A ilişkisini modeller.
+
+     Bu anlamda bu iki ilişki türü birbirinin rakibi olarak görülebilir. Bir problemi çözerken geliştiricinin kendisine
+     sorması gereken şudur : "A sınıfı B sınıfının bir türü müdür ? Yoksa A sınıfının bir B'si mi vardır?" Geliştiricinin
+     cevabı hangi yapıyı kullanması gerektiği hususunda yol gösterici olabilir.
+
+     !! Yazılım dünyasında tecrübe kazandıkça, sıkı bağlılığın (tight coupling) ne kadar tehlikeli olabileceği görülmüştür.
+     Inheritance'ın yanlış kullanımı, bakımı çok zor, kırılgan ve esnek olmayan kod hiyerarşileri yaratır. Bu nedenle
+     modern OOP tasarımında şu ünlü ilke benimsenmiştir : "Favor Composition over Inheritance" (Kalıtım yerine mümkün olduğunca
+     Composition tercih edilmeli)
+
+     Yani bu ilişkilerin önemi, Inheritance'ın tek seçenek olmadığını, hatta çoğu zaman Composition'un daha esnek ve daha
+     güvenli bir alternatif olduğunu göstermektedir.
+
+     Kavramsal ve Tasarımsal Açılar
+        Yukarıda da belirttiğimiz üzere OOP felsefesinde bu iki kavram tamamen zıttır:
+        - Inheritance bir tip hiyerarşisi yaratır. Yani bir türemiş sınıf nesnesi aynı zamanda bir taban sınıf nesnesi
+        olarak da davranabilir (Polimorphism). Bu aynı zamanda dış dünyaya verilen bir sözdür : "Like-A /IS-A
+        ilişki vurgusuyla; ben atamın yaptığı her şeyi yapabilirim, onun gibi davranabilirim ve onun yerine geçebilirim"
+        (Bknz : SOLID. L -> Liskov Subsitution Principle)
+        - Composition, bir nesne hiyerarşisi veya grafiği yaratır. Dış dünyaya kendi içinde konuk ettiği ya da bileşen
+        olarak kullandığı nesneye dair yeteneklerin sözünü vermez. Örn: Car ve Engine nesneleri arasındaki ilişki. Bir
+        Car nesnesi, Engine nesnesi olarak davranmaz. Sadece içindeki Engine nesnesini kullanır.
+
+        Composition Eleştirileri
+         "Favor Composition over Inheritance" ilkesi savunulur. Bu doğrudur, Composition daha esnek ve daha az kırılgan
+         bir yapı sunar.Ancak bu Composition'un mükemmel olduğu anlamına gelmez.
+
+         1. Tekrarlı Yönlendirme Metotları (Boilerplate Forwarding Methods)
+         Bu Composition'un en sık ve en büyük dile getirilen eleştirisidir. Bir dış sınıfın, içindeki bileşenin
+         arayüzünü dış dünyaya açması gerektiğinde, bunu manuel olarak yapmak zorundadır.
+         2. Polimorfik Kimliğin Kaybı
+           Kalıtım, alt sınıfa üst sınıf kimliğini kazandırır. Bu, polymorphism için doğal
+           bir yol sunar.
+              Örn: Kalıtımda, SportsCar sınıfı Car sınıfından miras alıyorsa, SportsCar nesnesini
+              Car türünden nesne bekleyen bir metoda rahatlıkla gönderilebilir.
+
+             Composition'da ise bu kimlik yoktur. Car sınıfı Engine nesnesine sahiptir, ama Car bir
+             Engine DEĞİLDİR.Bu yüzden Car nesnesini, Engine türünden nesne bekleyen bir metoda
+             gönderemeyiz. Bu sorunu aşmak için genellikle Arayüzler(Interface) kullanılır. ( Buna Design Pattern
+             olarak Adapter Design Pattern denir). Dış sınıf, içteki nesnenin arayüzünü implemente eder, ancak
+             bu da ekstra bir soyutlama katmanı ve karmaşıklık demektir.
+
+         3. Hata Ayıklama İz Sürme
+           Derin bir nesne grafiğinde (A, B'yi ; B, C'yi; C, D'yi içeriyor vb) bir metodun gerçekte nerede çalıştığını
+           anlamak için bir kaç katman derine inmemiz gerekebilir.
+         4. Tasarım Karmaşıklığı
+            Bileşen nesnelerinin doğru sırada ve doğru bağımlılıklarla oluşturmak karmaşıklığı artırabilir.
+
+
+-------------------------------------------------------------------------------------------------------------
+      Java'da kalıtımın en temel ve vazgeçilmez kuralı şudur: Bir alt sınıf(subclass) nesnesi oluşturulmadan önce,
+      üst sınıfının (superclass) durumu tam olarak başlatılmış (initialize) olmalıdır.
+
+      Neden Gerekli ?
+      Bir alt sınıf, üst sınıfın alanlarını ve metotlarını miras alır.Bunları kendi içinde kullanabilir. Eğer üst
+      sınıfın constructor'ı çalışmadan, yani bu alanlar başlatılmadan alt sınıf kendi mantığını çalıştırmaya başlarsa,
+      miras aldığı üyeleri tutarsız veya başlatılmamış bir durumda kullanma riski ortaya çıkabilirdi. Bu, öngörülemez
+      hatalara ve programın çökmesine yol açabilirdi.
+      İşte Constructor Chanining, bu kuralı zorunlu kılan mekanizmadır. super anahtar sözcüğü ise bu zinciri yönetmemizi
+      sağlayan araçtır.
+
+
+      super Anahtar Sözcüğü
+       super anahtar sözcüğünün iki temel ve farklı kullanımı vardır :
+
+       1. Üst sınıf üyelerine erişmek için (super.member)
+       Bir alt sınıf, üst sınıfın bir alanıyla aynı isimde bir alan tanımladığında ("field hiding")
+       veya bir metodu override ettiğinde, üst sınıftaki orijinal üyeye erişmek için super kullanılır.
+
+       JLS Kuralı
+        super.Identifier ifadesi, mevcut nesnenin üst sınıfından miras alınan ve Identifier ile adlandırılan
+        bir üyeye erişim sağlar.Bu erişim, override edilmiş olsa bile, doğrudan üst sınıftaki versiyonuna yapılır.
+        Neden Gerekli ?
+         A. İsim Çakışmasını Çözmek : Alt ve üst sınıfta aynı isimde üyeler olduğunda hangisine başvurulacağını netleştirmek
+         için.
+         B. Davranışı Genişletmek : Bir metodu override ederken, mevcut işlevselliği tamamen yok etmek yerine, üst
+         sınıfın metodunu çağırıp üzerine ek mantık eklemek için.
+
+       2. super() Constructor çağrısı ve Zincirleme(Chaining)
+
+        Bu, kalıtım mekanizmasının kalbidir.
+        JLS Kuralı
+          Bir constructor'ın gövdesindeki ilk statement, ya aynı sınıftaki başka bir constrcutor'a (this(...)) ya da
+          doğrudan üst sınıfın bir constrcutor'ına (super(...)) yapılan bir çağrı olmak zorundadır.
+           !!! Bu kural JAVA 22+ ile esnetilmiştir. Bknz: https://openjdk.org/jeps/447
+          Otomatik Ekleme Kuralı (Implicit Call) : Eğer bir constructor'ın ilk satırında bilinçli olarak this(...) veya
+          super(...) çağrısı eklemezseniz, Java derleyicisi sizin için otomatik olarak "super()"" (üst sınıfın varsayılan ctor'ı)
+          ifadesini ekler. (Yalnızca üst sınıfta default ctor olması durumunda geçerli)
+
+          Neden Gerekli ?
+          Bu kural, en başta belirttiğimiz "üst sınıf önce başlatılması" gerekliliğini garanti altına alır.Nesne oluşturma
+          işlemi, kalıtım hiyerarşisinin en tepesindeki Object sınfından başlar ve adım adım aşağıya, yani en özel alt
+          sınıfa doğru ilerler. Bu zincirleme yapı, her seviyedeki sınıfın kendi sorumluluğundaki başlatma işlemlerini
+          yapmasını sağlar.
+
+          Yaygın bir problem ve Kuralın etkisi  !!!!
+           Otomatik super() ekleme kuralı nedeniyle, eğer üst sınıfınızda argümansız (no-arg) bir ctor yoksa ve alt
+           sınıfınızın ctor'ında bilinçli bir super(...) çağrısı yapmazsanız kodunuz DERLENMEZ !!!!
+
+          Neden Gerekli ?
+            Üst sınıfta 1 ctor olsa dahi ve bu ctor default ctor değilse; alt sınıf ctor'ında tek olan ctor için otomatik
+            ekleme kuralı neye göre yapılacaktı ? Yani hangi argümanla (parametre değeri) otomatik yazılacaktı?
+            Bu argüman ancak geliştirici tarafından karar verilmesi gereken bir durumdur.
+            Örn : super_keyword.Person ve super_keyword.Employee sınıflarına bakınız
+            ---------------------------------------------------------------------------------------------------
+        Not: Üst sınıf no-arg ctor'ı alt sınıf ctor'ından açıkça super() ifadesiyle çağrılabilir.
+             Otomatik olarak eklenmesiyle arasında bir fark yoktur. Hatta açıkça yazıldığı için
+             derleyici tarafından otomatik olarak eklenmez !
+
+        Not: "Constructor'daki ilk statment super(...) olmalıdır" kuralı ilk bakışta super() çağrısından
+        önce hiçbir kodun çalışamayacağı gibi anlaşılabilir.Ancak JSL'i belirttiği kural daha narindir.
+         Asıl Kural/Amaç :
+           super(...) çağrısı tamamlanmadan önce, oluşturulmakta olan nesnenin kendisine (this referansı) veya
+           onun herhangi bir üye alanına/metoduna erişilemez.Amaç, tam olarak başlatılmamş bir nesnenin
+           durumunu (state) kullanmayı engellemektir.
+             Bu anlamda super(...) çağrısına parametre olarak gönderilen ifadeler, this referansını
+             kullanmadığı sürece geçerlidir.
+
+     ### protected Access Modifier
+
+     Hatırlanacağı üzere Java'da 4 erişim seviyesi vardır:
+     1. public
+     2. protected
+     3. package-private (default/friendly)
+     4. private
+
+     protected, bu specturumda public ile package-private arasında bir yerdedir. Amacı, bir sınfın
+     bazı üyelerini "genel kullanıma" (public) açmadan, o sınıfı genişletmek (extend) isteyen alt sınıflara
+     kontrollü bir erişim imkanı sunmaktır. Bu, özellikle framework ve kütüphane tasarımında kritik bir rol oynar.
+      Kural 1: Paket İçi Erişim
+          Bu, protected'ın en kolay anlaşılır yönüdür.
+          JLS Kuralı: Bir üye (member) protected olarak işaretlendiğinde, o üyeye üyenin tanımlandığı sınıf ile aynı pakette
+          bulunan herhangi bir kod/sınıf tarafından erişilebilir.
+      Kural 2: Paket Dışı Alt Sınıf Erişimi
+        protected'ı karmaşık yapan ve asıl gücünü veren kural budur.
+
+        JLS Kuralı: C sınıfının protected bir üyesine, C'nin tanımlandığı paketten farklı bir
+        paketteki bir alt sınıf(S) içinden erişilebilir. Ancak, bu kuralın çok önemli bir şartı
+        vardır: Erişim, yalnızca türü S veya S'nin bir alt türü olaran bir referans üzerinden
+        yapılabilir.
+
+        Kuralın Anlamı: Başka bir paketteki bir alt sınıf, miras aldığı protected üyelere dokunabilir.
+        ANCAK, bu alt sınıf, kendisi gibi olan veya kendisinden de türemiş nesnelerin protected üyelerine
+        dokunabilir.Rastgele bir üst sınıfın protected üyelerine dokunamaz.
+
+-------------------------------------------------------------------------------------------------------------------
+  object_class paketinde bulunan A sınıfının bildirimleri ve bu bildirimlere karşılık gelen bytecode çıktıları aşağıdaki gibidir:
+
+A.java :
+
+ package object_class;
+
+  public class A{
+
+  }
+
+A.class (bytecode) :
+
+Compiled from "A.java"
+public class object_class.A {
+  public object_class.A();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+}
+
+---- Ctor Bildirimi :
+A.java
+package object_class;
+
+public class A{
+
+    public A(){
+        super();
+        return;
+    }
+}
+
+A.class (bytecode):
+
+Compiled from "A.java"
+public class object_class.A {
+  public object_class.A();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+}
+----------------------------------------------------------------------------------------------------
+Yukarıdaki çıktılar incelenirse, A sınıfı bildirimi ctor bildirimi yapılmadan yazıldığında ve no-arg ctor
+bildirimi yapılarak yazıldığında bytecode çıktılarının aynı olduğu görülecektir.
+
+ Ctor bildiriminde dikkat çeken taraf; ctor gövdesinde super() çağrısının yapılması ve bu çağrının bytecode tarafında
+   " 1: invokespecial #1                  // Method java/lang/Object."<init>":()V"
+  satırına denk geldiğinin görülmesidir. Önceki dersimizde tartıştığımız üzere bu çağrının bir ctor çağrısı olduğu
+  yönünde mutabık kalmıştık. Öyleyse bu çağrı nereye yani hangi superclass kastedilerek yapılmıştır ?
+   Yine bytecode çıktısının okunabilir hali incelendiğinde yani:
+   " 1: invokespecial #1                  // Method java/lang/Object."<init>":()V"
+   Satırının açıklamasına bakıldğında:
+      "// Method java/lang/Object."<init>":()V"
+   ifadesi görülüyor olacaktır.
+   Bu ifadeyle daha önceki derslerimizde belirttiğimiz ortak ata sınıf olan java.lang.Object türünün kastedildiği
+   açıktır.
+    Bu anlamda bir sınıf bildirimi yapıldığında aslında bu sınıfın java.lang.Object türünden extend edildiği
+    default olarak varsayılır.
+
+    public class A extends Object {
+
+    }
+
+   Yukarıdaki gibi yazım yapılabilir. Fakat bu yazım tarzı derleyici veya static code analyzer aracı tarafından
+   redundant olarak vurgulanır.
+
+   Java'da yazılan veya kullanılan her sınıf, instisnasız bir şekilde java.lang.Object sınıfından türemiştir.
+   Bir sınıf tanımlarken extends anahtar kelimesi kullanılmasa bile, derleyici bunu otomatik olarak yapar (extends Object).
+    Daha önce java'da multiple inheritence olmadığını belirtmiştik. Yani bir sınıf aynı anda sadece bir sınıfı genişletebilir.
+
+ Multiple-Inheritance Girişimi: Aşağıdaki kodu yazınız ve gözlemleyiniz:
+    public class A extends B, Car {  // COMPILE-TIME ERROR
+    }
+ ------------------------------------------------------------
+   JLS Kuralı :
+      JLS, Bölüm 8, Superclasses and Subclasses, bu durumu net bir şekilde ifade eder:
+         Eğer sıradan bir sınıfın bildiriminde bir extends ifadesi yoksa, o zaman doğrudan üst sınıfı Object'tir.
+         (If the class declaration for an ordinary class has no extends clause, then the direct superclass is Object)
+
+
+ Bu kalıtım zorunluluğu, Java'daki her nesnenin belirli bir temel işlevselliğe sahip olmasını GARANTİ EDER.
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+package com.ba.yzl3514.domain.geometric;
+
+/**
+ *
+ *
+ *
+ * @author Onder Sahin
+ *
+ */
+public class GeometricObjects {
+
+
+    public static void printSquare(Square square) {
+        square.print();
+    }
+
+    public static void printCircle(Circle circle) {
+        circle.display();
+    }
+
+    public static void printRectangle(Rectangle rectangle) {
+        rectangle.printDetail();
+    }
+}
+
+....
+package com.ba.yzl3514.domain.geometric;
+
+/**
+ *
+ *
+ *
+ * @author Onder Sahin
+ *
+ */
+public class GeometricObjects {
+
+
+    public static void print(GeometricObject geometricObject){
+
+        if(geometricObject instanceof Rectangle){
+            ((Rectangle)geometricObject).print();
+        }else if(geometricObject instanceof Square){
+            ((Square)geometricObject).print();
+        }else if(geometricObject instanceof Circle){
+            ((Circle)geometricObject).print();
+        }
+    }
+
+}
+-------------------------------------------------------------------------------------------------
+## CASTING
+
+Java'nın statik tip sisteminde, bir referans değişkeninin türü derleme zamanında bellidir. Ancak polimorizm sayesinde,
+bu referans çalışma zamanında kendi türünden veya alt türünden nesneleri gösterebilir.Tipler arasındaki bu geçiş
+"Casting" adı verilen ve JLS'de katı kurallarla tanımlanmış bir operasyonla yönetilir.
+
+Reference Type Conversions
+ JLS, referans tipleri arasındaki dönüşümleri temel olarak iki kategoriye ayırır.
+
+ A.Widening Reference Conversion(Upcasting)
+  JLS'in "Upcasting" için kullandığı resmi terimdir.
+
+------------------------------------------------------------------------------------------------------------------------
+  Not : Upcasting Terimi
+  b_is_an_a.png'de görselleştirilen hiyerarşi bir UML notasyonudur. Bu görselde B türünün A türünden türemiş olduğu
+  anlaşılır. Bu anlamda aşağıdan yukarıya bir vurgu söz konusu olduğundan upcasting terimi kullanılıyor.
+
+  bknz: https://en.wikipedia.org/wiki/Unified_Modeling_Language#:~:text=The%20Unified%20Modeling%20Language%20(UML,behavior%2C%20interaction%2C%20and%20structure.
+  bknz: https://en.wikipedia.org/wiki/Class_diagram
+-----------------------------------------------------------------------------------------------------------------------
+ Bir alt tipten(subtype/subclass), kalıtım hiyerarşisinde daha yukarıda olan bir üst tipe (supertype/superclass) yapılan
+ dönüşümdür.
+
+ Bu dönüşüm örtük(implicit) ve her zaman güvenlidir.Derleyici bu dönüşümün hiç bir zaman bir ClassCastException hatasına
+ yol açmayacağını bilir. Bu yüzden geliştiriciden özel bir cast operatörü () kullanmasını beklemez.
+
+ JLS :
+    Widening Reference Conversion, bölümünde bu dönüşüme neden izin verildiğini açıklar.
+    "Herhangi bir S sınıfı türünden herhangi bir T sınıfı türüne, S'nin T'nin bir alt sınıfı olması koşuluyla."
+
+ B. Narrowing Reference Conversion (Downcasting)
+    JLS'in "Downcasting" için kullandığı resmi terimdir.
+    Bir üst tipten(supertype), kalıtım hiyerarşisinde daha aşağıda olan bir alt tipe (subtype) yapılan dönüşümdür.
+    Bu dönüşüm potansiyel olarak riskli olduğu için açık (explicit) bir cast operatörü gerektirir.
+    Derleyici, bu dönüşümün çalışma zamanında başarılı olacağının GARANTİSİNİ VERMEZ.
+
+Cast Operatörü ve Çalışma Zamanı Kontrolü
+ Bir geliştirici downcasting yaptığında, derleyice adeta bir "söz" verir, ancak asıl kontrolü çalışma zamanında JVM
+ yapar.
+
+  Object o = "STR";
+  String str = (String) o; // Söz verilen yer.
+
+  -----------------------------------------------------------------------------------------------------
+
+ JLS'e göre
+   Bir referans r'nin T tipine cast edilmesi (T) r işlemi içini çalışma zamanı süreci şöyledir :
+    "Eğer r bir nesneye referans ise, bir çalışma zamanı kontrolü gerçekleştirilir. Kontrolün sonucu şu
+    şekilde belirlenidr: Eğer nesnenin sınıfı T'nin bir alt sınıfı ise, cast doğrudur ve cast ifadesinin
+    sonucu referans değeridir"
+    "Eğer nesne T'nin bir örneği değilse, o zaman bir ClassCastException fırlatılır."
+
+ Aşağıdaki kodu çalıştırınız ve gözlemleyiniz :
+     Object o = Integer.valueOf(100);
+     String str =  (String)o;
+---------------------------------------------------------------------------------------
+  Güvenli Dönüşümün JLS' karşılığı : instanceof Operatörü
+   JLS, ClassCastException hatasından kaçınmak için geliştiriciye proaktif bir kontrol mekanizması sunar : instanceof operatörü.
+
+ Aşağıdaki kodu çalıştırınız ve gözlemleyiniz :
+        Object o = Integer.valueOf(100);
+        if(o instanceof String){
+            String str =  (String)o;
+        }
+
+ instanceof, bir cast işleminin başarılı olup olmayacağını önceden test etmemizi sağlar.
+
+ JLS, Type Comparison Operator: instanceof, bölümü bu operatörün nasıl çalıştığını tanımlar.
+ Özetle, r instanceof T ifadesinin true dönmesi için, r referansının gösterdiği nesnenin tipinin, T
+ tipine bir "Casting Conversion" ile hatasız bir biçimde dönüştürülebilir olması gerekir.
+
+ Bu, instanceof kontrolü ile cast işleminin çalışma zamanı kontrolünün aynı kural setini kullandığı anlamına gelir.
+
+
+ Java 16 ve sonrası için sunulan "Pattern Matching for instanceof" özelliği, bu JLS garantsine dayanarak bu iki adımı
+ (kontrol ve atama) tek bir atomik işlemde birleştirir ve kodu daha güvenli hale getirir.
+
+  Pattern Matching for instanceof için GeometricObjects sınıfının print metodunun yeniden yazılmış hali :
+
+  package com.ba.yzl3514.domain.geometric;
+
+  /**
+   *
+   *
+   *
+   * @author Onder Sahin
+   *
+   */
+  public class GeometricObjects {
+
+
+      public static void print(GeometricObject geometricObject){
+
+          if(geometricObject instanceof Rectangle rectangle){  // JDK 16+ Pattern Matching for instanceof
+              rectangle.print();
+          }else if(geometricObject instanceof Square square){
+              square.print();
+          }else if(geometricObject instanceof Circle circle){
+              circle.print();
+          }
+      }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

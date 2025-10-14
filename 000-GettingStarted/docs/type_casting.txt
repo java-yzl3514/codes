@@ -1,0 +1,117 @@
+Tür Dönüşümleri
+
+ Java'nın Otomatik Tür Dönüşümleri (Widening Conversion)
+
+Bir veri türündeki değer, başka bir türdeki değişkene atandığında otomatik dönüştürme yapılabilmesi için aşağıdaki
+2 koşulun sağlanması gerekir :
+  1 - Türler uyumlu olmalı
+  2 - Hedef tür kaynak türden daha "geniş" olmalı
+
+   int x = 123;
+   long y = x; // otomatik dönüşüm
+
+ ** Tamsayı türleri (byte,short, int, long) ve kayar nokta türleri (float, double) birbirleriyle uyumludur (Numeric Türler)
+ ** char türü ile boolean türü arasında uyumluluk yoktur.
+ ** char türü ile sayısal türler arasında otomatik dönüşüm yoktur
+
+         byte b = 1;
+         char c = b;
+         int a = 1;
+         //char ch = a; COMPILE -TIME ERROR
+         a = 'a';
+
+          char df = 65_535;
+         // char gh = 100_000;
+----------------------------------------------------------------------------
+        int a = 1;
+         a = 3.14; //  COMPILE -TIME ERROR
+
+         byte b = 100;
+         long c = 3;
+         double d = 1;
+
+         // a = d; COMPILE -TIME ERROR
+        // boolean bool = 1; COMPILE -TIME ERROR
+
+         char df = 65_535;
+         // char gh = 100_000;
+         // df = 3.;
+-----------------------------------------------------------------------------
+
+ Uyumsuz Türler (Narrowing Conversion)
+
+Eğer hedef tür kaynak türden daha küçükse (daraltma sözkonusu ise), Java otomatik olarak dönüşüm gerçeklemez.
+Bu duruma narrowing conversion denir ve programcı mutlaka casting (açık dönüştürme) yazmalıdır.
+
+        int a = 300;
+        byte b = (byte) a; // -128, +127
+        // 1 byte
+        // int 4 bytes
+
+        System.out.println(a);
+        System.out.println(b);
+---------------------------------------------
+         int a = 1_000_000;
+
+                byte b = (byte) a;
+
+                System.out.println(b);
+
+Kayar Noktadan Tam Sayıya: Kesirli Kısım Trunkasyonu
+  Floating Point değeri tam sayıya cast edilirse, kesirli kısım atılır (truncation)
+Örneğin :
+
+       double d = 123.456;
+       int i = (int)d;
+        System.out.println(d);
+        System.out.println(i);
+---------------------------------------------------------------------------
+Not: Bu işlemde yuvarlama yapılmaz !. Doğrudan kesirli kısmı yok sayar.
+
+ Yuvarlama yapılması gerekiyorsa java.lang.Math sınıfından faydalanılmalıdır.
+
+ Math.round, Math.floor, Math.ceil metotları kullanılabilir:
+
+ Örneğin:
+
+             System.out.println(Math.round(123.456));
+             System.out.println(Math.floor(123.456));
+             System.out.println(Math.ceil(123.456));
+
+---------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

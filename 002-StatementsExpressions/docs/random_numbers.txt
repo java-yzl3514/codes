@@ -1,0 +1,54 @@
+
+Rassal (Random) Sayı Üretimi
+
+  Gerçek dünyadaki rassallık bilgisayar dünyasında gerçekleştirilemez. Bu anlamda Bilgisayar
+  dünyasında deterministik olarak rassal sayı üretilmektedir. Bu sebeple bilgisayar dünyasında
+  üretilen rassal sayılara "pseudo random numbers" denilmektedir.
+
+  Bilgisayar dünyasında rassal sayı üretiminin kalitesi söz konusudur. Rassal sayı üretimine ilişkin
+  işlemler bir mantık çerçevesinde karmaşıklaştıkça genel olarak kalite artar. Bu durumda yapılan işlemlere ilişkin
+  bir maliyet söz konusu olacak.Bu konuda bilimsel çalışmalar devam etmektedir.
+
+  Java'da rassal sayı üretimine ilişkin pek çok sınıf bulunmaktadır.Özellikle Java 17 ile birlikte çeşitli algoritmalara
+  göre rassal sayı üretilmesine yönelik JavaSE'ye eklentiler yapılmıştır.
+  Java'da rassal sayı üretimine ilişkin en temel sınıf java.util paketi içerisinde bulunan Random sınıfıdır.
+  Bu sınıfın rassal sayı üretimi orta kalitededir. Çoğu zaman bu kalite yeterli olmaktadır. Özellike Java 17 den itibaren
+  Random sınıfına ilişkin rassal sayı üretimine "legacy random" da denilmektedir. Biz derslerimizde, çoğunlukla Random
+  sınıfından faydalanacağız.
+
+  Not :  java.util.Random sınıfı Donald Knuth'un "The Art of Computer Programming" kitap serisinde bulunan
+  "Seminumerical Algorithms" bölümündeki algoritmayı kullanmakta.
+
+  Bilgisayar dünyasında genel olarak rassal sayı üretiminde ismine tohum değeri (seed value) denilen bir değer kullanılır.
+  Rassal sayı üretimi bu değerle başlar ve her üretimde güncellenerek devam eder. Bu değer Rassal Sayı üretimine ilişkin
+  matematiksel işlemlerde kullanılır.
+  java.util.Random sınıfının constructor'ı(ctor olarak kısaltılacaktır) ile nesne yaratıldığında, tohum değeri ilgili uygulama içerisinde daha önce
+  default ctor kullanılarak yaratılmış olan nesnelere ilişkin tohum değerinden mümkün olduğunca farklı olma eğilimindedir.
+
+  java.util.Random sınıfının nextXXX metotları ile rassal sayılar elde edilebilir. Bu metotlardan başka metotlar da var elbette,
+  bu metotları zamanı ve sırası geldiğinde kullanmaya çalışacağız.
+
+  Bazı yerlerde import statement'ından kaçınmak için Math sınıfının random methodunu da kullanacağız.
+  Hatta ilk olarak bu metottan faydalanarak yazacağız.
+
+ Aslında Math sınıfının random metodu arka planda java.util.Randon sınıfını kullanmakta ve bu sınıfın
+ nextDouble metodunu çağırmaktadır.
+ Bu durum java.util.Random sınıfının rassal sayı üretimine ilişkin temek sınıf olduğu
+ gerçeğini vurgular niteliktedir.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

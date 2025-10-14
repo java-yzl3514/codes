@@ -1,0 +1,357 @@
+
+
+ Java Pratformu Temel Özellikleri :
+
+  Arakodlu çalışma sistemi : C ve C++ gibi dillerde yazılan kodlardan elde edilen çalışabilir dosya (executable file) sisteme(genel olarak işletim sistemi, donanım vb) özgüdür ve koda göre her sistem için ayrıca oluşturulmalıdır. Hatta sisteme özgü kodlar yazılmışsa diğer sistemler için bu dosya oluşturulamayacak.
+
+ Java programlama dili ile yazılan bir program "derlendiğinde(compile)" oluşan dosyanın içerisinde hiç bir
+ sistemin dili olmayan yapay bir arakod oluşur.Bu arakoda bytecode denilir. Bytecode doğrudan çalıştırılamaz.
+ Çalıştırılması için ayrı bir program gereklidir. Bu program bytecode'u yorumlayarak makine koduna yani sisteme özgü koda dönüştürerek çalıştırır.Bu dönüştürme işlemine Just In-Time Compilation denir.
+
+Bu anlamda geliştirme ve çalıştırma ortamına özgü 3 temel kavram ortaya çıkar:
+
+ JVM(Java Virtual Machine): bytecode'u makine koduna dönüştürür. JVM aslında bytecode'un nasıl makine koduna
+ dönüştürüleceğini tanımlayan soyut bir kavramdır.
+
+ JRE(Java Runtime Environment) : Genel olarak Java ile yazılmış bir uygulamayı "çalıştırmak(run)" için gereken
+ araçları ve uygulamaları içeren pakettir.Yani bytecode elde edildiğinde bu programın çalıştırılabilmesi için
+ JRE'ye ihtiyaç vardır.
+
+ JDK(Java Development Kit) : Geliştirme araçlarını ve çalıştırma araçlarının bir çoğunu içeren pakettir.Bu paketteki çalıştırma araçları geliştirme aşamasında elbette kullanılabilir.
+
+  Ticari kullanımlarda özellikle Java 11 ile birlikte bazı değişiklikler yapılmıştır. Genel olarak şöyle söylenebilir: Java'da geliştirme ortamı ücretsiz, çalıştırma araçları kullanılan araca göre ücretli olabilir.
+Tamamen ücretsiz olarak kullanılabilen "Open JRE" gibi çalıştırma araçları mevcuttur.
+Belirli bir noktadan sonra Java sürümleri için Long Term Support (LTS) kavramı da getirilmiştir. LTS sürümleri
+uzun süre desteklenen yani güncellenmesi (daha verimli hale getirilmesi, hataların düzeltilmesi(bug fix), vb) uzun süre yapılan sürümlerdir.
+  LTS Java 1.8 -> Java 8
+  LTS Java 11
+  LTS Java 17
+  LTS Java 21
+  LTS Java 24
+
+  Java'nın son sürümü bu ders itibariyle Java 24 sürümüdür(18 Mart 2025) - JSR 399
+
+
+  Arakodlu çalışma sisteminin en önemli avantajı, geliştirilen uygulamaların genel olarak sistemden bağımsız
+  olarak çalıştırılabilmesidir. Dolayısıyla çalışılacak olan sistemden bağımsız olarak ürün geliştirilebilir.
+
+  -- Hızlı Uygulama Geliştirme Ortamı :
+  -- Geniş bir sınıf kütüphanesi : Java 'da oldukça geniş bir sınıf kütüphanesi vardır.Örneğin : Veritabanı işlemleri, web programlama, dosya işlemleri gibi işlemler için hazır sınıflar bulunmaktadır.
+  -- Güvenli çalışma ortamı: Java'da yazılmış olan programın sisteme zarar verme olasılığı düşüktür.
+
+
+  Programlama Dillerinin Sınıflanfırılması:
+
+    Programlama dilleri genel olarak 3 şekilde sınıflandırılır :
+
+    -- Seviyelerine göre sınıflandırma: Programlama dilinin seviyesi insan algısına yakınlığının ölçüsüdür.
+    Yüksek seviyeli diller (high level languages) hem dil özellikleri, hem de uygulama geliştirme anlamında
+    insan algısına yakınlıkları dolayısıyla daha kolay öğrenilirler. Düşük seviyeli diller(Low-Level Languages) makineye daha yakın olan dillerdir.
+    -- Kullanım alanlarına göre sınıflandırma: Dilin hangi alanlarda kullanılabileceğine göre yapılan sınıflandırmadır. Bazı diller birden fazla alanda kullanılabilir. Bazı diller sadece bir alanda kullanılırlar.
+    Bu anlamda genel amaçlı diller, bilimsel ve mühendislik dilleri, veritabanı dilleri, yapay zeka dilleri, oyun ve animasyonu dilleri gibi alanlar dillerin sınıflandırılmalarına örnek teşkil etmektedir.
+    -- Programlama modeline göre sınıflandırma: Bir programı yazarken kullanılan genel model(paradigm) önemlidir. Örneğin bazı dillerde "sınıf(class)" kavramı yoktur. Program çeşitli alt programların (function) bir araya getirilmesiyle yazılır.Bu modele "procedurel model" denir. Bazı dillerde "sınıflar(class)" vardır ve programlar sınıflar kullanılarak yazılır.Başka bir çok destekleyici kavramla birlikte genel olarak sınıflar kullanılarak yazılan programlama modeline nesne-yönelimli model(Object Oriented Programming Paradigm) denir.
+Bazı dillerde programlar adeta matematiksel formül yazıyormuş gibi yazılmaktadır. Bu tarz programlama modeline "fonksiyonel programlama modeli(functional programming paradigm)" denir.
+ Bazı diller birden fazla modeli destekler.Bu tarz dillere "multi-paradigm languages" denir.Birden fazla modeli destekleyen diller modellerin tüm özelliklerini desteklemeyebilir.
+
+
+  Bu durumda Java, bilimsel ve mühendislik uygulamalarında, web uygulamarında, yapay zeka uygulamalarında,
+ mobil uygulamalarda, masaüstü (desktop) uygulamalarında vb. kullanılabilen genel amaçlı, yüksek seviyeli,
+ nesne-yönelimli programlama modeli ile uygulama geliştirilebilen ve özellikle Java 8 ile birlikte fonksiyonel
+ programlama modelini de belirli ölçüde destekleyen "multi-paradigm" bir dildir.
+
+ Çevirici Programlar, Derleyiciler ve Yorumlayıcılar:
+
+ Bir dilde yazılmış programı başka bir dile çeviren programlara çeviri programlar (translator) denir. Çevirici
+ programlarda bir kaynak dil (source language) ve bir de hedef dil(target/destination language) vardır.
+ Kaynak dil yüksek seviyeli, hedef dil düşük seviyeli bir programlama diliyse bu durumda çevirici programa
+ "derleyici(compiler)" denir. Örneğin Java programlama dilinden Kotlin programlama diline dönüştürme yapan program bir translator, Java programlama dilinden bytecode'a dönüştürme yapan program ise bir compiler'dır.
+  javac
+  JVM'in bytecode'u makine koduna çevire işlemi de bir derleme işlemidir. Bu sebeple buna JIT (Just In-Time) compilation denir.
+  Bazı dillerde yazılan programlar herhangi bir kod üretmeden çalıştırılırlar.Bu tarz dillerde yazılmış programları herhangi bir arakod üretmeden çalıştıran programlara "yorumlayıcı(interpreter)" denir.
+   Bazı diller hem derleyici hem de yorumlayıcıyla kullanılabilirler.
+  Java pratikte derleyici ile birlikte kullanılan, Java 11 ile birlikte "java" programı yorumlayıcı olarak da java kodunu bytecode üretmeden de "çalıştırabilmektedir".
+
+
+
+
+  Dil Kavramı
+  İletişimde kullanılan sembollere(semboller kümesine) dil denir. Dilin kurallarına grammer adı verilir. Bir olgu aşağıda belirtilen özelliklere sahipse bir dildir:
+
+  1. Sentaks(Syntax) : Dilin öğelerinin doğru dizilimine denir.
+        Örneğin : "I am an engineer" cümlesinde dilin öğeleri doğru dizilmiştir. Cümle "am an engineer I" biçimde yazılsaydı
+        sentaks olarak hatalı olurdu.
+
+  2. Semantik (Semantic) : Doğru dizilmiş öğelerin ortaya çıkardığı anlama semantik denir. Öğeler doğru dizilse bile cümle anlamlı değilse yine hatalıdır.
+
+  Doğal dillerde sentaks ve semantik dışında da kavramlar bulunur. Bilgisayar bilimlerinde kullanılanıla dillere bilgisayar dilleri (computer languages) denir. Bir bilgisayar dili
+  akış (flow/ algoritmik sıra-düzen) içeriyorsa bu dil programlama dili (programming language) olarak görülür. Her bilgisayar dili bir programlama dili değildir.
+
+
+  Derleyicinin verdiği mesajlar
+
+  Derleyiciler koda ilişkin bazı teşhis mesajları (diagnostics) verirler.Derleyicilerin teşhis mesajları 3 gruba ayrılır :
+
+
+  1. Gerçek hatalar (Errors) :
+      >  Hello.java:4: error...
+
+    Sentaks veya semantik olarak geçersiz bir durumda derleyicinin verdiği mesajlardır. Bu durumda BYTECODE üretilmez. Programcının hataya yol açan durumları düzeltmesi ve derleme
+    işlemini yapması gerekir.
+
+  2. Uyarılar (Warnings) : Programcının olası programlama hatalarına yönelik mesajlardır. Uyarı mesajları BYTECODE üretimini engellemezler. Programcı tarafından dikkate alınmalıdır.
+  Özel bir durum yoksa uyarı mesajlarına yola açan durumların ortadan kaldırılması gerekir. Bazı durumlarda programcının kullandığı bazı static kod analizi (static code analyzer) araçları da
+   derleyici dışında bazı uyarılar verebilirler. Mutlaka bu mesajlarda dikkate alınmalıdır.
+
+  3. Ölümcül Hatalar (Fatal Errors) : Derleme işleminin dahi tamamlanamadığı hatalardır. Örneğin derlenecek dosyanın bulunamaması, diskte yer kalmaması, sistemsel problemler oluşması vb.
+  Bu durumda programcının ölümcül hataya yol durumu ortadan kaldırıp derleme işlemini yapması gerekir. Yani ölümcül hata durumunda programcının kodu ile ilgili bir durum yoktur.
+
+
+  Derleme işleminin başarıyla yapılması durumunda derleyiciler ya hiç bir mesaj vermezler ya da derleme işleminin başarılı olduğuna dair anlamlı mesajlar verirler.
+
+  Programın çalışma zamanında oluşan hatalı durumlara genel olarak "exception" veya "run time error" denir.Exception işlemleri (exception handling) konusuna gelene kadar bir exception oluştuğunda
+  program abnormal bir biçimde sonlanır olarak düşüneceğiz.
+
+  Bir program için, programcı açısından iki durum söz konusudur.
+  1. Derleme zamanı (Compile Time) : Derleme işlemine ilişkin süreçtir.
+  2. Çalışma zamanı (Run Time) : Programın çalıştırılması sürecidir.
+
+
+ Derleme zamanı ve çalışma zamanı birbirleriyle ilişkilidir. Sonuçta bir program derlenmeden çalıştırılamaz. Her ne kadar ilişkili olsalarda birbirlerinden farklı kavramlardır.
+
+
+  Lexical Structor:
+
+     Java programları Unicode karakter setiyle yazılır. Bu sayede tüm dünya dillerinden karakterler kullanılabilir.
+
+
+public class Çalışan {
+      public static void main(String[] args) {
+
+           System.out.println("İstanbul");
+      }
+}
+
+Lexical Translations :
+  - Unicode Kaçış Karakterlerinin çözümlenmesi  \u0041  --> A
+  - Satır sonları ve karakterlerin ayrıştırılması,
+  - Geriye kalanlar input elements olur
+
+Line Terminator (Satır Sonları) :
+ Unix/Linux  \n  -> Line Feed Character
+ Windows     \r\n
+ Mac OS 9    \r
+
+ Input Elements ve Token
+  - Whitespace (boşluk, tab)
+  - Comments
+  - Token (keywords, identifiers, literals vb)
+
+
+ Token (Atom / Belirteç):
+    Programlama dilinin bölünemeyen en küçük birimine token (atom/belirteç) denir.
+
+ Whitespace :
+   Boşluk karakterleri derleyici tarafından atlanır.
+
+   int i = 5;
+
+ Comments :
+
+   // end of line Comment
+
+   /*
+    -- traditional comment --
+    Multiline Comments
+   */
+
+JavaDoc Comments :
+  /**
+   *
+   *
+   *
+   *
+   */
+
+ javadoc aracı, Java kaynak kodundaki Javadoc açıklamalarını (JavaDoc Comments /** .... */)
+  kullanarak HTML formatında API belgeleri üretir.
+  Kaynak kodda bulunan CalculatorJavaDoc örneğini inceleyiniz.
+
+
+
+ -- identifiers (tanımlayıcılar) :
+  Bir java programı içerisinde ilgili programlama varlıklarına (class, method, variable...) verilen isimlerdir.
+  - Java Letter içermeli
+  - Java Digit içermeli
+
+  A - Z
+  a - z
+  0 - 9
+   _
+   $
+
+ -- identifier'lar digit ile başlayamaz.
+ -- Sadece  _ (underscore) karakteri ile belirtilen identifier'lar Java 9 dan sonra desteklenmez. (Java bu versiyondan tek underscore karakterini keyword olarak sınıflandırıyor)
+ --  _ (underscore) karakteri identifier karakterleri içerisinde kullanılabilir
+ -- $ karakteri genellikle derleyicinin ürettiği kodlarda kullanılır. Java programcısı
+ bu karakteri identifier olarak kullanmaktan kaçınmalıdır.
+
+-- Java identifier'lara case-sensitive yaklaşır.
+   int number = 0;
+   int NUMBER = 0;
+   int nUmBer = 0;
+-- Java identifier'lara herhangi bir karakter sınırlaması getirmez (unlimited-length ) ama
+önerilen uzunluk genellikle  (15-20) karakterin mümkün olduğunca aşılmamasıdır.
+-- Java identifier'ları birebir "keyword" olarak sınıflandırılan token'lardan olamaz.
+
+
+-- Keywords --
+
+  abstract
+  assert
+  boolean
+  break
+  byte
+  case
+  catch
+  char
+  class
+  *const
+  continue
+  default
+  do
+  double
+  else
+  enum
+  extends
+  final
+  finally
+  float
+  for
+  if
+  *goto
+  implements
+  import
+  instanceof
+  int
+  interface
+  long
+  native
+  new
+  package
+  private
+  protected
+  public
+  return
+  short
+  static
+  strictfp
+  super
+  switch
+  synchronized
+  this
+  throw
+  throws
+  transient
+  try
+  void
+  volatile
+  while
+  _ (underscore) ** Since Java 9
+
+
+ * const ve goto keyword'leri java reserve haldedir fakat kullanılmazlar.
+
+
+-- Separators
+
+    ( ) - Paranthesis ?
+    { } - Curly Braces // Küme Parantezi / Süslü Parantez
+    [ ] - Brackets
+     ;  - Semicolon
+     .  - dot
+    ... - ellipsis  (Java 5)
+     @  - (~ Java 5 )
+     :: - method reference (Java 8)
+
+-- Operator
+
+    =
+    >
+    <
+    ==
+    <=
+    >=
+    !=
+    !
+    ~
+    +
+    -
+    *
+    /
+    %
+    +=
+    -=
+    /=
+    %=
+    |
+    &
+    |=
+    &=
+    ||
+    &&
+    ? : (Conditional Operator)
+    ->
+    ++
+    --
+    ^
+    ^=
+    <<
+    >>
+    >>>
+    <<=
+    >>=
+    >>>=
+
+ -- Literals
+   ???
+
+ - Types ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

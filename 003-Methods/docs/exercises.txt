@@ -1,0 +1,122 @@
+0- Kullanıcıdan int türden integer n sayısını alarak, ilk n adet asal sayıyı, her satırda
+ 20 tane asal sayı olacak şekilde ekrana yazdıran programı yazınız.
+ Çözüm : PrimeNumbersApp.java
+
+1- Kullanıcıdan Hex (16'lık taban) türden bir integer alan ve bu integer değeri decimal(10'luk taban) olarak çeviren ve ekrana yazdıran
+programı yazınız.
+ Açıklama : Scanner sınıfının nextInt isimli overload edilmiş bir versiyonunda metot radix isimli bir parametre alır.
+ Bu parametre okunacak integer'ın tabanını belirtir. Bu metodun keşfedilmesi güzel fakat bu soruda
+ bir problemin küçük parçalara nasıl ayrıştıralacağını pekiştirmek önemli.Bu yüzden kullanıcıdan okunacak
+ değerin yazı olarak okunması önerilir.
+
+ Çözüm : HexadecimalToDecimalApp.java
+         Exception'lar konusu ileride ele alınacak. Fakat HexadecimalToDecimalApp incelenirse, beklenen değerler dışında
+         değerlerin hesaplamaya sokulmasına nasıl itiraz edilmeli ? Düşünün...
+         bknz : HexadecimalToDecimalAppWithExceptions.java
+2- RandomCharacter isimli sınıf oluşturun.Bu sınıf içerisinde rastgele random karakterler üreten ve imzaları aşağıdaki
+gibi olan metotların implementasyonunu yazınız:
+
+    public static char nextLower() { ... }
+    public static char nextUpper() { ... }
+    public static char nextDigit() { ... }
+    public static char next() { ... }
+
+ Yukarıdaki metotlar kesinlikle bu sınıfın API'sinde yer almalı. Bu metotlara yardımcı olacak hesaplamaları yapan metotlar olabilir(!)
+ bu metotlar geliştiriciye aittir.
+ Çözüm : RandomCharacter.java
+
+3- (İleriye Yönelik) isPrime metotları bize belki metot test utility alt yapısı için bir fikir vermiş olabilir.
+  Basit yolla yapmaya çalışınız.
+  Hint : System.nanoTime();
+  Çözüm : // TODO
+
+
+1-
+   public static int digitCharToDecimal(char digitChar) {
+           final int NOT_DIGIT = -1;
+           if (digitChar < '0' || digitChar > '9')
+               return NOT_DIGIT;
+           if (digitChar == '0') {
+               return 0;
+           } else if (digitChar == '1') {
+               return 1;
+           } else if (digitChar == '2') {
+               return 2;
+           } else if (digitChar == '3') {
+               return 3;
+           } else if (digitChar == '4') {
+               return 4;
+           } else if (digitChar == '5') {
+               return 5;
+           } else if (digitChar == '6') {
+               return 6;
+           } else if (digitChar == '7') {
+               return 7;
+           } else if (digitChar == '8') {
+               return 8;
+           }
+           return 9;
+       }
+return statement'ının çalışma biçiminden dolayı :
+
+public static int digitCharToDecimal(char digitChar) {
+        final int NOT_DIGIT = -1;
+        if (digitChar < '0' || digitChar > '9')
+            return NOT_DIGIT;
+        if (digitChar == '0') return 0;
+        if (digitChar == '1') return 1;
+        if (digitChar == '2') return 2;
+        if (digitChar == '3') return 3;
+        if (digitChar == '4') return 4;
+        if (digitChar == '5') return 5;
+        if (digitChar == '6') return 6;
+        if (digitChar == '7') return 7;
+        if (digitChar == '8') return 8;
+        return 9;
+    }
+
+switch statement ile :
+
+public static int digitCharToDecimal(char digitChar) {
+        final int NOT_DIGIT = -1;
+        switch (digitChar) {
+            case '0': return 0;
+            case '1': return 1;
+            case '2': return 2;
+            case '3': return 3;
+            case '4': return 4;
+            case '5': return 5;
+            case '6': return 6;
+            case '7': return 7;
+            case '8': return 8;
+            case '9': return 9;
+            default: return NOT_DIGIT;
+        }
+    }
+
+switch expression ile :
+
+  public static int digitCharToDecimal(char digitChar) {
+         final int NOT_DIGIT = -1;
+         return switch (digitChar) {
+             case '0' -> 0;
+             case '1' -> 1;
+             case '2' -> 2;
+             case '3' -> 3;
+             case '4' -> 4;
+             case '5' -> 5;
+             case '6' -> 6;
+             case '7' -> 7;
+             case '8' -> 8;
+             case '9' -> 9;
+             default -> NOT_DIGIT;
+         };
+     }
+
+Aritmetik ile :
+
+ public static int digitCharToDecimal(char digitChar) {
+         final int NOT_DIGIT = -1;
+         if(digitChar < '0' || digitChar > '9') return NOT_DIGIT;
+         return digitChar - '0';
+     }

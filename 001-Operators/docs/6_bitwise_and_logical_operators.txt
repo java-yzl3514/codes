@@ -1,0 +1,96 @@
+
+
+AndExpression:
+ EqualityExpression
+ AndExpression & EqualityExpression
+
+ ExclusiveOrExpression
+ AndExpression
+ ExclusiveOrExpression ^ AndExpression
+
+ InclusiveOrExpression
+ ExclusiveOrExpression
+ InclusiveOrExpression | ExclusiveOrExpression
+
+
+ Farklı önceliklere sahip operatörlerdir.
+  En yüksek öncelikli :  &,
+  En düşük öncelikli : |
+
+
+
+ Java'da & (VE), ^ (Simetrik Fark) ve | (VEYA) operatörleri, operandların türlerine göre iki farklı
+ şekilde çalışır: tamsayılar için bit düzeyinde(bitwise), boolean değerler için mantıksal
+ operatörler olarak çalışırlar.
+ Bu operatörler hem birleşmeli ( -Left Associative) hem de değişmeli (Commutative) özelliktedirler
+
+### Tamsayılar için
+   Operandlar int, long, short ve byte olduğunda bu operatörler sayıların ikili(binary) gösterimlerindeki
+   bitleri teker teker karşılaştırarak yeni değer üretirler.
+   Operand'lar üzerinde binary numeric promotion uygulanır.
+
+   Bitwise AND: iki bitte 1 varsa sonuç 1, diğer durumlarda 0 olur
+     Pratik Kullanım :
+       Maskeleme : Belirli bitleri "kapatmak" veya bir değerin belirli bir bölümünü ayıklamak için kullanılır
+       value & 0xFF ifadesi, value'nun son 8 bitini alır diğerlerini sıfırlar.
+
+   Bitwise Inclusive OR / OR: İki bitten en az biri 1 ise sonuç 1, ikisi de 0 ise sonuç  0 (sıfır).
+
+      Pratik Kullanım:
+        Bit Ayarlama : Belirli bitleri "açmak" için kullanılır.
+        Örneğin bir settings bayrağında(flag) 3. biti açmak için,
+            settings | 0b100
+            veya
+            settings | 4
+        kullanılır
+
+   Bitwise Exclusive OR/XOR : İki bit birbirinden farklıysa sonuç 1, aynıysa (1-1 / 0-0) sonuç 0'dır
+     Pratik Kullanım:
+       Bit Değiştirme /Toggle: Belirli bir biti tersine çevirmek için kullanılır.
+
+       settings ^ 0b100 ifadesi 3. biti 1 ise 0, 0 ise 1 yapar
+
+
+örnekler:
+        int a = 5;
+        int b = 3;
+
+        System.out.println("& : " + (a & b));
+        System.out.println("^ : " + (a ^ b));
+        System.out.println("| : " + (a | b));
+
+
+        int settings = 0;
+
+        System.out.println(settings | 0b100);
+
+        System.out.println(Integer.toBinaryString(settings | 0b100));
+-------------------------------------------------------------------------------
+
+  Boolean Değerler için Mantıksal Operatörler
+
+  Operandlar boolean olduğunda bu operatörler standart mantık kurallarına göre çalışır.
+  Önemli Not: Bu operatörler her iki tarafı da her zaman değerlendirirler (evaluate)
+
+  & (Logical AND) : her iki taraf true ise sonuç true, aksi halde false'dur
+  | (Logical OR) : En az bir taraf true ise sonuç true, aksi halde false'dur
+  ^ (Logical XOR) : İki taraf birbirinden farklıysa true, aynıysa false'dur
+
+
+        System.out.println(true | false);
+        System.out.println(false & true);
+        System.out.println(false ^ true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+

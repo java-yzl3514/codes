@@ -1,0 +1,10 @@
+
+0- RandomWords isminde rastgele anlamlı ya da anlamsız kelime üreten sınıfı modelleyiniz.
+   Her kelimenin baş harfi büyük olarak üretilmeli. Karakter sayısı geliştirici tarafından karar verilebilir.
+1- RandomWords sınıfını Java ile uyumlu olacak şekilde refactor ediniz. Örn: java.util.Scanner
+   sınıfı ile okunabilir hale getiriniz.Bu güne kadar Scanner sınıfının kullanımı göz önünde bulundurulabilir.
+   Scanner Docs : https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html
+1a- RandomParagraph, RandomPassword sınıflarını modellemeyi düşünün.
+
+
+

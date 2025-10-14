@@ -1,0 +1,106 @@
+
+ Java'da Değiken Uzunluktaki Argümanlar (Variable-Length Arguments), kısaca Varargs, bir metoda aynı türden değişken
+ sayıda argüman göndermemizi sağlayan bir özelliktir. Üç nokta (...) (ellipsis) ile ifade edilir. Bu özellik
+ kodun esnekliğini ve okunabilirliğini artırmak için Java 5 ile birlikte dile eklenmiştir.
+
+ Varargs'a Neden İhtiyaç Duyuldu ?
+  Varargs özelliği olmadan önce, bir metoda belirsiz sayıda parametre göndermek için temelde iki zahmetli yöntem
+  kullanılıyordu.
+  1. Method Overloading
+    Aynı işi yapan metot, desteklenmesi istenen her bir parametre sayısı için ayrı ayrı yazılırdı.
+    Problem : Bu yöntem sürüdürülebilir değildir. 5, 10 veya 20 argüman desteklemek istenildiğinde, kod tekrarı ve
+    karmaşıklık yönetilemez hale gelir. Her yeni argüman sayısı için yeni bir metot eklemek gerekir.
+
+  public class MathUtils {
+
+      public static int sum(int a, int b) {
+          return a + b;
+      }
+
+      public static int sum(int a, int b, int c) {
+          return a + b + c;
+      }
+
+      public static int sum(int a, int b, int c, int d) {
+          return a + b + c + d;
+      }
+
+      public static int sum(int a, int b, int c, int d, int e) {
+          return a + b + c + d + e;
+      }
+  }
+
+  2. Dizi(Array) Kullanımı
+    Metot, parametre olarak bir dizi alacak şekilde tasarlanırdı. Bu, esnek bir çözüm sunsa da metodu çağıran taraf
+    (istemci) için pratik değildi.
+      Problem: Metodu çağıran, argümanları göndermeden önce onları manuel olarak bir dizi içine koymak zorundaydı.
+      Bu, özellikle az sayıda argüman için gereksiz ve kalabalık bir kod yazımına neden olur.
+
+
+   public class MathUtils {
+
+       public static int sum(int[] numbers){
+           int sum = 0;
+           for(int number: numbers)
+               sum += number;
+           return sum;
+       }
+   }
+  Bu iki yöntemin de bariz dezavantajları vardır.Varargs, bu sorunları çözmek için zarif bir çözüm olarak ortaya
+  çıktı.
+
+    Çözüm : Vararags Nasıl Çalışır ?
+
+    Varargs,derleyici sevisinde çalışan bir yazım kolaylığıdır (syntactic sugar).Arka planda Java derleyicisi sizin
+    için gönderdiğiniz tüm argümanları otomatik olarak bir dizi(array) haline getirir ve metoda bu diziyi gönderir.
+    Bu sayede, metodu tanımlayan kişi için esneklik sağlanırken, metodu çağıran kişi için de büyük bir kolaylık
+    sunulur.
+       << Kurallar >>
+     Varargs kullanılırken bilinmesi gereken iki temel kural vardır :
+      1. Son Parametre Olmalıdır: Bir metodun parametre listesinde varargs, her zaman en son parametre olarak
+      bildirilmelidir.
+          Örn :
+              Doğru : public void process(String name, int... values)
+              Yanlış: public void process(int... values, String name) // Compile-Time Error
+      2. Sadece Bir Tane olabilir: Bir metot, parametre listesinde en fazla bir tane varargs parametresine sahip
+      olabilir.
+
+     JLS'e göre :
+       Bir metodun veya ctor'un son resmi parametresi türü takip eden bir üç nokta (ellipsis) ile belirtilen
+       bir değişken sayıda argüman parametresi (variable arity parameter) olabilir.
+
+       Eğer son resmi parametre bir değişken sayıda argüman parametresi ise, bu metot bir değişken sayıda argüman
+       metodu olarak adlandırılır (Variable arity method).Aksi takdirde, bu bir sabit sayıda argüman metodudur
+       (fixed arity method)
+
+        T... şeklindeki bir değişken sayıda argüman parametresinin türü T[] olarak kabul edilir.
+
+    örn:
+    public class MathUtils {
+
+        public static int sum(int... numbers){
+            int sum = 0;
+            for(int number: numbers)
+                sum += number;
+            return sum;
+        }
+    }
+    ...
+
+    public class MathSumApp {
+        public static void main(String[] args) {
+            System.out.println(MathUtils.sum(34,776,3424,53453,23123,5436,21323,1231,23));
+
+        }
+    }
+
+ Aşağıdaki örnekte main metoduna dikkat ediniz :
+
+
+ public class MathSumApp {
+
+     public static void main(String... args) {
+
+
+     }
+ }

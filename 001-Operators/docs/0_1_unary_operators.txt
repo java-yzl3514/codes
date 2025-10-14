@@ -1,0 +1,89 @@
+
+ Prefix Increment Operatör (++)
+
+  ++E ifadesi, önce E'nin değeri üzerinde gerekli binary numeric promotion kurallarını işletir,
+    sonra değeri 1 artırır,
+    sonucu orijinal değişkene yazar ve bu yeni değeri üretir.
+    - Eğer E bir final değişken ya da atanama yapılamayan bir ifade ise derleme hatası oluşur.
+
+   örn:
+
+           int a = 5;
+           int b = ++34; // COMPILE-TIME ERROR
+
+            ----------------------------------
+
+                    byte byt = 127;
+                    byte r = ++byt;
+                    System.out.println(r);
+
+                    int a = 5;
+                    int b = ++a;
+
+                    System.out.println(b);
+----------------------------------------------------
+###Prefix ++ operatörü tek bir operand alır, fakat JLS'e göre bu operandın değerini 1 ile
+toplarken aslında içsel olarak ikili toplama işlemi yapılır. Bu toplama işleminde binary numeric promotion
+uygulanır.
+Aşağıdaki işleme dikkat ediniz :
+    byte b = 1;
+    b = b + 1;
+
+Nasıl Çalışır ?
+ 1. Derleyici, sabit 1'i ve operandın değerini öncelikle binary numeric promotion kurallarına göre
+ ortak bir tipe yükseltir.
+ 2. Bu iki değer toplanır.
+ 3. Elde edilen sonuç, gerekirse daraltma dönüşümü (narrowing) veya kutulama işlemlerine (boxing) tabi tutularak
+ orijinal değişken tipine çevrilip değişkene yazılır.
+ 4. İfade sonucu değişkene yazılan yeni değerdir.
+
+ ###Prefix Decrement (Önek Azaltma) Operator (--)
+
+  Önek --E ifadesi, önce gerekli BNP kurallarını işletir,
+  sonra değeri 1 azaltır,
+  sonucu değişkene yazar ve bu yeni değeri döndürür.
+  Final değişkenlerde ya da atama yapılamaz ifadelerde derleme hatası verir .
+  İstisna (Exception) durumunda azalma uygulanamaz.
+
+   Integer i = null;
+   Integer result = --i;
+
+---------------------------------------------------------------
+  ###Postfix Increment Operator (++)
+  E++ biçimindeki ifade, önce E'nin mevcut değerini elde eder, ardından E'nin değerine 1 ekleyip
+  sonucu E'ye geri yazar. İfade sonucu ise yazma öncesi E'nin orijinal değeridir.
+  Eğer E final ya da atama yapılamayan bir ifade ise sonuç derleme zamanı hatasıdır.
+  İstisna fırlatılabilir istisna durumunda artış gerçekleşmez
+
+ Örn:
+  int a = 199;
+         int b = a++;
+         System.out.println(b);
+         System.out.println(a);
+
+  ###Postfix Increment Operator (--)
+  E-- biçimindeki ifade, önce E'nin mevcut değerini elde eder, ardından E'nin değerini 1 azaltıp
+  sonucu E'ye geri yazar. İfade sonucu ise yazma öncesi E'nin orijinal değeridir.
+  Eğer E final ya da atama yapılamayan bir ifade ise sonuç derleme zamanı hatasıdır.
+  İstisna fırlatılabilir istisna durumunda azaltma gerçekleşmez
+
+
+###Bitwise Complement (Bit Tümleyeni) Operator (~)
+  Operan önce Unary Numeric Promotion'a tabi tutulur.
+  Sadece convertable Integral Type,
+  Primitive Integral Type ile çalışır
+  Sonra tüm bitleri çevirir.
+
+örn :
+
+           int i = 1;
+           int r = ~i;
+           System.out.println(r);
+--------------------------------------------------------------
+### Logical Complement (Mantıksal Tümleyen) (!)
+ Operand boolean veya Boolean olmak zorundadır. Gerekirse unboxing yapılır, ardından true ise false,
+ false ise true yapılır.
+ Örn:
+         boolean b = false;
+         boolean result = !b;
+         System.out.println(result);

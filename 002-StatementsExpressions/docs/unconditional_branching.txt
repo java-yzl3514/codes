@@ -1,0 +1,153 @@
+
+Bilgisayar bilimlerinde, yapısal programlama (structured programming) prensibi gereği,
+kodun okunabilir ve yönetilebilir olması için, tek bir giriş ve tek bir çıkış noktasına
+sahip bloklardan oluşmasını teşvik eder.Ancak bazı durumlarda bir metodun, döngünün switch
+bloğunun ortasında, işin bittiği veya bir sonraki adıma geçilmesi gerektiği durumlarda
+bu yapılardan kontrollü bir şekilde çıkmak da gerebilir.
+Bu anlamda bu kontrollü ama koşulsuz dallanma (unconditional branching) sağlayan araçlarımız :
+return statement
+break statement
+continue statement
+yield statement
+
+return statement
+
+return, alt program (subroutine) veya fonksiyon kavramının temel bir parçasıdır. Bir alt program çağrıldığında,
+kontrol programın ana akışından ilgili alt programa geçer. Alt program görevini tamamladığında, kontrolün
+tekrar çağrıldığı yere dönmesi gerekir. return statement tam olarak bu geri dönüşü sağlar. Ayrıca, fonksiyonel
+programlamada olduğu gibi bu geri dönüş sırasında "sonuç değer (return value)" de taşıyabilir.
+
+
+JLS return'u bir metodun veya constructor'ın çalışmasını sonlandıran bir statement olarak tanımlar.
+
+Değer döndürmeyen Form:
+   Söz Dizimi :  return;
+  - geri dönüş türü void olarak tanımlanmış metotlarda kullanılır.
+  - Metodun son statement'i olarak yazılması zorunlu değildir.
+
+ Değer Döndüren Form:
+ Söz Dizimi : return <Expression>;
+  - void olmayan ve bir geri dönüş türü olan metotlarda kullanılır.
+  - Bu metotlarda, bu formun statement'ı yazılmak zorundadır.
+  - Expression metodun geri dönüş değeriyle uyumlu olmalıdır.
+
+bknz: ReturnStatement.java
+
+Notlar :
+
+  return statement'ından sonra yazılan kodlar unreachable statement olarak sınıflandırılır
+  ve bu durum derleme zamanı hatası meydana getirir.
+
+
+break Statement
+ En içteki kapsayıcı kapsayıcı döngü (loop) veya switch yapısının sonlandırılmasını sağlayan
+ bir komuttur.
+ Programın normal döngü koşulunu beklemeden veya switch'in sonuna gelmeden ilgili yapıdan tamamen
+ çıkmasını sağlar.
+
+ JLS break statement'ı iki formda tanımlar :
+ 1. Etiketsiz break (Unlabeled break)
+ Söz Dizmi :  break;
+  En içteki switch, for, while veya do-while statementlarını sonlandırır
+ 2. Etiketli break (Labeled break)
+ Söz Dizimi : break <label>;
+  Kendisini "çevreleyen" ve belirtilen etiket ile işaretlenmiş olan statement'ı sonlandırır
+  Genellikle bu iç içe döngüleri sonlandırmak amaçlı kullanılır.
+
+Java'da Etiket ilgili etiket ifadesi yazıldıktan sonra : ile belirtilir. Identifier
+oluşturma kurallarını barındırır.
+
+Örn :
+
+ public static void main(String[] args) {
+
+        Labels:
+        break Labels;
+
+        LABELS:
+        break LABELS;
+
+        LABELS:
+        break LABELS;
+
+    }
+
+bknz: BreakStatement.java
+
+continue Statement
+
+continue, break statement'ına benzer şekilde döngünün akışını değiştirir ancak döngüyü
+kırmak/sonlandırmak yerine döngünün mevcut iterasyonunun geri kalanını atlayıp bir sonraki
+iterasyona geçilmesini sağlar.
+
+JLS'de continue statement'ı iki formda tanımlar:
+
+1. Etiketsiz continue
+   En içteki for, while, do-while döngülerinin mevcut adımının geri kalanını atlar.
+2. Etiketli continue
+   Belirtilen etiket ile işaretlenmiş döngünün mevcut adımını atlar ve o döngünün bir sonraki
+   iterasyonuna geçer.
+Örn:
+public static void main(String[] args) {
+
+
+        int[] numbers = {10, -2, 20, -4};
+        int sumOfPositiveNumbers = 0;
+
+        for (int i = 0; i < numbers.length; i++) {
+            if(numbers[i] < 0){
+                continue;
+            }
+            sumOfPositiveNumbers += numbers[i];
+        }
+    }
+
+Örn:
+    public static void main(String[] args) {
+
+            MAIN_LOOP:
+            for(int i = 0; i < 10; i++){
+                System.out.printf("i : %d%n",i);
+                for(int k = 0; k < 10; k ++){
+                    if(k % 2 == 0){
+                        continue MAIN_LOOP;
+                    }
+                    System.out.printf("k : %d%n",k);
+                }
+            }
+
+        }
+
+
+yield Statement
+
+  JLS, yield'i sadece switch expression'ları içinde bir değer belirtmek/üretmek için kullanılan
+  bir deyim olarak tanımlar aynı zamanda yield'i "bağlamsal anahtar sözcük(Contexual Keyword)" olarak
+   tanımlar.
+
+  return'e benzer (değer döndürme anlamında), ancak metodu sonlandırmak yerine, sadece
+  içinde bulunduğu switch expression'ın değerinin olmasını sağlar
+
+  --- switch expression'unun case bildirimi -> oparatörüyle tanımlanmışsa yield kullanılmaz.
+     -> operatorünün sağındaki değer ya da expression zaten üretilecek değeri ortaya çıkarır.
+  --- case'i geleneksel (:) ile tanımlanmış ve bir kod bloğu içeriyorsa o bloğun switch
+  expression'una değer döndermesi için yield kullanılmalıdır.
+   -> operatörü bileşik deyim yani block içeriyorsa yield kullanılmalıdır.
+
+   Bu anlamda aşağıdaki örnek incelenebilir. yield ifadesinin tekrarlandığı görülecektir.
+   Bu durumda switch expression'u için okunabilirliği artırması yönünde eleştirilebilir bir yapı
+   elde edilir. Doğrudan değer için -> oparatörü kullanılmalıdır.Eğer Block statement varsa
+   bu durumda zaten kaçış yoktur.
+
+örn:
+        String result = switch (day) {
+                    case 1, 2, 4 : {
+                        yield "45";
+                    }
+                    case 6 : yield "Weekend";
+                    default : yield "Invalid Day";
+                };
+
+--------------------------------------------------------------------------------
+
+

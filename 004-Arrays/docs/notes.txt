@@ -1,0 +1,305 @@
+
+Aşağıdaki yazım tarzlarını karşılaştırınız:
+
+        int v1;
+        int v2;
+        int v3;
+        int v4;
+        int v5;
+        int v6;
+        int v7;
+        int v8;
+        int v9;
+        int v10;
+
+...
+        int[] numbers = new int[10];
+
+
+ Java programlama dilinde arrayler 'nesnedir'. Dinamik olarak oluşturulurlar.
+ Object türündeki değişkenlere atanabilirler.
+ Object sınıfının tüm metotları bir dizi üzerinde çağrılabilir.
+
+ Bir dizi nesnesi, bir dizi değişken içerir. Değişkenlerin sayısı sıfır olabilir, bu durumda dizi boş
+ olarak adlandırılır.
+ Bir dizide yer alan değişkenlerin isimleri yoktur.Bunun yerine, negatif olmayan tamsayı index değerleri
+ kullanan dizi erişim ifadeleriyle referans gösterilirler.Bu değişkenlere dizinin bileşenleri (components) denir.
+ Bir dizinin n bileşeni varsa dizinin uzunluğunun n olduğu söylenir ve dizinin bileşenlerine
+ 0'dan n-1'e kadar olan tamsayı indeksler kullanılarak erişilir.
+ * Bu anlamda diziler hem fiziksel hem de mantıksal olarak sıralı bir veri yapısıdır.
+
+ Bir dizinin tüm bileşeni aynı türe sahiptir ve bu türe dizinin bileşen türü (component type) denir.
+ Bir dizinin bileşen türü, dizinin türünün kendisinden farklıdır.
+ Yani,bir dizinin bileşen türü T ise, dizinin türü T[] şeklinde yazılır.
+
+
+Teknik arka plan:
+
+  # Bellek Yönetimi :  Diziler (array), ilkel veri tipleri (primitive) gibi, yerel faaliyet alanlarında (local),
+  stack bellekte değil,tüm nesneler gibi heap bellekte oluşturulurlar.
+   Örn :
+         int[] numbers = new int[10];
+   ifadesi için;
+
+     'numbers' referansı stack bölgesinde tutulurken, 10 tamsayılık yeri barındıran asıl dizi nesnesi heap
+     bölgesinde yaratılır.
+     Bu, dizilerin metotlardan döndürülebilmesini ve scope(kapsam) dışına çıktıklarında Java'nın GC'si tarafından
+     otomatik olarak temizlenmesini sağlar.
+
+  # Dinamik Oluşturma : Dizilerin boyutu derleme zamanında (compile-time) sabit olmak zorunda değildir. Boyut
+  programın çalışma zamanında belirlenebilir.
+  Örn: Kullanıcıdan bir değer alıp o boyutta dizi oluşturulabilir.
+  Bu durum dizilerin nesne olmasının doğal sonucudur.
+
+ # Object Sınıfı Mirası : Her dizi dolaylı olarak java.lang.Object sınıfından miras alır(inheritance). Bu
+ sayede her dizi üzerinde hashCode(), equals(), toString() gibi Object türüne ait metotlar çağrılabilir.
+
+ #length özelliği : Dizilerin nesne olmasının bir diğer kanıtı,'length' adında bir final instance (örnek)
+ değişkenine sahip olmalarıdır. Bu bir metot değildir !. Dizinin boyutunu verir ve bu değer dizi oluşturulduktan sonra
+ değiştirilemez !
+
+
+ # Dizi Türleri (Array Types)
+  Bir dizi(array) türü, bir eleman türünün adının ardından gelen bir veya daha fazla boş köşeli parantez (brackets),[],
+  çiftiyle yazılır.
+  Bir dizinin uzunluğu türünün bir parçası değildir. Yani new int[10] ve new int[20] ile oluşturulan diziler, farklı
+  uzunluklara sahip olsalar da aynı türderdirler.(int[]). Bu neyi sağlar?
+   Cevap : Bu durum bir dizi referansının çalışma zamanında farklı uzunluklardaki dizileri gösterebilmesini sağlar.
+
+   Java programlama dili C-Style array referans değişkeni bildirimine de (declaration) izin verir.
+   Fakat bu Java programcısına ÖNERİLMEZ. Static-code-analyzer aracı da bu yönde uyarı verecektir.
+   bknz : CStyleArrayReference.java
+
+
+ # Kovaryans(Covariance) ve Tür Güvenliği: JLS belirtiği, "eğer B, A'ya atanabiliyorsa,B[], A[]'ya
+ atanabilir" kuralı, dizilerin kovaryant olduğunu söyler.
+ Bu, Java'nın en önemli ve bazen kafa karıştırıcı teknik detaylarından biridir.
+
+  İleride göreceğimiz üzere String, Object'in bir alt türü olduğu için, String[]'de Object[]'in
+  bir alt türüdür.Bu sayede şu atamayı yapabiliriz :
+
+   String[] strArray = {"Ankara", "Istanbul"};
+   Object[] objArray = strArray; // Geçerli
+ Ancak bu durum tehlikelidir! Yani çalışma zamanına safe bir kod bırakmaz.Derleyici bu atamaya
+ izin verir.JLS'e göre kural ihlali yoktur. Fakat JVM çalışma zamanında tür güvenliğini
+ sağlamak zorundadır!
+
+ Aşağıdaki kod örneğini inceleyiniz :
+
+
+        objArray[0] = "İzmir"; // Geçerli
+        objArray[1] = 45; // Geçerli. Fakat çalışma zamanı sırasında ArrayStoreException
+                                      fırlatır.
+
+
+ # Dizi Erişimi ve Sınır Kontrolü (Array Access)
+   Diziler, int değeri ile indexlenmelidir. short, byte veya char değerleri de index değeri
+   olarak kullanılabilir çünkü bunlar unary numeric promotion'a tabi tutulur.
+   Bir dizi bileşenine long türden bir index değeri ile erişme girişimi derleme zamanı hatasıyla sonuçlanır.
+
+   Dizi erişimi sırasında index değeri negatifse veya dizinin uzunluğundan büyük veya eşit ise
+   java.lang.ArrayIndexOutOfBoundsException fırlatılır.
+
+   int[] numbers = new int[10];
+   numbers[-1] = 34; // Geçerli - Derlenir
+   fakat çalışma zamanında:
+   java.lang.ArrayIndexOutOfBoundsException: Index -1 out of bounds for length 10
+
+//....
+    int[] numbers = new int[10];
+    numbers[10] = 34; // // Geçerli - Derlenir
+    fakat çalışma zamanında :
+    java.lang.ArrayIndexOutOfBoundsException: Index 10 out of bounds for length 10
+//...
+  int[] numbers = new int[10];
+  numbers[11] = 34; // Geçerli - Derlenir
+   fakat çalışma zamanında:
+    java.lang.ArrayIndexOutOfBoundsException: Index 11 out of bounds for length 10
+
+----------------------------------------------------------------------------------------------------
+
+Array uzunlukları da int türünün max değeri ile sınırlı olacaktır.
+int[] numbers = new int[Integer.MAX_VALUE]; // Geçerli
+
+Array uzunluğu negatif belirtilirse, kod derlenir fakat çalışma zamanında
+ java.lang.NegativeArraySizeException fırlatılır
+int[] numbers = new int[Integer.MIN_VALUE]; // Geçerli
+----------------------------------------------------------------
+
+
+Bu durumda şu sonuç çıkarılır: JVM ,her dizi erişiminde indexin geçerli aralıkta olup olmadığını
+çalışma zamanında kontrol eder.
+
+Dizi yaratmak için "new" operatörü kullanılır.
+Dizinin bileşenlerine erişmek için [] operatörü yani subscription/subcript/access/indexing operatörü kullanılır.
+Bu operatör özel amaçlı iki operandlı ve ara-ek durumudadır.Operatörün birinci operandı bir dizi referansı;
+ikinci operandı ise int türüne doğrudan dönüşebilen bir değer(index) olmalıdır.
+
+Bir 'koleksiyon' veya 'kapsayıcı'(container) içerisindeki tek bir elemana erişmek için kullanılan operatördür
+Bu operatörün en yaygın gösterimi köşeli parantezlerdir [] ve Java'da bu notasyon kullanılır.
+
+Java'da operator overloading söz konusu değildir. Bu yüzden bu operatör sadece ve sadece diziler için
+yerleşik olarak bulunur.
+Bu nedenle ArrayList, HashMap gibi koleksiyon(Collection) sınıflarında kullanılamaz.Bunun yerine ilgili
+işlemler için geliştirici metot yazar veya hali hazırdaki metotları kullanır.
+ Java'da bu operatörün iki temel işlevi vardır:
+ 1- Değer Okuma (r-value)
+ 2- Değer Atama (l-value)
+ Yani expression içerisindeki bağlamına göre bu operatör ya ilgili indexteki array bileşeninin değerini üretir ya da
+ değişken(variable) üretir.
+
+        numbers[3] = 4;
+  Yukarıdaki statement içinde bu opratör değişken üretmiştir.Böylelikle ilgili indexteki değişkene 4 değeri atanır.
+        System.out.println(numbers[3]);
+  Yukarıdaki statement içinde bu opratör bileşen/eleman/değişeken değerini üretmiştir.
+  Böylelikle ilgili indexteki değişkenin değeri standart çıktıya gönderilir.
+
+Kaynak: https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html
+Dizi yaratıldığında bileşenlerinin/elemanlarının her birine default değerler atanır.
+
+default değerler nedir ?
+ default değerler primitive türler için 0-vari değerler:
+  tamsayılar için 0,
+  boolean türü için false
+  char türü için \u0000
+  floating-point tür için 0.0
+  referans/object tür için null
+---------------------------------------------------------------------------
+
+## Array Initializer Syntax
+
+   Bu sentaks bir kısayol notasyonudur.
+
+   elementType[] arrayReferenceVariable = {value0,value1, value2...... valueN }
+
+   int[] numbers = {1,2,3,4,5}
+   'numbers.length' değeri 5'tir
+
+Yukarıdaki notasyonun uzunca yazımı aşağıdaki gibidir:
+
+    int[] numbers = new int[5];
+    numbers[0] = 1;
+    numbers[1] = 2;
+    numbers[2] = 3;
+    numbers[3] = 4;
+    numbers[4] = 5;
+
+tailing comma syntax :
+ int[] numbers = {1,2,3,4,5,6,};
+ sonuncu yazılan elemandan sonra bırakılan virgüle 'tailing comma' adı verilir.Derleme zamanı hatası oluşturmaz.
+ C-Style olarak yorumlanabilir.
+ Bunu yazmakla yazmamak arasında bir fark yoktur.Bunun programcının yaklaşımına göre 2 ana kullanımı söz
+ konusu olabilir:
+ 1 - Programcı henüz ilk değerleri tamamlamamıştır bunu belirtmek için kullanabilir.
+ 2 - Verilen ilk değerlerin geliştirme aşamasında yerlerinin çok sık değişebileceği durumda, değiştirme
+ işlemi daha kolay yapılabilir.
+
+
+  Array Initializer Syntax new operatörü ile yazılabilir fakat bu durumda arrayin uzunluk bilgisi yazılmaz !
+
+  elementType[] arrayReferenceVariable = new elementType[]{value0,value1, value2...... valueN }
+
+Örn:
+   int[] numbers2 = new int[]{1,2,3,34,6,7};
+
+    Bu durumda aşağıdaki gibi yazılırsa derleme zamanı hatası verilir.
+
+       int[] numbers2 = new int[6]{1,2,3,34,6,7};
+
+  Array Initializer Syntax aşağıdaki gibi yazılamaz :
+          int[] numbers3;
+          number3 = {1,2,3,4,5}; // COMPILE-TIME ERROR
+
+  DİKKAT:  { } parantezleri içerisinde yazılan elemanlar notasyonu tek başına bir liste, array ya da diğer sıralı
+    koleksiyon gibi veri yapılarını belirtmez! Bu notasyon sadece ve sadece array reference initializing sırasında
+    kullanılabilir!
+
+  new operatörüyle ile birlikte kullanılan initializing syntax neden var hangi durumda kullanılır ?
+  Bu notasyon sabit ve elemanları belirli olan bir array'in bir metoda argüman olarak geçilmesini sağlar ya da multi-dimensional olarak oluşturulmuş bir array için, farklı diziler oluştururken de
+  eğer değerler belliyse bu syntax kullanılır.
+  Çünkü yukarıdaki notumuza istinaden { } parantezleri arasına yazılmış olan elemanların oluşturduğu notasyon
+  tek başına anlamlı ve yeterli değildir.
+
+  Bu anlamda sıfır elemanlı bir dizi aşağıdaki yazımlardan biri ile yaratılabilir:
+    new int[0];
+    new int[]{};
+
+ 2-Boyutlu Array (Two-dimensional)
+
+
+   elementType[][] arrayRefVar;
+   ya da
+
+   elementType arrayRefVar[][]; // C-Style bildirim (declaration), bu bildirim biçimine izin verilir fakat tercih edilmez.
+
+   Creation :
+
+   new elementType[<int>size**][<int>size*];
+
+ * Bu size bildirimi opsiyonel olarak değerlendirilir. Bu bilginin zorunlu olmaması dizilerin farklı uzunlukta olabileceklerini vurgular.
+ Bknz: Ragged Arrays. Bu özellik dinamik yani çalışma zamanında farklı uzunluklarda array'ler oluşturulmasını sağlar.
+ ** new operatörüyle birlikte array initializer syntax kullanılırsa eğer bu size bildirimi yapılmaz.
+
+ örn : int[][] matrix = new int[][]{ {21, 67}, {23, 67, 56} };
+
+
+# Ragged Array
+
+İlk array uzunluğunun belli olduğu fakat ilk array'in bileşenlerinin göstereceği array'lerin uzunluklarını farklı olabildiği array türü.
+
+Örn: int[][] arr3 = new int[3][];
+Yukarıdaki array heap bellek bölgesinde, 3 uzunluklu bir array oluşturur. Bu arrayin bileşenlerinin default değeri, multi-dimensional array olduğundan dolayı, array'ler obje olduklarından dolayı,
+yani referans türde olduklarından, null değeri ile yaratılmış olacak.
+
+   int[][] arr3 = new int[3][];
+
+         for(int row = 0; row < arr3.length; row ++){
+             for(int column = 0; column < arr3[row].length ; column++){
+                 System.out.printf("%d  ", arr3[row][column]);
+             }
+             System.out.println();
+         }
+
+Yukarıdaki program, ilk dizinin göstereceği diziler henüz yaratılmadıklarından, NullPointerException ile sonuçlanır.
+
+Array'lerin Yazıya Dönüştürülmesi (ToString)
+
+Arrays isimli java.util paketi içerisinde bulunan sınıfın, eğer dizi tek-boyotlu ise overload edilmiş toString metotları ve multi-dimensional diziler için deepToString metodu, yardımıyla yazıya
+dönüştürme yapılabilir.
+Örn:
+          int[][] matrix = new int[2][2];
+
+          System.out.println(java.util.Arrays.toString(matrix));
+Yukarıdaki programın çıktısı, an itibarıyla ve ilgili makinede (yani I@76ed5528 ifadesindeki @ işaretinden sonraki kısım sembolik obje adresini belirtir), aşağıdaki gibidir :
+   [[I@76ed5528, [I@2c7b84de]
+
+Yukarıdaki çıktıyı, programcı şöyle okuyacaktır :
+  2 uzunluklu bir dizinin, 0. indexinde 76ed5528 sembolik referans adresini gösteren, [I, int türden array ve 1. indexinde 2c7b84de sembolik referans adresini gösteren, [I, int türden array başka
+  bir array var.
+
+  Java default olarak array adres bilgisini yazı olarak belitirken sol köşeli parantez (left bracket), [, ifadesiyle başlatır. [, ifadesi objenin array olduğunu belirtir. Sonraki ifade arrayin tür bilgisini
+  belirtir. Bu anlamda [I,  int türden bir arraydir.
+
+# Object türden referans ile array gösterimi :
+
+         Object arr = new int[3];
+
+         Object arrMulti = new int[2][2];
+
+         Object[] arrMulti2 = new int[2][2];
+
+
+
+* Soru: Arrays util sınıfının içindeki sort metotları hangi sort algoritmasını kullanıyor ?
+
+* Recursive Metot Çağrıları
+ Bir metodun kendisini kendi metot gövdesinden tekrar çağırmasıdır.Bu metot çağrılarına recursive metot call denilir.
+ Mantıksal olarak adeta bir döngü kurulmuş gibi düşünülebilir.
+ Recursive metot çağrılarında metot çağrım döngüsünden çıkılması önemlidir. Termination Condition denilen bu koşulu
+ geliştirici dikkatle belirleyip yazmalıdır. Aksi durumda StackOverflowError ile sonuçlanır.
+ Bknz : ArrayUtil.quickSort
+
+
+
+
+

@@ -1,0 +1,134 @@
+
+  RelationalExpression:
+  ShiftExpression
+  RelationalExpression < ShiftExpression
+  RelationalExpression > ShiftExpression
+  RelationalExpression <= ShiftExpression
+  RelationalExpression >= ShiftExpression
+  InstanceOfExpression
+
+
+ Java'da ilişkisel operatörler, iki değer arasındaki ilişkiyi (büyüklük, küçüklük, tip uyumu..) sorgulayarak boolean (true/false) bir
+ sonuç üreten operatörlerdir.
+
+ Sayısal Karşılaştırma : < (küçüktür), > (büyüktür), <= (küçük veya eşit), >= (büyük veya eşit)
+ Tip Karşılaştırma : instanceof
+
+ Tüm ilişkisel ifadelerin sonucu her zaman boolean tipindedir.
+
+ Left-Associative
+ JLS, bu operatörlerin soldan sağa birleştiğini ancak bu bilginin pratik bir faydasının olmadığını belirtir
+
+ a < b < c  -> (a < b) < c şeklinde ayrıştırılır
+  1. Tip kontrolü: javac (a < b) ifadesini değerlendirir ve sonuç boolean'dır
+  2. Hata tespiti: İfade (boolean bir değer) < c haline gelir ve < (less-than) operatorü sol operandı boolean
+  olan bir durum için tanımlı değildir.
+  3. Sonuç: Derleyici bu ifadenin anlamsız olduğunu anlar ve bir derleme zamanı hatası verir. Bu durum Java'nın
+  güçlü statik tür sisteminin programcıyı mantıksal hatalardan korumasının bir örneğidir.
+
+   Operand:
+     -- Convertable,
+     -- primitive
+-- Binary numeric promotion uygulanır
+
+ Floating-Point Kıyaslama ve IEEE 754
+
+ Bilgisayar bilimleri açısından floating-point kıyaslaması özel kurallar içerir.Bu kurallar, tüm modern
+ işlemciler tarafından kullanılan IEEE 754 standardından gelir.
+
+  NaN (Not a number) : NaN "sayı olmayan" anlamına gelir. (örn: 0.0 / 0.0). NaN hiçbir değere;
+  kendisine bile eşit değildir.
+
+        double d = 0. / 0.;
+
+        System.out.println(d);
+
+        System.out.println(Double.NaN <= Double.NaN); // false
+
+   NaN operan içeren harhangi bir <, >, <=, >= karşılaştırmasının sonucu her zaman false'dur
+
+   Sonsuzluk: Negatif sonsuzluk (-Infinity) diğer tüm sonlu değerlerden küçük; pozitif sonsuzluk
+   ise diğer tüm sonlu değerlerden büyüktür.
+
+  Örnekler:
+    System.out.println(Double.NEGATIVE_INFINITY <= Double.NEGATIVE_INFINITY);
+
+  Sıfır Değerleri: Pozitif sıfır (+0.0) ve negatif sıfır(-0.0) karşılaştırma operatörleri tarafından
+  eşit kabul edilir. Bu yüzden -0.0 < 0.0 ifadesi false üretir.
+  Örnekler:
+
+          System.out.println(-0.0 < 0.0);
+
+
+  Programlama Pratiği :
+    Floating-point sayılarla çalışırken, hassasiyet (precision) kayıpları nedeniyle iki sayının
+    tam eşitliğini kontrol etmek genellikle risklidir.
+    Örneğin 0.1 + 0.2 == 0.3 ifadesi false üretebilir!
+    Bunun yerine, iki sayı arasındaki farkın çok küçük bir epsilon(tolerans) değerinden daha az
+    olup olmadığı kontrol edilmelidir. (Math.abs(a - b) < epsilon)
+
+
+    instanceof Operatörü
+
+    Bu operatör, bir nesnenin çalışma zamanında belirli bir tipe ait olup olmadığını kontrol
+    etmek için kullanılır.Bu, bilgisayar bilimlerindeki Çalışma Zamanı Tip Bilgisi (Run-Time Type Information- RTTI)
+    kavramının Java'daki karşılığıdır.Modern Java (JDK 16+), bu operatörü Desen Eşleştirme (Pattern Matching)
+    ile birleştirerek çok daha güçlü hale getirmiştir.
+
+    Klasik tip karşılaştırması:
+
+    Derleyici Kontrolü:
+    javac, obj instanceof Type ifadesinde obj'nin Type'a dönüştürülmesinin teorik olarak imkansız
+    olup olmadığını kontrol eder.
+    Örn :
+
+       if("yazı" instanceof Integer) ifadesi, String'in asla bir Integer olamayacağı bilindiği için
+      derleme zamanı hatası verir.
+
+    Primitive Türler JDK 23+ ile birlikte Pattern Matching durumunda kullanılabilir.
+
+    Çalışma Zamanı Davranışı:
+
+        Eğer ifade null ise, sonuç her zaman false'dur.
+        Eğer null değilse, nesne belirtilen tipe ClassCastException fırlatılmadan dönüştürülebiliyorsa
+        sonuç true aksi halde false olur.
+
+    Pattern Matching kavramı Nesneler konusunda tartışılacaktır.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

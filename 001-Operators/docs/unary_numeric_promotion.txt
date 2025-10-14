@@ -1,0 +1,8 @@
+https://docs.oracle.com/javase/specs/jls/se17/html/jls-5.html
+
+ Unary(Tekli Operand) sayısal operatörlerin (+, -, ~) işlediği operand'ın türü eğer dar (narrow) bir tamsayı
+ türüyse, önnce daha geniş (int) türe yükseltilir.
+ Kurallar :
+    1. Operatör uygulanacak değerin türü byte, short veya char ise, işlemden önce int türüne yükseltilir.
+    2. Operand zaten int, long, float veya double ise hiçbir ek dönüşüm yapılmaz.
+    3. boolean türüne + / - / ~ operatörleri uygulanmaz.

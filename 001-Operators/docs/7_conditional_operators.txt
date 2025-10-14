@@ -1,0 +1,104 @@
+ConditionalAndExpression
+ InclusiveORExpression
+ ConditionalAndExpression && InclusiveORExpression
+
+ ConditionalORExpression
+ ConditionalAndExpression
+ ConditionalORExpression || ConditionalAndExpression
+
+ - Left Associative
+
+Bu operatörler, & ve |'nun "akıllı" ve programlamada neredeyse her zaman tercih edilen versiyonlarıdır.
+Temel özellikleri kısa devre(short-circuit) davranışıdır
+
+ Kısa Devre (Short-Circuit) Davranışı Nedir ?
+
+  Bilgisayar bilimlerinde kısa devre, bir mantıksal ifadenin sonucunu belirlemek için
+  gereken minimum sayıda işlenenin (operand) değerlendirilmesidir.
+
+  && (Conditional AND) : Sol taraf değerlendirilir; eğer sonuç false ise ifadenin tamamının
+  false olacağı kesindir.Bu nedenle sağ taraf hiç değerlendirilmez.Sadece sol taraf true ise
+  sağ taraf değerlendirilir.
+
+  || (Conditional OR) : Sol taraf değerlendirilir; eğer sonuç true ise ifadenin tamamının true
+  olacağı kesindir.Bu nedenle sağ taraf hiç değerlendirilmez.Sadece sol taraf false ise
+  sağ taraf değerlendirilir.
+
+  Programlama Perspektifi:
+   Kısa devre, hem bir performans optimizasyonudur hem de programların doğru çalışması için kritik
+   bir mekanizmadır.
+
+   Derleyici Perspektifi:
+      javac, && ve || gördüğünde, koşullu dallanma (conditional branching) bytecode'ları üretir.
+
+  Koşul Operatörü (Ternary Operator)
+
+  Üçlü (ternary) operatörü olarak da bilinen ? :, if-else yapısının daha kompact bir ifade (expression) halidir.
+  if-else deyim/buyruk/komut (statement) iken, ? : bir değer üreten ifadedir. Bu, onu atamalarda ve return ifadelerinde
+  kullanışlı kılar.
+
+     söz dizimi : koşul ? koşul_eger_doğruysa : kosul_eger_yanlışsa
+
+ Temel Kurallar:
+   1. Değerlendirme: Önce "koşul" değerlendirilir. koşul boolean değer üreten bir ifadedir.
+      - true ise, sadece "koşul_eger_doğruysa" ifadesi değerlendirilir ve tüm ifadenin sonucu bu olur.
+      - false ise, sadece "kosul_eger_yanlışsa" ifadesi değerlendirilir ve tüm ifadenin sonucu bu olur.
+
+   2. Right-Associative (Sağdan Birleşme) : Operator sağdan sola birleşir. a ? b : c ? d : e ifadesi
+   a ? b : (c ? d : e) şeklinde yorumlar. (Bu yazım tarzının okunabilirliği ciddi şekilde düşürdüğü söylenebilir.)
+
+   ### Derleyici Perspektifi ve Sonuç Tipinin Belirlenmesi:
+   Derleyicinin en önemli görevlerinden biri tüm ? : ifaadesinin nihai türünü belirlemek.
+    - Boolean ise : ikinci ve üçüncü operandlar boolean ise sonuç boolean
+    - Sayısal Türler ise : ikinci ve üçüncü operandlar sayısal türler ise  (int, double vb), binary numeric promotion
+    kuralları işletilir.
+    - Referans (Nesne/Obje) ise: Bu en karmaşık durumdur. İkinci ve üçüncü operandlar için :
+      -- iki tip aynıysa, sonuç o tiptir.
+      -- Biri null ise, sonuç diğerinin tipidir.
+
+
+      Örn:
+
+
+              int x = 40;
+
+              int result = x > 100 ? foo() : bar();
+              System.out.println(result);
+
+              result = x > 100 ? foo() : x < 50 ? tar() : x < 10 ? foo() : bar();
+
+              System.out.println(result);
+
+
+              double r = condition() ? 10 : 1.;
+              System.out.println(r);
+
+
+              Integer a = 300;
+              Double d = 30.;
+
+              Double ir = condition() ? a : d;
+
+
+      -- Tipler farklı ise, derleyici iki tipinde atanabileceği en yakın ortak üst sınıfı veya arayüzü (Least Upper Bound)
+        bulmaya çalışır.
+         örneğin ArrayList ve LinkedList için sonuç List olur :
+
+                ArrayList<Integer> numbers = new ArrayList<>();
+                LinkedList<Integer> numbers2 = new LinkedList<>();
+                List<Integer> list =  condition() ? numbers : numbers2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

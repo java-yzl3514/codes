@@ -1,0 +1,240 @@
+
+Multiplicative Operators
+
+  Bu operatorler, *, /, %
+
+  Expression (ifade)
+
+   MultiplicativeExpression
+    UnaryExpression
+    MultiplicativeExpression * UnaryExpression
+    MultiplicativeExpression / UnaryExpression
+    MultiplicativeExpression % UnaryExpression
+
+
+Same precedence (Aynı öncelik ve önem)
+left-associative ( grouping left-to-right)
+
+ Operandları :
+      JLS'e göre convertable tür,
+      primitive numeric tür
+      ya da compile-time error
+
+ operand'lara Binary Numeric Promotion uygulanır.
+
+
+ *** Tüm operand'lar aynı tamsayı türündeyse, tam sayı çarpması birleştiriciseldir (associative) (a * b) * c == a * (b * c)
+     Kayar nokta (Floating-point) çarpması birleştiriciselliği garanti etmez. (x * y) * z  ile  x * (y * z) aynı sonuç vermeyebilir
+
+ Bir tamsayı çarpması taşarsa (overflow), sonuç, iki operand'ın matematiksel çarpımının en düşük anlamlı bitleri olarak alınır. Hatta işaret biti bile değişebilir.
+
+Floating-point:
+  1. Bir operand NaN ise sonuç NaN'dır
+  2. Sonsuzluk ile sıfır çarpımı NaN
+  3. Sonsuzluk ile sonlu bir değer çarpımı uygun işaretli sonsuzluk ile sonuçlanır.
+
+
+
+Örnek:
+        byte b1 = 2;
+        byte b2 = 3;
+        byte result = b1 * b2; // COMPILE-TIME ERROR
+
+          byte b1 = 2;
+          byte b2 = 3;
+          int result = b1 * b2;
+------------------------------------------------------
+OVERFLOW (TAŞMA): !!!
+        int operand1 = Integer.MAX_VALUE;
+        int operand2 = 2;
+
+        int result = operand1 * operand2; // Integer Overflow
+        System.out.println(result);
+
+        -----------------------------------------------------
+               int operand1 = Integer.MAX_VALUE;
+                long operand2 = 2;
+
+                long result = operand1 * operand2;
+                System.out.println(result);
+
+Kritik Algoritmalarda taşma kontrolü veya hata kontrolü için BigInteger sınıfı tercih edilir.
+
+
+ / Division Operator
+
+Binary (İkili) / operatorü, bölme işlemini yapar ve operandlar'ın bölüm değerini üretir. Sol operand
+bölünen (dividend), sağ operand bölen (divisor) olarak adlandırılır.
+
+** Tamsayı Bölmesi : Sonuç 0'a doğru yuvarlanır. Yani binary numeric promoiton'dan sonra tamsayı türünde
+olan n (dividend) ve d (divisor) için elde edilen q tamsayısı için |d x q| <= |n| koşulunu sağlayan
+ve mutlak değeri mümkün olduğunca büyük olan değerdir. Ayrıca q, |n| >= |d| ve n ile d aynı işarete
+sahipse pozitif, tersi durumda negatif olur
+
+örnek:
+            int n = 90;
+            int d = 4;
+            int result = n / d;
+            System.out.println(result);
+
+            result = d / n;
+            System.out.println(result);
+------------------------------------------------------
+
+
+
+Özel Durum :
+        int n = Integer.MIN_VALUE;
+        int d = -1;
+
+        int result = n / d;
+        System.out.println(result);
+
+Dividend, türünün alabileceği en büyük negatif tam sayı ise ve divisor -1 ise taşma oluşur
+ve sonuç dividend'a eşitlenir.
+
+Divisor 0 ise:
+                int n = 1;
+                int d = 0;
+                int result = n / d;
+                System.out.println(result);
+Sonuç:
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+---------------------------------------------------------------
+Örnek:
+               int n = -1;
+               int d = 1;
+               int result = n / d;
+               System.out.println(result);
+Sonuç:
+  -1
+
+---------------------------------------------------------------
+Ondalıklı Bölme (float/double) : IEEE 754 standartlarına göre yapılır.
+
+* Herhangi bir operand NaN ise sonuç NaN olur
+* Sonuç NaN değilse, operandların işaretleri aynıysa sonuç pozitif, farklıysa negatif olur
+* Sonsuzluğun sonsuzluğa bölünmesi NaN üretir. Sonsuzluğun sonlu bir değere bölünmesi uygun
+işaretli sonsuzluk üretir.
+* Sonlu bir değer sonsuzluğa bölünürse işaretli sıfır üretilir.
+* Sıfırın sıfıra bölünmesi NaN üretir
+* Sıfırın başka bir sonlu değere bölünmesi uygun işaretli sıfır üretir.
+* Sıfır olmayan sonlu bir değerin sıfıra bölünmesi uygun işaretli sonsuzluk üretir
+* Diğer durumlarda matematiksel bölüm sonucu hesaplanır.
+* Eğer bölüm sonucu temsil sınırlarını aşarsa taşma (oveflow) meydana gelir ve uygun işaretli
+sonsuzluk üretilir; aksi halde sonuç en yakın değere yuvarlanır.
+
+Not: Ondalıklı bölme işlemleri hiç bir koşulda çalışma zamanı istisnası üretmez.
+
+Örnekler:
+        double n = 1.;
+        double d = -0.;
+
+        double result = n / d;
+        System.out.println(result);
+
+---------------------------------------
+        double n = 0;
+        double d = -0.;
+
+        double result = n / d;
+        System.out.println(result);
+--------------------------------------
+        double n = 0.;
+        double d = -1.;
+
+        double result = n / d;
+        System.out.println(result);
+
+-----------------------------------------------------------------------
+         double n = 1.;
+         double d = Double.POSITIVE_INFINITY;
+
+         double result = n / d;
+         System.out.println(result);
+-------------------------------------------------------------
+
+% Remainder Operator
+- Binary operatördür
+- Sol operandın sağ operanda bölümünden arta kalan değeri üretir.
+- Sol operand bölünen (dividend), sağ operand bölen (divisor) olarak adlandırılır
+
+
+-- Tamsayı Kalanı:
+   İki tamsayı n (bölünen) ve d (bölen) üzerinde uygulanır.Sonuç; n - d x q ifadesidir.
+ Burada q, n/d işleminin tamsayı bölmesinden elde edilen değerdir.
+ -- Eğer d değeri 0 ise ArithmeticException fırlatılır.
+ -- İşaret Kalanın işareti bölünenin işaretine eşittir. n pozitifse sonuç pozitif ya da sıfır;
+ n negatifse sonuç negatif ya da sıfırdır.
+
+
+-- Ondalıklı Kalan:
+ * Eğer herhangi bir operand NaN ise sonuç NaN'dır
+ * Sonuç NaN değil ise, işaret biti dividend(bölünen)'ın işaret bitini alır
+ * Bölme işlemi sonrasında kalan değerin mutlak değeri, divisor'un mutlak değerinden küçüktür
+   r = n - d * truncate(n / d)
+   truncate operasyonu kesir kısmını atar(0'a doğru yuvarlama)
+
+ Örnekler:
+
+        int n = 9;
+        int d = 5;
+
+        int result = n % d;
+        System.out.println(result);
+        --------------------------------------
+        double n = 1.0;
+        double d = 0.;
+
+        double result = n % d;
+        System.out.println(result);
+
+Özel Durumlar :
+    Dividend : Sonsuz
+    Divisor : Sonlu
+    Result : NaN
+---------------------
+    Dividend : 0.
+    Divisor : 0.
+    Result : NaN
+------------------
+    Dividend : 0.
+    Divisor : Sonlu
+    Result : 0
+---------------------
+    Dividend : Sonlu
+    Divisor : Sonsuz
+    Result : Dividend
+-------------------------
+        double n = 10000.;
+        double d = 0;
+
+        double result = n % d;
+        System.out.println(result); // NaN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

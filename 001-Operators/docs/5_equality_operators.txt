@@ -1,0 +1,57 @@
+
+EqualityExpression
+RelationExpression
+EqualityExpression == RelationExpression (equal)
+EqualityExpression != RelationExpression (not equal)
+
+-Bu operatörler, sayısal tipler, boolean, referans tipleri üzerinde çalışabilirler.
+- Convertable Types,
+- Soldan sağa birleşme özelliği (Left-Associative) ile çalışırlar.
+
+Sayısal Eşitlik
+ - Operand'lar üzerinde binary numeric promotion uygulanır.
+ Sayısal tipler için == operatörü iki değerin matematiksel olarak eşit olup
+ olmadığını kontrol eder. Floating-point sayılar içinde IEEE 754 standardı kuralları geçerlidir.
+
+ NaN == NaN her zaman false'üretir. NaN'ı kontrol etmenin en doğru yolu
+ Double.isNaN()/Float.isNaN() metodudur.
+Örnekler:
+        System.out.println(0.0 / 0.0 == Double.NaN);
+        System.out.println(Double.isNaN(0.0 / 0.0));
+        System.out.println(Float.isNaN(0.0F / 0.0F));
+        ------------------------------------------------------
+-0.0 == 0.0 her zaman true üretir.
+
+Boolean Eşitliği
+  iki  boolean değerin aynı olup olmadığını kontrol eder.
+  Eğer operandlardan birisi Boolean sarmalayıcı sınıfı türündense, unboxing işlemi ile
+  boolean primitive türüne dönüştürülür.
+
+Referans Eşitliği
+
+  Referans tipler için == operatörü, iki referansın bellekte aynı nesneyi gösterip göstermediğini
+  kontrol eder.Değerlerinin (içeriklerinin) aynı olup olmadığını kontrol etmez.
+
+#### Değer Semantiği vs Referans Semantiği
+   *Değer Semantiği (Primitive Types): int a = 5; int b = 5; a == b ifadesinde sonuç true olur.
+   a ve b'nin değerleri karşılaştırılır.
+
+   *Referans Semantiği: == operatörü, iki referansın işaret ettiği bellek adreslerini karşılaştırır.
+
+
+
+String türü en fazla hata yapılan türdür.
+
+Örnekler :
+
+        String str1 = new String("yazı");
+        String str2 = new String("yazı");
+
+        System.out.println("yazı" == "yazı");
+        System.out.println(str1 == str2);
+        System.out.println(str1.equals(str2));
+--------------------------------------------------------------
+
+
+
+

@@ -1,0 +1,63 @@
+Lütfen aşağıdaki metodu JDK 8, JDK 11 veya JDK 17 veya yeni bir version ile derleyip javap
+komutu ile üretilen bytecode'u inceleyiniz :
+
+ public static String intToStringV1(int i) {
+        return "" + i;
+    }
+Yukarıdaki method IntegerToString.java dosyasında örneklenmiştir.
+
+Background :
+https://openjdk.org/jeps/280
+invokedynamic instruction : https://blogs.oracle.com/javamagazine/post/understanding-java-method-invocation-with-invokedynamic
+
+invokedynamic Java 7 ile tanıtılan bytecode komutudur (instruction).
+concat.png'de javap komutu çıktısının ekran görüntüsü görünmektedir.
+İlgili görselde makeConcatWithConstants görülecektir. Bu talimat invokedynamic isimli bytecode'u kullanır.
+invokedynamic hangi metodun çağrılacağına derleme zamanında değil çalışma zamanında karar verilmesini sağlar.String birleştirme
+için bu JVM'in o anki durumuna en uygun birleştirme stratejisini seçmesine olanak tanır.
+JEP 280 (Indify String Concatenation) ile Java 9'da standart hale gelmiştir.
+ Aşağıdaki kodu düşünelim :
+
+   String a = "Username";
+   String b = "John Doe";
+   String result = a + " : " + b; // "Username : John Doe"
+
+   #Java 8 ve öncesinde klasik yöntem :
+   Derleyici (javac) bu kodu gördüğünde bytecode'a StringBuilder kullanarak bir dizi komut yazar.
+    ** String result = new StringBuilder().append(a).append(" : ").append(b).toString();
+
+   Bu yaklaşım işe yarar ancak birkaç dezavantajı vardır:
+    - Bytecode daha karmaşık ve uzundur.
+    - Strateji sabittir.Daha iyi bir yol olsa bile,her zaman StringBuilder kullanılıyor
+    - Gereksiz nesne oluşturma potansiyeli.
+
+    #Java 9 ve sonrası
+    Derleyici (javac) aynı kodu gördüğünde çok daha basit ve akıllı bir kod üretir.
+    | Adım-1 : Derleme
+    Derleyici, yukarıdaki StringBuilder kodunu üretmek yerine, tek bir invokedynamic talimatı
+    oluşturur. Bu talimat, makeConcatWithConstants metodunu "bootstrap" (başlatıcı) olarak işaretler
+    ve birleştirme için bir "reçete (recipe)" sunar.
+     örnek recipe : "\u0001 : \u0001" sonraki parametre için yer tutucu ve doğrudan çağrım için değer.
+
+    | Adım-2 : Çalışma Zamanı- İlk Çağrı
+
+    Bu kod satırı ilk kez çalıştırıldığında JVM invokedynamic talimatını görür.
+      1 . JVM, bootstrap metodu StringConcatFactory sınıfı üzerinden çağırır (StringConcatFactory.makeConcatWithConstants)
+    Bu sınıf java.lang.invoke paketinde yer alır ve runtime ortamında yer alır.
+      2. Bu metot kendisine verilen reçeteyi ve değişkenleri analiz eder.
+      3. Bu analize göre en verimli birleştirme stratejisini seçer bu stratejiyi uygulayan özel bir
+      bir Method Handler oluşturur. (CallSite). Bu adeta o iş için özelleştirilmiş bir "mini metot" gibidir.
+      4. JVM, bu invokedynamic çağrı noktasını, bu super verimli Method Handler'a bağlar.
+
+     | Adım-3 : Sonraki Çağrılar
+      Aynı kod satırı tekrar çalıştığında, JVM artık bootstrap işlemini tekrarlamaz. Doğrudan o daha önce
+      oluşturulmuş optimize edilmiş Method Handler'ın işaret ettiği metodu çağrır. Bu işlem son derece hızlı
+      gerçekleştirilir.
+
+     Bu anlamda
+       -- Yüksek Performans
+       -- Esneklik ve geleceğe yönelik tasarım
+       -- Daha basit küçük bytecode
+
+
+

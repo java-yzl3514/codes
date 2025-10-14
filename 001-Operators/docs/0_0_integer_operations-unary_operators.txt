@@ -1,0 +1,97 @@
+
+
+integer'lar için Numerical Operator'ler int ya da long değer üretirler.
+
+ The Unary Operators
+    Unary plus (+) Operatörü
+    Operandları :
+      JLS'e göre convertable tür,
+      primitive numeric tür
+      ya da compile-time error
+
+      operand üzerinde Unary Numeric Promotion uygulanır
+
+
+    Unary minus (-) Operatörü
+    Operandları :
+      JLS'e göre convertable tür,
+      primitive numeric tür
+      ya da compile-time error
+
+       operand üzerinde Unary Numeric Promotion uygulanır
+
+Operandlar convertable türse işleme sokulmadan önce primitive tür karşılıkları alınır.
+
+
+Örnek:
+
+    byte b = 1;
+    byte result =  +b; // COMPILE-TIME ERROR
+
+     byte b = 1;
+     int result =  (byte)+b;
+
+     byte b = 1;
+     int result =  +b;
+-----------------------------------
+       char ch = 'A';
+       char result = +ch; // COMPILE-TIME ERROR
+       result = + 1; // OK
+
+       char ch = -'A'; // COMPILE-TIME ERROR
+       char cresult = -ch; // COMPILE-TIME ERROR
+       cresult = -1; // COMPILE-TIME ERROR // Karakter türünün range aralığına çıkılması
+------------------------------------
+        short s = 1;
+        short result = +s; // COMPILE-TIME ERROR
+
+
+        byte b = 1;
+        byte result = - b; // COMPILE-TIME ERROR
+
+        int i = 1;
+        int iresult = -i ;
+
+        long c = 1;
+        long lresult = -c;
+
+        float f = 12.F;
+        float result = +f;
+----------------------------------------------
+
+         int i = 4;
+         int iresult = + + + + + + + + + + + + +i;
+
+        System.out.println(iresult);
+
+        iresult = - - - - - - - - - - - i;
+        System.out.println(iresult);
+
+        iresult = +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-i;
+
+        System.out.println(iresult);
+------------------------------------------------------
+
+          boolean bool = true;
+       // boolean resultb = +bool; // COMPILE-TIME ERROR
+-----------------------------------------------------------
+     // For all integer x; -x = (~x)+1
+        int f = 5;
+        int minusF = ~f + 1;
+        System.out.println(minusF);
+
+        System.out.println(-Integer.MIN_VALUE); // Numeric Overflow
+        System.out.println(-Long.MIN_VALUE); // Numeric Overflow
+
+------------------------------------------------------------
+  Sıfır için :
+        System.out.println(-0);
+        System.out.println(-0.);
+
+        int reversed = ~0;
+        System.out.println(reversed);
+
+Infinity:
+      System.out.println(-Double.POSITIVE_INFINITY);
+
+

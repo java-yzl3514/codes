@@ -1,0 +1,7 @@
+https://docs.oracle.com/javase/tutorial/java/data/autoboxing.html
+
+Java'da primitive bir türün Referans karşılığı türünden bir değişkene atanması (object karşılığı türe dönüştürülmesi) BOXING olarak adlandırılır.
+Java'da primitive bir türün Referans karşılığı türünden bir değişkenden primitive tür karşılığına atanması UNBOXING olarak adlandırılır.
+
+AUTO-BOXING ve AUTO-UNBOXING bu işlemlerin java tarafından otomatik olarak gerçekleştirilmesidir.Bu özellik java'ya Java 5 aracılığıyla gelmiştir.
+

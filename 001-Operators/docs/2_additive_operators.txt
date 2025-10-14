@@ -1,0 +1,100 @@
+
+AdditiveExpression:
+  MultiplicativeExpression
+  AdditiveExpression + MultiplicativeExpression
+  AdditiveExpression - MultiplicativeExpression
+
+Java'da + ve - operatorleri toplamsal operatorler olarak adlandırılır.
+Bu operatorler temel aritmetik ve string birleştirme işlemlerinin temel taşlarıdır.
+
+* Same precedence (Aynı öncelik ve önem)
+* left-associative ( grouping left-to-right) (Soldan-sağa birleşme özelliği)
+Bu durumda a + b + c gibi bir ifadenin her zaman (a + b) + c şeklinde, yani soldan
+sağa doğru değerlendirildiği anlamını taşır.
+Not: Derleyici açısından parse edilme durumu Soyut Sözdizim Ağacı'nın
+(Abstract Syntax Tree- AST) soldan sağa doğru dallanarak inşa edildiğini gösterir.
+
+
+#String Birleştirme Operator
+Eğer + operatorünün operandlarından en az biri String tipindeyse, işlem sayısal toplama
+değil, string birleştirme (concatenation) olur.
+
+
+Örnekler:
+         int a = 56;
+         int b = 56;
+         int c = 10;
+
+         int result = a + b + c; // 112 + c
+         System.out.println(result);
+---------------------------------------
+
+** Eğer operandlardan yalnızca biri String ise, diğer operand (bir sayı, bir boolean veya bir
+nesne) çalışma zamanında otomatik olarak String'e dönüştürülür.Bu dönüşüm primitive türler için
+String.valueOf() metoduna, nesneler için ise o nesnenin toString() metodunun çağrılmasına denktir.
+** Birleştirme işleminin sonucu, iki string'in birleştirilmesiyle oluşan "yeni bir String nesnesine
+referanstır". Sol işlenen operandın karakterleri yeni oluşturulan string'de sağ işlenen operand'ın
+karakterlerinden önce gelir.
+-----------------------------------
+ ! Bknz : string_concatenation.txt
+-------------------------------------
+
+String'ler immutable'dır.
+"Teorik olarak" her + işlemi yeni bir String nesnesi yaratır.
+String result = "a" + "b" + "c";
+ 1. "a" + "b" geçici bir "ab"
+ 2. "ab" + "c"
+ ---------------------------------------------------------------
+
+#Sayısal Toplama
+ İki operand sayısal bir türe dönüştürülebiliyorsa + operatör toplama - operatörü operator çıkarma
+ işlemi.
+  - Binary Numeric Promotion uygulanır
+  - promote edilmiş tür int veya long ise tamsayı aritmetiği; float veya double ise floating-point
+  aritmetiği yapılır.
+
+ # Tamsayı Aritmetiği ve Taşma
+  Tamsayı toplamı işlemi,sonucun tipin saklayabileceği maksimum değeri aşması durumunda taşma (overflow)
+  meydana gelir. Java overflow durumları için bir istisna (exception) fırlatmaz (!)
+
+
+ int a = Integer.MAX_VALUE + 1; // Overflow
+
+ Neden İstisna Fırlatılmaz ?
+  Java'nın tasarımcıları, her aritmetik işlemde taşma kontrolü yapmanın donanım seviyesinde ek
+  maliyet getireceğini ve performansı düşüreceğini düşünmüşlerdir. Bu nedenle, Java bu kontrolü
+  programcıya bırakır.
+** Eğer Taşma kontrolü gerektiren bir durum varsa: Math sınıfının addExact metodundan faydanılabilir .
+Taşma Kontrol (Overflow Check)
+https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html#addExact-int-int-
+! bknz: AdditiveOverflow.java
+
+ # Floating-Point Aritmetiği ve IEEE 754 standardı
+
+ Floating point sayı aritmetiği, tamsayı aritmetiğinden daha karmaşıktır. IEEE 754 standardına göre
+ yürütülür.Bu durum sonuçların platformlar arasında tutarlı olmasını sağlar.
+
+ Örnekler:
+
+                double d = Double.NaN;
+                double e = Double.POSITIVE_INFINITY;
+                double result = d + e;
+                System.out.println(result);
+
+Matematikte toplama işlemi birleşme özelliğine sahiptir : ((a + b) + c = a + (b + c))
+(!) Fakat Floating Point aritmetiğinde bu her zaman geçerli DEĞİLDİR !
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

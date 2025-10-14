@@ -1,0 +1,6 @@
+
+Noktalı sayıları ifade etmek için iki format geliştirilmiştir.
+Bunlardan birine sabit noktalı formatlar (fixed points formats) diğerine
+kayan noktalı formatlar (floating points formats) denilmektedir. (IEEE 754)
+
+Java tarafında kayan noktalı format kullanılmaktadır.

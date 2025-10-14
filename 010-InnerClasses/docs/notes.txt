@@ -1,0 +1,284 @@
+11.10.2025
+Inner Classes (İç içe sınıflar)
+
+ Inner ve Nested Class konuları JLS'in özellikle bölüm 8: Sınıflar(Classes) başlığı altında ele alınır.
+
+ JLS'e göre bir sınıf içinde bildirilen herhangi bir sınıfa iç içe sınıf denir. JLS bu tür sınıfları iki ana kategoriye
+ ayırır:
+   1. Statik İç İçe Sınıflar (Nested Classes)
+   2. İç Sınıflar (Inner Classes)
+
+Bu ayrım static anahtar kelimesinin kullanılıp kullanılmadığına bağlıdır.
+
+Static İç İçe Sınıflar (Nested Classes)
+JLS (bknz: 8.1.3 ve 8.5):
+  Bir iç içe sınıf, static olarak bildirilirse static iç içe sınıf (Nested Class) olarak adlandırılır.Static bir iç içe
+  sınıf, kendisini çevreleyen sınıfın (outer class) bir parçasıdır ancak onu çevreleyen sınıfın bir örneğine (instance)
+  sahip değildir.Bu nedenle, çevreleyen sınıfın örnek(instance) değişkenlerine veya örnek metotlarına doğrudan erişemez.
+  Yalnızca çevreleyen sınıfın statik üyelerine erişebilir.
+
+ Bu en basit iç içe sınıf türüdür. Sınıf içinde tanımlanmış normal bir sınıf gibi düşünülebilir. Dış sınıf bu sınıf için
+ sadece bir isim alanı (namespace) görevi görür. Dış(Outer) sınıfın bir nesnesini oluşturmadan static iç içe sınıfın
+ bir nesnesini oluşturabilirsiniz.
+
+ package ba.yzl3514.domain.nested;
+ public class Outer {
+
+      private int nonStaticField;
+      static String outerStaticField = "Outer Static Field";
+
+      public static class Nested {
+         public void display(){
+
+             // System.out.println(nonStaticField); // COMPILE-TIME ERROR
+             System.out.println(outerStaticField);
+         }
+     }
+ }
+
+
+ package ba.yzl3514.main;
+
+ import ba.yzl3514.domain.nested.Outer;
+
+ public class Driver {
+     public static void main(String[] args) {
+         Outer.Nested nestedObj = new Outer.Nested();
+         nestedObj.display();
+     }
+ }
+
+ İç Sınıflar (Inner Classes)
+  JLS (bknz: 8.1.3)
+  static olarak bildirilmemiş bir iç içe sınıf, iç sınıf (inner class) olarak adlandırılır. Bir iç sınıf, kendisini
+  çevreleyen sınıfın bir örneği(instance) ile ilişkilidir. Bu örtülü(implicit) ilişki sayesinde, iç sınıfın kodu,
+  çevreleyen sınıfın örnek(instance) değişkenlerine ve örnek metotarına erişebilir.
+
+  Bu sınıflar, dış sınıfın bir nesnesine "gizlice" bağlıdır. Bu nedenle, bir iç sınıf nesnesi oluşturabilmek için önce
+  dış sınıf nesnesinin var olması gerekir. Bu gizli bağ sayesinde, iç sınıf dış sınıfın tüm üyelerine
+  (private olanlar da dahil) erişebilir
+
+----------------------------------------------------------------------------------------------------------------------
+Derleme Çıktısı !
+
+ba.yzl3514.domain.inner paketinin içerisinde bulunan sınıfların derleme çıktısı aşağıdaki gibidir:
+    'Outer$Inner.class'   Outer.class
+Dikkat edilirse; her sınıf bildirimi için ayrı bir .class dosyasının üretildiği
+görülecektir. Diğer dikkat çeken husus; inner sınıfın isimlendirilmesidir.
+Yani Outer$Inner, identifier oluşturma kurallarını incelediğimizde $ ve _ karakterleri ile identifier oluşturulabileceğini
+görmüştük. $ karakterinin kaynak kodda geliştirici tarafından tercih edilmemesi gerektiğini de vurgulamıştık.Yine aynı
+şekilde bu karakterin otomatik kod üretimi aşamasında veya derleyici tarafından kullanıldığını, adeta bu otomatik
+işler için "reserve" edildiğini de belirtmiştik. İşte yukarıda görmüş olduğumuz isimlendirme bu tartışmamıza örnek
+niteliğini taşımaktadır.
+------------------------------------------------------------------------------------------------------------------------
+
+  ##  Java 16 Değişiklikleri
+ Daha önce de belirttiğimiz gibi bir iç sınıf, kendisini çevreleyen sınıfın bir örneğine örtülü bir şekilde bağlıdır.
+ Bu felsefi bağ, Java'nın ilk tasarımcılarını şu mantıksal sonuca götürmüştür:
+   "Eğer bir yapı(inner class), bir örneğe aitse, o yapının içinde örnekten bağımsız (static) bir üye(member)
+   barındırmak anlamsal olarak çelişkilidir."
+
+   static üyeler, bir sınıfa aitir.O sınıfın bir nesnesine ait değildirler.Bu yüzden Outer.Inner.staticMethod() gibi
+   bi çağrı yapmak anlamsal olarak "absürt" olarak düşünülebilir.Çünkü Inner sınıfının kendisi bir Outer nesnesi
+   olmadan tam olarak var olamıyordu.
+
+    Bu kısıtlama nedeniyle, Java 16'dan önceki sürümlerde bir iç sınıf içinde:
+     - static metotlar tanımlanamazdı.
+     - static initializer blockları kullanılamazdı.
+     - static alanlar yalnızca derleme sabitleri olarak tanımlanabilirdi.
+
+ Java 15 ve öncesi Kod Örneği :
+public class Outer {
+
+    private String outerNonStaticField  = "Outer non-static field";
+
+    public class Inner{
+
+        private static final int VALUE  = 190;
+
+        private static String staticField; // COMPILE-TIME ERROR
+
+        static {
+                // COMPILE-TIME ERROR
+        }
+
+        public static void display(){
+                // COMPILE-TIME ERROR
+        }
+    }
+}
+
+Bu kısıtlama geliştiricileri bazen static bir yardımcı metoda ihtiyaç duyduklarında bu metodu dış sınıfa veya
+tamamen farklı bir yardımcı sınıfa taşımaya zorluyordu.Bu da kodun mantıksal bütünlülüğünü zayıflatabiliyordu.
+
+ ## Java 16+ - JEP 395
+     https://openjdk.org/jeps/395
+
+ Yukarıda bahsettiğimiz durum, Java 16 ile birlikte gelen JEP 395: Records özelliği sayesinde değişti. Record'lar
+ değişmez (immutable) veri taşıyıcıları oluşturmak için sunulan yeni ve daha öz bir sınıf türüdür. Java tasarımcıları
+ Record'ların da iç içe (nested), yerel (local) ve iç (inner) sınıflar olarak tanımlanabilmesini istediler.
+ --------------------------------------------------------------------------------------------------------------------
+ Yapın ! : Exercises 0
+---------------------------------------------------------------------------------------------------------------------
+  Record'ların kendi içinde static yardımcı metotlar ve alanlar barındırabilmesi çok kullanışlıdır. Bu özelliği iç
+  sınıflar içinde tanımlanan Record'lara taşımak için, Java'daki eski kısıtlamanın kaldırılması gerekiyordu.Bu kaldırma
+  işlemi Record'lar için değil, tüm iç sınıflar için genel bir iyileşme olarak yapıldı.
+
+  Sonuç olarak, Java 16 ve sonrası sürümlerde, iç sınıflar artık şunları yapabilir:
+    - static alanlar (final olsun olmasın) tanımlayabilir.
+    - static metotlar tanımlayabilir
+    - static initializer blocklar kullanılabilir.
+
+Java 16+ için tekrar yazılan Outer sınıfı:
+
+
+package ba.yzl3514.domain.inner;
+
+public class Outer {
+
+    private String outerNonStaticField  = "Outer non-static field";
+
+    public class Inner{
+
+        private static final int VALUE  = 190;
+
+        private static String staticField; // // OK
+
+         static {}  // OK
+
+        public void display(){ }
+
+        public static void foo(){
+             // OK
+        }
+    }
+
+    public static record InnerRecord(int x){ // OK- Implicitly static / static anahtar kelimesi kullanılmayabilir
+
+        public static void foo(){ // Already OK
+
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------
+
+Bu değişiklik, iç sınıfların yeteneklerini nested(static) sınıflarınkine yaklaştırarak dilin tutarlılığını artırmıştır.
+static bir üyenin, kendisini çevreleyen sınıfın bir örneğine erişemeyeceği kuralı ise hala geçerlidir.
+
+!! Bu değişikliklerin ortak teması, Java'nın geliştirici deneyimini iyileştirmek, gereksiz kod tekrarını ve "törensel/merasim"
+(ceremonial) kodları azaltmak ve dili modern, okunabilir ve daha az hataya açık hale getirmektir.
+Inner class'lara static üye ekleme yeteneği de bu pragmatik evrimin doğal parçasıdır.
+------------------------------------------------------------------------------------------------------------------------
+ JLS, Inner Class'ları kendi içinde üçe ayırır:
+a) Üye iç sınıflar (Non-static Classes)
+  Bir sınıfın üyesi olarak (veri alanları ve metotlar gibi) tanımlanan,static olmayan sınıflardır. Dış sınıfın her bir
+  nesnesi, bu iç sınıftan üretilen nesnelerle ilişkilidir.
+
+
+  public class Outer {
+
+      private String outerNonStaticField  = "Outer non-static field";
+
+      public class Inner{
+
+          private static final int VALUE  = 190;
+
+          public void display(){ }
+
+          }
+      }
+   }
+
+
+package ba.yzl3514.main;
+
+import ba.yzl3514.domain.inner.Outer;
+public class Driver {
+
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        Outer.Inner innerObject = outer.new Inner();
+        innerObject.display();
+    }
+}
+
+b) Yerel Sınıflar (bknz: JLS 14.3)
+ Yerel sınıflar bir block içinde (örneğin bir metot gövdesinde) bildirilen sınıflardır. Kapsamı, bildirildiği
+ block sınırlıdır. Yerel sınıflar, çevreleyen bloktaki final ve etkin olarak final (effectively final) değişkenlere
+ erişebilir.
+
+  Sadece bir metot veya bir kod bloğu içerisinde geçerli olan "kullan-at" sınıflardır. O metot/block dışında bu sınıfın
+  varlığından kimsenin haberi olmaz.
+
+    package ba.yzl3514.domain.local;
+    public class Outer {
+
+        public void foo() {
+
+            String message = "Ave Java !";
+
+             class LocalClass{
+
+
+                        public void foo(){
+
+                        }
+
+                        private void bar(){}
+
+                    }
+
+                    LocalClass localClass = new LocalClass();
+                    localClass.foo();
+                    localClass.bar();
+        }
+
+        {
+
+            class LocalClass{
+
+            }
+        }
+    }
+
+
+Derleme Çıktısında oluşan dosyalar :
+
+'Outer$1LocalClass.class'  'Outer$2LocalClass.class'   Outer.class
+
+Dikkat edilirse Outer$ ifadesinden sonra numerik olarak isimlendirme dahil edilmiştir.
+---------------------------------------------------------------------------------------------------------
+(!)
+Örnekte foo metodunun içindeki LocalClass içinde bildirilen metotların erişim belirleyicilerine dikkat ediniz.
+Sonrasında LocalClass üzerinden alınan örnek ile private olarak bildirilen metodun çağrılabildiğine dikkat ediniz !
+-------------------------------------------------------------------------------------------------------------------
+
+
+Java 8+ : Effectively Final
+
+public class Outer {
+
+    public void foo() {
+
+        String message = "Ave Java !"; // OK
+        // ....
+        message = "Other value"; // OK
+
+        class LocalClass{
+            public void foo(){
+               // message = "new value"; // COMPILE-TIME EROR!
+            }
+        }
+
+    }
+
+Java 8'den önce, yerel(local) veya isimsiz(anonymous) sınıflar, çevrelerindeki scope'tan sadece final olarak
+işaretlenmiş değişkenlere erişebilirdi.
+
+Yeni Durum: Java 8 ile bu kural "etkin olarak final" (effectively final) olacak şekilde gevşetildi.Yani bir değişken
+final olarak işaretlenmemiş olsa bile, değeri atandıktan sonra hiç değiştirilmiyorsa, final olarak kabul edilir ve
+inner/local class'lar tarafından kullanılabilir. Bu gereksiz final anahtar kelimesi kalabalığını ortadan kaldırmıştır.
+------------------------------------------------------------------------------------------------------------------------
+
+

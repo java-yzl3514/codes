@@ -1,0 +1,121 @@
+
+ ShiftExpression:
+ AdditiveExpression
+ ShiftExpression << AdditiveExpression
+ ShiftExpression >> AdditiveExpression
+ ShiftExpression >>> AdditiveExpression
+
+ Java Shift operatörleri bir tamsayının bitlerini sola veya sağa kaydırmak için kullanılan bit düzeyinde (bitwise)
+ operatorlerdir.
+ Bu operatöler, düşük seviyeli programlama, performans kritik hesaplamalar ve veri manipülasyonu için temel araçlardır.
+  <<  Left Shift (Sola Kaydırma)
+  >>  Signed Right Shift (İşaret Korumalı Sağa Kaydırma)
+  >>> Unsigned Right Shift (İşaretsiz Sağa Kaydırma)
+
+
+  Bu operatörlerde sol operand kaydırılacak değeri, sağ operand kaydırma mesafesini(shift distance) belirtir.
+
+  Bu operatörler:
+   Soldan sağa birleşme özelliğine sahiptir (Left Associative) Yani, a << b << c ifadesi (a << b) << c olarak değerlendirilir.
+   Type Promotion : Kaydırma operatörlerinde her bir işlenen(operand) üzerinde unary numeric promotion ayrı ayrı gerçekleştirilir.
+   Sonuç her zaman sol operandın promote edilmiş türünden olacak.
+
+Örnekler:
+
+        byte b = 10;
+        // byte result = b << 2; // Compile-Time Error
+        int result = b << 2;
+        System.out.println(result);
+--------------------------------------------------
+# Kaydırma Mesafesinin (Shift Distance) Maskelenmesi
+
+  Bir sayıyı kendi bit sayısından daha fazla kaydırmak anlamsızdır. Bu nedenle Java kaydırma
+  mesafesini otomatik olarak sınırlar
+
+  -- Eğer sol operand int (32-bit) ise, sağ operand'ın sadece son 5 biti kullanılır. Bu kaydırma
+  mesafesini "& 0x1f" yani (& 31) maskesiyle filtrelemekle eşdeğerdir.
+  Dolayısıyla, gerçek kaydırma mesafesi her zaman [0-31] kapalı aralığında olur.
+  -- Eğer sol operand long (64-bit) ise, sağ operand'ın sadece son 6 biti kullanılır. Bu kaydırma
+    mesafesini "& 0x3f" yani (& 63) maskesiyle filtrelemekle eşdeğerdir.
+    Dolayısıyla, gerçek kaydırma mesafesi her zaman [0-63] kapalı aralığında olur.
+
+Örnekler:
+          int x = 10;
+          int result = x << 35; // aslında 3 -> 35 % 32 = 3
+          System.out.println(result);
+
+          int result2 = x << 3;
+          System.out.println(result); // 80
+----------------------------------------------------------
+
+        int x = Integer.MIN_VALUE;
+        int result = x << 31; // 0
+        System.out.println(result);
+---------------------------------------------
+
+  << Sola Kaydırma
+   Bir sayıyı x bit sola kaydırmak, sayıyı 2^x ile çarpmaya eşdeğerdir. Bu, modern işlemcilerde
+   standart çarpma işleminden çok daha hızlı bir yoldur.
+   Kaydırma sonucunda sol taraftan taşan bitler kaybolur ve sağ taraftaki boşluklar her zaman 0 ile
+   doldurulur (padding)
+
+   >> İşaret Korumalı Sağa Kaydırma (Signed Right Shift)
+
+  Bir sayıyı x bit sağa kaydırmak, sayıyı 2^x ile bölmeye benzer (floor(n / 2^x)). Bu operatörün en
+  önemli özelliği  işaret genişletme(sign extension) yapabilmesidir.
+
+   İşaret Genişletme (Sign Extension) : Sağa kaydırma sonucunda sol tarafta oluşan boşluklar, sayının
+   orijinal işaret biti ile doldurulur.
+     -- Sayı pozitifse boşluklar 0 ile doldurulur
+     -- Sayı negatifse boşluklar 1 ile doldurulur.
+
+Örnekler:
+           int x = 20;
+           int result = x >> 2;
+           System.out.println(result); // 5
+
+            int x = -20;
+            int result = x >> 2;
+            System.out.println(result); // -5
+------------------------------------------------------------
+ >>> İşaretsiz Sağa Kaydırma (Unsigned Right Shift)
+    Bu operatör de sağa kaydırma işlemini yapar ancak önemli bir fark vardır :
+      sıfır genişletme (zero-extension) uygular.
+
+    Sıfır Genişletme : Sayının işareti ne olursa olsun sağa kaydırma sonucunda sol tarafta
+    oluşan boşluklar her zaman 0 (sıfır) ile doldurulur.
+
+
+
+  Bu operator, sayıyı aritmetik bir değer olarak değil bir bit deseni olarak ele alır.
+  Bu nedenle negatif bir sayı >>> ile kaydırıldığında işaret biti (1) kaybolur ve yerine 0 geldiği için
+  pozitif ve genellikle çok büyük bir sayıya dönüşür.
+   Örnekler:
+
+        int x = -20;
+        int result = x >>> 2;
+        System.out.println(result); // 1073741819
+
+--------------------------------------------------------------------------------
+
+Kullanım :
+   -- Çok hızlı çarpma bölme işlemleri için kullanılırlar. Derleyiciler ve JVM'ler genellikle x * 2
+   gibi ifadeleri x << 1'e optimize ederler.
+
+   -- Bit maskeleme
+
+   Örnek kullanım alanları :
+    - Renk Kodlaması
+    - Hashing Algoritmaları
+    - Düşük seviyeli protokoller
+
+
+    color = 0xAARRGGBB  color >> 16 & 0xFF
+
+
+
+
+
+
+
+

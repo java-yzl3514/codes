@@ -1,0 +1,22 @@
+PRINTF metodu
+
+System.out.printf metodu bir yazı taslağı içerisinde konuşlanacak alanları veri tipine göre
+% işaretiyle belirtilen bir string arguman ile bu alanlara denk gelecek verileri sırasıyla argüman (metot parametresinin değer karşılığı)
+olarak alır ve yazı taslağı içerisine sırasıyla yerleştirir.
+     %d -> tamsayılar
+     %s -> string ifadeler
+     %f -> floating point
+     %c -> karakter
+     %b -> boolean
+     %x -> hexadecimal tamsayılar
+     %n -> line-feed satır sonu (bir yer tutucu görevi icra etmez, Satırı bitirir)
+     //....
+
+örn:
+           java.util.Scanner keyboard = new java.util.Scanner(System.in);
+           System.out.println("Please enter two integers to add :");
+
+           int number1 = keyboard.nextInt();
+           int number2 = keyboard.nextInt();
+           int result = number1 + number2;
+           System.out.printf("Result = %d", result);

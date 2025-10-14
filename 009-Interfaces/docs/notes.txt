@@ -1,0 +1,442 @@
+ Soyut(Abstract) Sınıflar ve Arayüzler(Interfaces)
+
+ Java tip sistemi, somut ve doğrudan kullanılabilir planlardan (concrete classes), tamamen soyut ve davranışsal
+ sözleşmelere (interfaces) uzanan bir spektrum üzerine kuruludur. Bu yapı, programcının doğru soyutlama seviyesini
+ seçerek esnek ve sürdürülebilir kod yazmasını sağlar.
+
+ # Somut Sınıflar (Concrete Classes)
+  Somut bir sınıf, tüm metotlarının (hem kendi tanımladığı hem de miras aldığı) bir implementasyonuna sahip olan
+  ve new operatörüyle/anahtar kelimesi ile doğrudan bir örneği(instance/object) oluşturulabilen sınıftır.Java'da
+  abstract anahtar kelimesi ile işaretlenmemiş her sınıf somuttur.Programlamadaki nesnelerin büyük çoğunluğu
+  somut sınıflardan türetilir.
+   JLS :
+     "Somut Sınıf" terimi doğrudan bir başlık altında tanımlanmaz. Bunun yerine, bir sınıfı soyut olmaması durumu üzerinden
+     tanımlar. JLS ilgili bölümü, abstract Classes, soyut bir sınıfı "abstract anahtar kelimesiyle bildirilmiş bir sınıf"
+     olarak tanımlar. Dolayısıyla, JLS'e göre bir somut sınıf, abstract olarak bildirilmemiş bir sınıftır ve bu nedenle
+     bir örneği oluşturulabilir. Örnek oluşturma işlemi abstract sınıflar için yasaklanmıştır.
+
+Semantik Anlam
+  Somut bir sınıf, problem alanındaki "tam ve eksiksiz bir kavramı" temsil eder. Bir "plan" veya "şablon"dur ve bu plandan
+  doğrudan nesneler üretilebilir.Örneğin, Araba, Müşteri, Hesap gibi kavramlar, tüm özellik ve davranışları net bir şekilde
+  tanımlandığında somut birer sınıftır. Soyutlamanın en az olduğu, uygulamanın en belirgin olduğu(işin "gerçek" olarak yapıldığı)
+  katmandır.
+
+
+# Soyut Sınıflar (Abstract Classes)
+ Soyut bir sınıf, abstract anahtar kelimesi ile işaretlenmiş / bildirilmiş ve doğrudan bir örneği (new ile) oluşturulamayan
+ bir sınıftır.Amacı, birbiriyle yakından ilişkili alt sınıflar için ortak bir temel, bir "kısmi şablon" görevi görmektir.
+ Hem implementasyonu tamamlanmış metotlar (somut metotlar) hem de implementasyonu "alt sınıflara bırakılmış metotlar"
+ (abstract metotlar) içerebilir.
+  JLS
+    Soyut sınıfları kesin kurallarla tanımlar:
+        "Soyut bir sınıf, abstract olarak bildirilmiş bir sınıfır. Soyut bir sınıfın örneğini oluşturmaya yönelik bir
+        girişim bir derleme zamanı hatasıdır"
+
+   Ayrıca, bir sınıfın ne zaman soyut metotlara sahip olacağını da belirtir:
+       "Eğer A sınıfı açıkça soyut bir metot bildirimi içeriyorsa, A sınıfının soyut metotları vardır."
+
+   Bir sınıf, abstract bir metot içeriyorsa, kendisi de abstract olarak işaretlenmek ZORUNDADIR.
+
+ Semantik Anlam
+   Soyut bir sınıf, güçlü bir "is-a" ilişkisini modeller. Genellikle ortak veri alanları ve ortak davranışları paylaşan
+   bir sınıf ailesinin temelini oluşturur.Örneğin, "Hayvan(Animal)" soyut bir sınıftır. Her hayvanın bir adı vardır ve
+   "beslen()" metodu/davranışı ortaktır.Ancak "sesCikar()" metodu her hayvan için farklıdır.Bu yüzden bu metot abstract
+   olarak bildirilmelidir.Mesela "Kedi" ve "Köpek" sınıfları "Hayvan" sınıfından türediğinde, "bir Kedi bir Hayvan'dır" ve
+   ortak özellikleri miras alırken kendine özgü sesCikar() davranışını implemente etmek zorundadır.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+   Interfaces
+   interface,bir sınıfın hangi metotları implemente etmesi gerektiğini tanımlayan tamamen soyut bir referans türüdür.
+   Bir "sözleşme" görevi görür. Bir sınıf, bir arayüzü "implements" ettiğinde, o arayüzün tüm soyut metotlarını
+   implemente etmeyi taahhüt eder.
+
+   JLS, Bölüm 9, "Interfaces", arayüzleri ayrı bir başlıkta inceler:
+    "Bir arayüz bildirimi, üyeleri, sınıflar, arayüzler, sabitler ve metotlar olan yeni bir referans tipi sunar. Bir arayüz
+    örtük(implicitly) olarak abstract'tır. Bir arayüzün bir örneğini oluşturmaya çalışmak derleme zamanı hatasıdır"
+
+  JLS ayrıca, bir arayüz içindeki gövdesiz metotların örtük olarak public ve abstract olduğunu belirtir.
+
+ Semantik Anlam
+  Arayüzler, bir "can-do"(yapabilir/-able/ability) ilişkisini veya bir "yeteneği" modeller.Birbirleriyle kalıtımsal olarak
+  hiç olmayan sınıflara ortak bir davranış kazandırmak için kullanılır.Örneğin  Kuş, Uçak,Kağıt, Yaprak,Drone ve Helikopter
+  sınıflarının arasında is-a ilişkisi yoktur.Ama her biri de "uçma yeteneğine sahiptir". Bu yetenek Flyable(Uçabilir) adında
+  bir arayüz ile tanımlanabilir. Bu arayüzü implemente eden her sınıf nasıl uçtuğunu (fly() metodu) kendisi tanımlamak zorundadır.Bu
+  polimorfizmin en esnek halini sağlar ve modern API tasarımlarının temelidir.
+
+
+ Java'daki arayüzler, dilin en temel soyutlama mekanizmalarından biri olmasına rağmen, yazılım geliştirme pratiklerinin
+ ihtiyaçlarına cevap vermek üzere zaman içerisinde önemli ölçüde evrimleşmişti. Bu evrim, arayüzleri saf soyut sözleşmeler
+ olmaktan çıkarıp, davranışsal yetenekler de sunabilen daha esnek yapılara dönüştürmüştür.
+
+
+  ## Klasik Arayüzler (Java 7 ve öncesi)
+
+  Bu dönemde arayüzlerin tek ve net bir amacı vardı : %100 saf soyutlama sağlamak.Bir sınıfın NE yapması gerektiğini
+  (metot imzalarını) tanımlar, ama bunu nasıl yapacağına dair hiçbir ipucu vermezlerdi. Bu, C++ gibi dillerdeki
+  çoklu kalıtımın yarattığı "ölümcül elmas problemi (deadly diamond of death)" gibi sorunları önlemek ve API'lar için
+  net bir "sözleşme"(protocol : bazı programlama dillerinde interface gibi bildirimler yapmak için kullanılır.Örn: Swift, Python, Objective-C)
+
+  JLS Temelli Kurallar :
+   1. Tamamen Soyut:
+       Kural: Bir arayüz, örtük(implicitly) olarak abstract'tır. Bir arayüzden doğrudan nesne yaratılamaz.
+        JLS Doğrulaması: "Every interface is implicitly abstract"
+
+   2. Metotlar: Sadece Bildirim, Implementasyon Yok !
+      Kural: Bir arayüz içinde bildirilen her metot (gövdesiz), örtük olarak public ve abstract'tır. Metot gövdesi
+      (implementasyon) içermezler.
+
+   3. Alanlar(Fields): Sadece Sabitler (Constants)
+     Kural: Arayüz içinde bildirilen her alan örtük olarak public, static ve final'dır. Yani bunlar, bir sınıfa ait
+     sabit değerlerdir.
+
+Bir interface tanımlaması:
+     public abstract interface Executable {
+
+         public static final String NAME = "Linux";
+
+         public abstract void execute();
+     }
+
+   ## Java 8 Devrimi-Davranışsal Genişleme
+    API Evrimi Problemi
+    Gerekçesi
+      Java 8'den önce, yaygın olarak kullanılan bir arayüze (örneği java.util.List) yeni bir metot eklemek çok zor ve
+      karmaşlık süreçler gerektiriyordu. Çünkü bu, o arayüzü implemente eden Java ekosistemindeki tüm sınıfların (milyonlarca olabilir)
+      kodlarının kırılarak derleme hatası vermesi anlamına gelirdi.Bu sorunu çözmek için Java'ya arayüzlere geriye dönük
+      uyumluluğu bozmadan metot eklemeyi sağlayacak bir mekanizma gerekiyordu.
+      https://openjdk.org/jeps/126
+
+      JLS Temelli Kurallar:
+       1. Yeni Özellik: default Metotlar
+          Kural: default anahtar kelimesiyle, arayüzler artık implementasyon içeren(gövdeli) metotlar barındırabilir.
+          Bu metot, arayüzü implemente eden sınıflar tarafından doğrudan miras alınır. Sınıf isterse bu metodu
+          override edebilir.
+
+        JLS Doğrulaması: default metotların kalıtım kuralları netleştirilmiştir.
+                        En önemli kural şudur: Sınıfın implementasyonu her zaman kazanır(Class wins).
+                        Eğer bir sınıf,bir üst sınıftan ve arayüzden aynı imzaya sahip bir metot miras alıyorsa, üst
+                        sınıftaki metot, her zaman default metodu ezer.
+                        Bknz: Software,Whatsapp, Executable
+
+         Gerekçe: API'ları kırmadan yeni metot ekleyebilmek. Örn. Collections API için forEach, stream metotları.
+                 List,Set ve Collection interface'leri incelenebilir.
+
+         2.Yeni Özellik: static Metotlar
+           Kural: Arayüzler artık static metotlar içerebilir. Bu metotlar arayüzün kendisine aittir ve implemente
+                  eden sınıflar tarafından miras alınmazlar. Doğrudan <InterfaceName>.<staticMethodName>() olarak
+                  çağrılırlar
+                    Örn: Aşağıdaki programı çalıştırınız ve gözlemleyiniz.
+                                public interface Connection {
+
+                                    static void checkStability(){
+                                        System.out.println("Connection.checkStability");
+                                    }
+                                }
+
+
+                                public class InternetConnection implements Connection {
+                                }
+
+
+                                public class Driver {
+
+                                    public static void main(String[] args) {
+
+                                        Whatsapp whatsapp = new Whatsapp();
+                                        whatsapp.run();
+                                        Whatsapp.staticMethod();
+
+                                        //InternetConnection.checkStability();
+                                        Connection.checkStability();
+
+                                    }
+                                }
+
+           JLS Doğrulaması : Statik metotların arayüz gövdesinde tanımlanabileceği belirtilmiştir. Bu metotlar
+           örtük olarak "public"tir
+
+           Gerekçe: İlgili yardımcı(Utility) metotları, Collections gibi ayrı bir sınıf yerine, doğrudan ilgili oldukları
+           arayüzün içinde gruplamak. Bu, daha iyi bir kod organizasyonu sağlar.
+
+
+        ## Java 9 : İyileştime ve Kapsülleştirme
+          Java 8 ile gelen default ve static metotlar, bazen karmaşık olabilir ve kendi içlerinde ortak bir mantığı
+          paylaşma ihitiyacı duyabilirler.Bu ortak mantığı private bir metot olmadan paylaşmanın tek yolu ya kodu
+          kopyalamak ya da bu yardımcı metodu da public (ya da public static) işaretlemekti. Bu ise, arayüzün,
+          API'sini gereksiz yere kirletiyor ve kapsülleme ilkesini ihlal ediyordu.
+          JLS Doğrulaması : Metot bildirimlerinde private erişim belirleyicisinin eklendiği belirtilmiştir.
+
+          public abstract interface Executable {
+
+              static final String NAME = "Linux";
+
+              public abstract void execute();
+
+              default void run(){
+                  System.out.println("Executable.run()");
+              }
+
+              // Java 9+
+              private void bar(){
+
+              }
+
+              // Java 9+
+              private static void foo(){
+
+              }
+          }
+
+          Gerekçe: default ve static metotlar arasında kod tekrarını önlemek ve arayüzün iç mantığını dış dünyadan
+          gizleyerek kapsüllemeyi (encapsulation) güçlendirmek.
+
+
+    ## Initializer Blocks in Interface
+     Daha önceki derslerimizde görüldüğü üzere non-static blockların interface içerisinde yer almasının mantıklı
+     olmayacağını çıkarsayabiliriz. Çünkü arayüzler üzerinden doğrudan instance alınamaz.
+
+     static initializer blockları da arayüzler üzerinde kullanılamazlar.
+
+            public interface Connection {
+
+                static {   // COMPILE-TIME ERROR
+                    checkStability();
+                }
+
+                static void checkStability(){
+                    System.out.println("Connection.checkStability");
+                }
+            }
+
+     Class'larda olduğu gibi final modifier'ını interface'lerde kullanamayız.
+
+      COMPILE-TIME ERROR
+     public final interface Connection {
+
+         static void checkStability(){
+             System.out.println("Connection.checkStability");
+         }
+     }
+
+ ------------------------------------------------------------------------------------
+  ## Functional Interfaces (Fonksiyonel Arayüzler)
+   Lamda ifadelerinin hedef tipi olabilen özel bir arayüz türünü tanımlar.
+
+   JLS Tanımı : Bir fonksiyonel arayüz, ne kadar default metoda sahip olursa olsun
+   sadece bir tane abstract metoda sahip olan bir arayüzdür.
+
+
+         @FunctionalInterface
+         public interface PlainFunctionalInterface {
+
+             void foo();
+
+         }
+  -----------------------------------------------------------------------------------
+
+
+  super ile Metot Çağırımı
+    Bir sınıfın, implemente ettiği bir arayüzün default metodunu nasıl açıkça çağırabileceğini düşününüz. (Bir sınıf birden
+    fazla arayüz implement etmiş olabilir)
+
+    Sözdizimi : <ArayüzAdı>.super.<metotAdı>()
+
+    Örnek :
+
+            public abstract interface Flyable {
+                void fly();
+
+                default void foo(){
+                    System.out.println("DEFAULT Foo Behaviour");
+                }
+            }
+
+        public class Plane implements Flyable {
+            @Override
+            public void fly() {
+                System.out.println("Plane is flying...");
+            }
+
+            @Override
+            public void foo() {
+                Flyable.super.foo();
+            }
+        }
+
+    Problem: default Metot Çatışması (Ambiguity)
+      Bu söz dizimini neden ihtiyaç duyulduğunu anlamak için önce problemi tanımlayalım.
+      Bir sınıf veya bir arayüz, aynı imzaya sahip default metotlar içeren birden fazla arayüzden kalıtım aldığında,
+      hangi default metodun kullanılacağı belirsizleşir. Java, bu belirsizliğe izin vermez ve bir derleme zamanı hatası
+      verir.
+
+
+               public interface Messenger {
+
+                   default void send(String message){
+                       System.out.println("Sending message via Messenger: " + message);
+                   }
+               }
+
+               public interface Mailer {
+
+                   default void send(String message){
+                       System.out.println("Sending message via Mailer: " + message);
+                   }
+
+               }
+
+               public class SmartClient implements Messenger, Mailer {
+                   @Override
+                   public void send(String message) {
+                       Messenger.super.send(message);
+                   }
+               }
+
+      Çözüm: Belirsizliği Ortadan Kaldırmak
+         JLS'in kuralına göre, SmartClient sınıfı bu belirsiği açıkça çözmek zorundadır.Bunu, çatışan send(String) metodunu
+         kendisi override ederek yapar.
+          İşte bu override işlemi sırasında  <ArayüzAdı>.super.<metotAdı>() sözdizimi devreye girer. Bu sözdizimi,
+          geliştiriciye hangi üst arayüzün implementasyonunu kullanmak istediğini seçme veya birleştirme imkanı tanır.
+            Bknz : JLS 15.12
+
+
+       ### Inheritance in Interfaces (Arayüzlerde Kalıtım)
+
+      Java'da kalıtım sadece sınıflara özgü bir mekanizma değildir. Arayüzler de daha genel sözleşmeleri alıp daha
+      spesifik sözleşmeler oluşturmak için birbirlerini genişletebilirler. Ancak arayüz kalıtımı, sınıf kalıtımından
+      çok önemli bir noktada ayrılır: ÇOKLU KALITIMA (multiple inheritance) İZİN VERMESİ
+
+      Temel Kural: Arayüzler ve extends Anahtar Kelimesi
+        Tıpkı sınıflar gibi, bir arayüz de başka bir arayüzü geniştmek için "extends" anahtar kelimesini kullanır.Bir
+        arayüz başka bir arayüzü genişlettiğinde, onun tüm üyelerini(metotlar, sabitler ve iç içe tipler) miras alır.
+
+        JLS Doğrulama:
+           Bir arayüz, bir veya daha fazla başka arayüzün doğrudan bir uzantısı olarak bildirilebilir, bu da
+           genişlettiği arayüzlerin tüm üye tiplerini, nesne metotlarını ve sabitlerini örtük olarak miras aldığı anlamına
+           gelir.
+
+        Bu mekanizma, arayüzler arasında bir hiyerarşi kurarak daha modüler ve yeniden kullanılabilir sözleşmeler
+        oluşturmamızı sağlar.
+
+
+        En Önemli Fark : Çoklu Kalıtım
+
+         Sınıfların aksine, bir arayüz birden fazla arayüzü aynı anda genişletebilir. *Bu, Java'nın tip sisteminde çoklu
+         kalıtıma izin verdiği tek yerdir.*
+          JLS, 9.1.3:
+             extends ifadesinin sözdizimi, virgülle ayrılmış bir <InterfaceType> listesine izin verir.
+
+                  extends InterfaceTypeList
+
+                  InterfaceTypeList : InterfaceType {, InterfaceType }
+
+        Örnek : ???
+
+
+
+    ---------------------------------------------------------------------------------------------------------------
+        Aşağıdaki örneği inceleyiniz. Daha önceki örnekle arasında nasıl bir fark olduğunu anlayınız:
+
+            public interface Messenger {
+
+                default void send(String message){
+                    System.out.println("Sending message via Messenger: " + message);
+                }
+            }
+
+            public interface Mailer {
+
+                default void send(String message){
+                    System.out.println("Sending message via Mailer: " + message);
+                }
+
+            }
+
+            public class MessageSender {
+
+                public void send(String message) {
+                    System.out.println("MessageSender.send()");
+                }
+            }
+
+            public class SmartClient extends MessageSender implements Messenger, Mailer {
+
+                // Class Body...
+            }
+
+-----------------------------------------------------------------------------------------------------
+
+       Bir sınıf implements anahtar kelimesinden sonra virgülle ayrılmış bir liste ile birden fazla arayüzü
+       uygulayacağını(implemente) bildirebilir demiştik. Bu, o sınıfın listelenen tüm arayüzlerin bir alt tipi olduğu ve
+       onların tüm sözleşmelerini yerine getireceği anlamına gelir. Yukarıdaki örnekte SmartClient nesnesine
+       Messenger türünden bir referans ile erişilebilir aynı şekilde Mailer türünden bir referans ile de erişilebilir.
+
+        Örn:
+                   SmartClient smartClient = new SmartClient();
+                   //...
+                   Mailer mailer = smartClient;
+                    //...
+                   Messenger messenger = smartClient;
+                    //...
+                   MessageSender messageSender = smartClient;
+
+                   mailer = messageSender; // COMPILER-TIME ERROR
+
+        Her referans, nesnesinin sadece o rolle ilgili yeteneklerini görmemizi sağlar.
+----------------------------------------------------------------------------------------------------------------------------
+   İmplementasyon Yükümlülüğü
+     Kural
+         abstract olmayan bir sınıf, implements ettiği tüm arayüzlerdeki (ve bu arayüzlerin genişlettiği tüm üst
+         arayüzlerdeki) tüm abstract metotları implemente etmek ZORUNDADIR. Eğer bir tanesini bile implemente etmezse,
+         o sınıfın kendisinin abstract olarak bildirilmesi gerekir.
+
+
+  Metot Çatışmaları
+   Bir sınıf birden fazla arayüzü implemente ettiğinde, metot imzaları çakışabilir. JLS, bu durumları çözmek için net kurallar
+   belirler.
+
+     Aynı İmzaya Sahip abstract Metotlar
+      Eğer bir sınıf, aynı imzaya sahip abstract metotlar içeren iki veya daha fazla arayüzü implemente ederse ne olur ?
+
+         Kural: Bu bir problem teşkil etmez. Sınıf, o imzaya sahip metodu SADECE BİR KEZ implemente eder ve bu tek
+         implementasyon, ilgili tüm arayüzlerin sözleşmesini aynı anda yerine getirir.
+
+      JLS Doğrulaması :
+            Bir sınıfın, override-eşdeğeri imzalara sahip birden fazla metot miras alması mümküdür.Bu durumda, bu metotlar,
+            tek bir metot olarak kabul edilir.
+
+       !!!!!  Bu senaryoyu anlatan bir örnek yazınız. !!!
+
+
+Çatışmalar için collision paketinin örneklerini inceleyiniz.
+-------------------------------------------------------------------------------------------------------------------
+
+ İç içe Arayüzler (Nested Interfaces)
+
+  Bir interface içerisinde başka bir interface bildirilebilir. Böyle interface'lere nested interface'ler denir.
+
+          public interface A {
+
+              public static interface B{
+
+                  public static interface C{
+
+
+
+                  }
+              }
+          }
+
+  Nested interface'ler örtük olarak public ve static'tir.
+
+---------------------------------------------------------------------------------------------------------------------
+
+ *Comparable, Comparator, Serializable, Clonable, Readable, Iterable arayüzlerini inceleyiniz.
+ Design Pattern
+ *Strategy Design Pattern'i inceleyiniz.
+ *Adapter Design Pattern
+
+
+
+
+

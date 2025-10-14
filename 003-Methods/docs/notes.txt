@@ -1,0 +1,340 @@
+
+
+
+Bir program yazarken,aynı veya benzer kod parçalarını tekrar tekrar yazma ihtiyacı duyarız.
+Metotlar (diğer dillerdeki adıyla fonksiyonlar, prosedürler veya alt programlar), bu tekrarı
+önlemek, ve programları daha yönetilebilir hale getirmek için geliştirilmiş temel bir soyutlama
+(abstraction) mekanizmasıdır.
+
+Temel Amaçlar:
+--- Kod Tekrarını Önleme : D.R.Y.! : Do not Repeat Yourself! : Bir görevi yerine getiren kodu tek bir
+metot bloğuna yazarsanız, ihtiyaç duyduğunuz her yerden bu metodu çağırabilirsiniz. Bu yaklaşım
+programı küçültür ve bakımı kolaylaştırır.Bir değişiklik gerektiğinde, sadece tek bir yeri
+düzeltmeniz yeterlidir.
+
+--- Ayrıştırma (Decomposition) : Büyük ve karmaşık problemleri, her biri belirli bir alt görevi çözen
+daha küçük, basit ve yönetilebilir metotlara bölmenizi sağlar.
+Örn:
+sum(),
+subtract(),
+saveToDatabase()
+gibi metotlar büyük programların anlaşılabilir yapıtaşları haline gelir.
+
+--- Soyutlama (Abstraction) : Bir metodu çağıran kodun, o metodun nasıl çalıştığını bilmesi
+gerekmez, sadece ne yaptığını bilmesi yeterlidir. Örn : Math.sqrt(25) metodunu çağırdığımızda,
+karekök hesaplamasının ardındaki karmaşık algoritmayı bilmemize gerek yoktur. Sadece 25 sayısını
+verdiğimizde 5 sonucu alacağımızı biliriz.Bu, karmaşıklığı gizler.
+
+
+Metot Bildirimi (Method Declaration - Blueprint)
+Bu, metodun ne iş yapacağını, hangi bilgilere ihtiyaç duyacağını ve ne tür sonuç üreteceğini tanımladığımız yerdir.
+
+   [modifiers] <type_parameters> return_type methodName ([parameters]) [throws ExceptionList] {
+                // method_body
+
+   }
+
+   modifiers :  public,private,protected,static,final, abstract, synchronized, strictfp, native gibi anahtar kelimeler
+   metodun nereden erişilebilir olduğunu ve davranışını belirlerler.
+
+   type_parameters : Generic metotlar için kullanılır. Generic konusunda detaylı ele alınacaktır.
+
+   return_type : Metodun çağrıldığı yere döndüreceği verinin tipidir. Eğer metot bir değer döndürmüyorsa void anahtar
+   sözcüğü kullanılır.
+
+   methodName(Metod Adı) : Metodu çağırmak için kullanılacak isimdir.
+    Daha önce ele alınan identifier oluşturma kuralları geçerlidir. Java'da metod yazın tarzı camelCase olarak kabul edilir.
+    örn : calculateArea, getUserName
+
+   parameters : Metodun çalışması için dışarıdan alması gereken verilerdir.
+   () içerisinde tip ve isimleriyle birlikte virgül atomuyla (separator) ayrılarak listelenir.
+
+   throws ExceptionList : Metodun fırlatabileceği kontrol edilen (checked exceptions) istisnaları belirtir. Bu konuda
+   Exception Handling konusuyla ele alınacaktır.
+
+   method_body : Süslü parantezler (braces) ,{}, içindeki kod bloğudur. Metodun asıl iş yaptığı yerdir.
+
+   Buna göre, metot bildirimi bir işin nasıl yapılacağının "tarifidir". Henüz yapılmamıştır, sadece plan oluşturulmuştur.
+
+   JLS Tanımlaması :
+
+     MethodDeclaration:
+      {MethodModifier} MethodHeader MethodBody
+
+      MethodModifier
+      MethodHeader : Metodun imzasını ve temel tanımını içerir.
+      MethodBody :  Metodun çalıştırılacak kodu.
+
+     MethodHeader:
+     JLS Grameri : Result MethodDeclarator [Throws]
+
+     Result : Geri dönüş değeri, primitive ve referans türden olabilir.
+     MethodDeclarator: Metodun adını ve parametrelerini içeren kısımdır.
+        JLS Grameri : Identifer ([FormalParameterList]) [Dims]
+     FormalParameter :  Metodun çalışmak için ihtiyaç duyduğu değişkenlerin listesi.
+      Her parametere
+         type_name identifier
+      şeklinde tanımlanır.
+
+      örn: int number, String userName gibi
+
+     [Dims] : Metot bir dizi (array) döndürüyorsa kullanılabilir. Array'ler konusunda ele alınacaktır.
+
+     MethodBody :
+       Bir metot abstract ya da native olarak bildirilmişse metot gövdesi olmaz, sadece MethodHeader'ından sonra
+       ; ile sonlandırılır.
+
+
+  Metot Çağrımı (The Action)
+  Daha önce bildirimi/planı/taslağı yapılmış metodun çalıştırılması eylemidir.
+
+  int result = add(10, 5);
+
+  Argümanlar(Arguments) : Metot çağrılırken parantez içine yazılan gerçek değerlerdir.Bu
+  değerler, metot bildirimindeki parametre sırası neyse sırasıyla bu parametrelere atanırlar.
+
+  Metot İmzası (Method Signature)
+
+  İki metot veya constructor, A ve B, eğer aynı isme sahiplerse ve her bir formal parametreleri aynı türde ise, aynı imzaya
+   sahiptirler. Bir m metodunun imzası, metodun adından, formel parametrelerinin sayısından ve her bir formel parametrenin
+   sırasıyla türünden oluşur. Metodun geri dönüş türü , parametre isimleri ve throws ile belirtilen istisna bildirimleri metod imzasının bir
+   parçası değildir.
+
+
+ Metot Aşırı Yüklenmesi (Method Calculator)
+
+   Eğer bir sınıftaki (class) iki veya daha fazla metot bildirimi aynı isme fakat farklı imzalara sahipse, bu metotların
+   aşırı yüklendiği söylenir (method overloading). Bu durum metotların farklı formel parametre listelerine
+   sahip olduğu anlamına gelir.
+
+   Özetle, Overlading,aynı sınıf içinde, aynı isimde fakat farklı metot imzalarına sahip birden fazla metot tanımalama
+   yeteneğidir. Derleyici, metot çağrısı yapıldığında hangi metodun çağrılacağına, çağrıda kullanılan argüman sayısına ve
+   türüne bakarak derleme zamanında karar verir.
+
+  Aşağıdaki iki metot overload edilmemiştir. Çünkü isimleri aynı fakat imzaları da aynıdır.
+  yani derleyici bu metotları şöyle görür : print(int)
+
+     public static void print(int data){ // print(int)
+
+      }
+
+
+      public static void print(int repeatCount){ // print(int)
+
+      }
+
+------------------------------------------------------------------
+
+  Metot imzası ve overloading, sadece Java'ya özgü sentaktik kolaylıklar değil, aynı zamanda
+  bilgisayar biliminin temel prensiplerine dayanan ve modern programlama dillerinin
+  vazgeçilmez bir parçası olan kavramlardır.
+
+  Polymorphism (çok biçimlilik)
+   Latince Poly- çok ve morph- şekil/biçim kelimelerinin birleşmesiyle oluşmuş bir kavramdır.
+
+   Bu kavramların temeli Polymorphism'e dayanır. Polymorphism, bir nesnenin, arayüzün veya metodun farkı durumlarda
+   farklı şekilde davranabilme yeteneğidir. (Bu tanımlamaya ileride tekrar değineceğiz). Overlaoding polymorphism'in
+   özel bir türü olan Statik Polymorphism veya Compile-Time Polymorphism (Derleme zamanı polymorphism) olarak kabul edilir.
+   Polymorphism denilince akla statik polymorphism gelmez. Genellik bu kavram run-time polymorphism'e atıfta bulunur yani
+   nesne tabanlı programlama yöntemine atıfta bulunur.
+
+   Neden Statik ? Çünkü hangi overload edilmiş metodun çağrılacağı, program çalıştırılmadan önce, kod derlenirken bellidir.
+   Derleyici, metoda geçilen argümanların sayısına ve sırasıyla tiplerine bakarak, hangi metodun imzasıyla eşleştiğini
+   bulur ve ilgili metot çağrısını koda "sabit" bir şekilde bağlar.
+
+   ***Çalışma zamanına ait polymorhism ileride ele alınacaktır. (Dynamic Binding / Run-time Polymorphism)
+
+   Overlaoding'in pratik programlamadaki faydaları çok büyüktür.
+
+   1. Sezgisel API Tasarımı(Intuitive API Design) : Programcıların aynı işlevi farklı veri türleri için gerçekleştiren
+   metotları hatılamasını kolaylaştırır.
+   Örn. System.out.println() metotlarını inceleyiniz. Kursumuzun başından beri kullandığımız bu metot
+   overload edilmiş bir metottur. Dikkat ederseniz bu metodu farklı veri türlerini standart çıktıya yazdırmak için
+   adını değiştirerek kullanmadık.
+
+   2. Kod Okunabilirliği (Code Readability) : Tek bir anlamlı eylem için tek bir metot
+   ismi kullanmak, kodun amacını çok daha net bir şekilde ifade eder.
+   Kod, adeta doğal bir dil gibi okunabilir hale gelir.
+
+   3. Esneklik ve Kolaylık . Özellikle constructor görevinde olan metotlarda işe yarayan
+   bir özelliktir. (Bu konuya nesneler konusunda değineceğiz.)
+
+
+  Metot Çağrım İfadeleri (Method Invocation Expressions)
+
+  Derleyicinin metot çağrısını gördüğünde, hangi metodu çalıştıracağına karar verme süreci JLS(kurallı) tarafından belirtilmiştir.
+  Bu süreç, özellikle method overloading olduğunda kritik öneme sahiptir.
+
+   JLS, doğru metodun bulunması için kabaca üç aşamalı bir algoritma kullanır. Derleyici bu adımları "sırasıyla" uygular ve
+   bir metot bulduğu anda durur.
+    Aşama 1: Kesin Eşleşme ve Genişletici Dönüşümleri Belirleme
+      Derleyici,metot adıyla ve argüman sayısıyla eşleyen tüm metotları bulur.Sonra bu metotların "uygulanabilir" olup
+      olmadığını kontrol eder. Bu aşamada,bir metodun uygulanabilir olması için, çağrıdaki her bir argümanın, karşılık
+      gelen parametreye aşağıdaki 2 yoldan biriyle atanabilmesi gerekir :
+        1 - Kimlik Dönüşümü (Identity Conversion): Argüman ve parametre tipleri birebir aynıdır (örn: int -> int)
+        2 - Widening Primitive Conversion : Argüman, veri kaybı olmadan daha geniş bir primitive tipe dönüştürülebilir.
+         (Örn: int -> long, int -> double)
+        3 - Genişletici Referans Dönüşümü (Widening Reference Conversion)  : Argüman, parametre tipini bir alt sınıfıdır.
+        (Örn: ArrayList -> List)
+    Eğer bu kontrollerden sonra en az bir "uygulanabilir" metot bulunursa, derleyici 2. aşamaya geçer.Eğer hiç bulamazsa
+    derleyici 3. aşamaya geçer.
+
+
+    Aşama 2: 1. Aşamada birden fazla uygulanabilir metot bulunduysa, derleyici aralarından en spesifik olanı seçmek
+    zorundadır.
+       "Daha spesifik olmak ne demektir?"
+       M1 metodunun M2 metodundan daha spesifik olması demek,M1'in aldığı tüm parametre tiplerinin,M2'nin aldığı karşılık gelen
+       parametre tiplerine dönüştürülebilir olması demektir.
+
+       class Test{
+            public static void m(double d,int i){....} // M1
+            public static void m(double d,double i){....} // M2
+       }
+
+        // Invocation :
+        Test.m(10.5, 4);
+       - Bu çağrı hem M1'e hem M2'ye uygulanabilir.(Çünkü int olan 4 double'a genişletilebilir)
+       - Ancak, M1(double,int) imzası M2(double, double) imzasından daha "spesifiktir". Çünkü
+       int tipi double'dan daha dardır(narrow).(yani int, double'a dönüştürülebilir ama tersi her zaman geçerli değildir)
+       - Bu nedenle derleyici M1'i seçer.
+
+      Belirsizlik(Ambiguity) : Eğer uygulanabilir metotlar arasından tek bir en spesifik metot seçemezse (yani iki metot da birbirine
+      göre spresifik değilse) derleme zamanında "reference to m is ambiguous" hatası verir.
+       bknz: Ambiguity.java ve DriverAmbiguity.java
+
+      Aşama 3: Değişken Argümanlar ve Boxing/UnBoxing
+       Eğer 1. Aşamada hiçbir metot bulunamadıysa,derleyici arama kriterini genişletir ve tekrar dener.
+       Bu sefer aşağıdaki dönüşümlere izin verir :
+        - Boxing Conversion : Primitive tipten wrapper sınıfına dönüşüm. (Örn: int -> Integer)
+        - Unboxing Conversion : Wrapper sınıftan primitive türe dönüşüm (Örn: Integer -> int)
+        - Değişken Sayıda Argüman(Variable Arity- Varargs) : Derleyici argümanları bir dizi olarak paketleyip bir varargs
+        parametresine uydurmaya çalışır.
+
+ bknz: Calculator.java
+
+-----------------------------------------------------------------------------------------
+
+ Metot Parametreleri ve Argümanlar
+
+  Java'da metotlara geçilen argümanlar pass-by-value prensibiyle çalışır.Yani metot argümanlarının
+  değerleri metot parametrelerine kopyalanır.
+  bknz : Increment.java
+
+------------------------------------------------------------------------------------------
+
+
+ Java programlama dilinde metotların sahip olduğu bazı limitler söz konusudur.
+ Bu limitler dilin kendisinden çok, kodu çalıştıran JVM tarafından belirlenir.
+ Bu limitleri bilmek, JVM'in çalışma mantığını anlamak açısından değerli olsa da, iyi bir programcının
+ hedefi bu limitlere yaklaşmak değil, tam tersine temiz ve yönetilebilir kodlar yazarak bu limitlerden
+ uzak kalmaktır.
+
+ *** Aşağıdaki limitler JVM Spesifikasyonlarına göre değişkenlik gösterebilir ***
+
+ İki temel limit inceleyeceğiz:
+   - Parametre Sayısı Limiti
+   - Yerel Değişken Alanı Limiti
+
+ ### Parametre Sayısı Limiti
+   Bir metoda tanımlayabileceğiniz parametre sayısı doğrudan sınırlıdır.
+   Limit: 255
+   Kaynak: JVM Specification.Derlenmiş Java kodu (.class dosyası) içerisinde bir metodun
+   parametre sayısı 1 byte'lık bir alanda tutulur. 2^8 = 256 farklı  değer elde edilir [0-255]
+
+   Bu limit metodun türüne göre küçük bir farklılık gösterir.
+
+   ** static metotlar bir nesneye ait olmadıkları için, gizli bir receiver parametresi (this) ya da referansı taşımazlar.
+   Bu nedenle 255 parametrenin tamamı kullanılabilir.
+   ** instance metotları belirli bir nesne üzerinde çalıştığı,JVM receiver parametresi olarak this referansını arka planda
+   gönderir. this referans parametresi 255 limitine dahildir. Bu yüzden bu metotlarda en fazla 254 parametre kullanılabilir.
+
+  -------------------------------------------------------------------------------------------------------------------------
+  ### Yerel Değişken Alanı Limiti
+    Bu limit parametrelerin sayısından ziyade, bu parametrelerin ve metot içinde tanımlanan diğer değişkenlerin bellekte
+    kapladığı toplam alanla ilgilidir.
+    Limit: 65_535 slot
+    Kaynak: JVM Specification. Bir metot çağrıldığında, onun için bir Stack Frame oluşturulur. Bu frame içerisinde
+    Local Variable Array oluşturulur ve bu array içerisinde parametreler ve yerel değişkenler bulunur. Bu dizinin maximum
+    boyutu, .class dosyasında 2 byte'lık bir alanda belirtilir.
+
+    slot Kavramı ?
+     - Bir dizinin boyutu bu seviyede slot adı verilen birimlerle ölçülür. Değişken tiplerinin kapladığı slot sayısı
+     farklıdır :
+       1 Slot : int, float, boolean, char, short, byte ve tüm nesne referansları
+       2 Slot : long, double
+
+    Bunun yanı sıra bir metot için code_length limiti de mevcut. Arka tarafta üretilen bytecode'lar için bir
+    byte limitinin olduğunu unutmayınız. Kod derleme aşamasında "code too large" hatası verir
+    bknz: LocalVariableLimitCase.java
+    --------------------------------------------------------------------------------------------------
+    Yukarıdaki limitler JVM'in iç yapısını anlamaya yönelik bilgilerdir. Programcı yukarıda da belirttiğimiz gibi
+    bu limitlere meydan okumamalıdır.
+     Bir metodun kabaca 5-6'dan fazla parametre alması, genellikle tasarımda bir sorun olduğuna işaret eden
+     Code Smell olarak kabul edilir. Bu durum metodun Single Responsibility Princible'ı (Tek Sorumluluk Prensibi) ihlal
+     ettiğini ve çok fazla (tek sorumluluk dışında) iş yapmaya çalıştığını gösterir.
+
+     Çok Sayıda Parametrelerle Çalışmak Gerektiğinde Ne Yapmalı ?
+      - Parametre Nesnesi oluşturulabilir.
+
+        public static void save(String firstName, String middleName, String lastName, String ssn, String phone, String email, LocalDate birthDate){
+
+        }
+        ....
+
+        public static void save(User user){
+
+        }
+
+   bknz: UserSaveCase.java
+
+      - Metot Yeniden Yapılandırılabilir (Refactor) : Metodun yaptığı işi daha küçük odaklanmış metotlara bölmek.
+
+-----------------------------------------------------------------------------------------------
+
+ boolean return tipine sahip olan metotlar genellikle is-, has-, can- gibi öneklerle(prefix) isimlendirilir.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
