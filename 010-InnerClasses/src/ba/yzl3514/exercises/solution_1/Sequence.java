@@ -1,6 +1,4 @@
-package ba.yzl3514.domain.exercises.solution_1;
-
-import java.util.Arrays;
+package ba.yzl3514.exercises.solution_1;
 
 /**
  *

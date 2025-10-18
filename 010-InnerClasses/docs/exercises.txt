@@ -35,4 +35,50 @@
 
 3- Builder Design Pattern
 
+4-
+   Senaryo
+     Bir Server sınıfı tasarladığımızı düşünelim. Bu sunucunun başlatılabilmesi için port, timeout, max bağlantı sayısı
+     ve SSL'in aktif olup olmadığı gibi birden fazla yapılandırma parametresi gerekmektedir.Tüm bu parametreleri alan
+     bir ctor yazmak kodun okunabilirliğini düşürebilir. Builder Design Pattern kullanarak sorunu çözünüz.
+
+   Problem Tanımı
+    Server sınıfının yapılandırma nesnesini adım adım oluşturmak için "Builder" sınıf oluşturun. Bu Builder, Server
+    sınıfının bir parçası olmalı ancak Server nesnesine bağlı olmadan çalışabilmelidir.
+
+
+    Gereksinimler ve Kısıtlar
+      Server Sınıfı:
+         - port, timeout, maxConnections ve useSSL gibi alanları olmalıdır.
+         - Ctor, private olmalıdır.
+
+      Builder Sınıfı
+        - Server sınıfındaki yapılandırma alanlarının aynılarına sahip olmalıdır.
+        - port(int port), timeout(int timeout) gibi ayar metotları bulunmalıdır. Bu metotlar, zincirleme çağrıları
+           (metot chaining) destekleyecek şekilde yazılmalıdır.
+        - Server nesnesini oluşturan ve döndüren build() adında bir metodu olmalıdır.
+
+---------------------------------------------------------------------------------------------------------------------
+5-
+  Senaryo
+    Basit bir UI(Kullanıcı Arayüzü) kütüphanesi için bir "Button" sınıfı geliştirdiğimizi düşünelim. Her bir butona
+    tıklandığında farklı bir eylemin tetiklenmesini sağlamak istiyoruz. Bu eylemleri, butonları oluşturduğumuz yerde,
+    anlık olarak ve isimsiz bir şekilde tanımlamak istiyoruz.
+
+  Problem Tanımı
+    Bir ActionListener arayüzü ve bu arayüzü kullanan bir Button sınıfı tasarlayın. main metodunda bir buton
+    oluştururken, ona tıklandığında ne yapacağını belirten kodu anonymous inner class kullanarak atayın.
+
+  Gereksinim ve Kısıtlar:
+    1- ActionListener arayüzü
+         void onAction()
+    2- Button sınıfı
+         - ActionListener türünden bir "listener" veri alanı olmalı
+         - setActionListener metodu olmalı
+         - Tıklama olayını simüle eden public void click() metodu olmalı.
+
+
+
+
+
+
 

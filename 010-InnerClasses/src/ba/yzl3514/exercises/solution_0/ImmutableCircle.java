@@ -1,4 +1,4 @@
-package ba.yzl3514.domain.exercises.solution_0;
+package ba.yzl3514.exercises.solution_0;
 
 /**
  *

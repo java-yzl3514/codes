@@ -1,4 +1,4 @@
-package ba.yzl3514.domain.exercises.solution_1;
+package ba.yzl3514.exercises.solution_1;
 
 /**
  * Bu sınıfın implementasyonunu devam ettiriniz.

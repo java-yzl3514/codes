@@ -280,5 +280,54 @@ Yeni Durum: Java 8 ile bu kural "etkin olarak final" (effectively final) olacak 
 final olarak işaretlenmemiş olsa bile, değeri atandıktan sonra hiç değiştirilmiyorsa, final olarak kabul edilir ve
 inner/local class'lar tarafından kullanılabilir. Bu gereksiz final anahtar kelimesi kalabalığını ortadan kaldırmıştır.
 ------------------------------------------------------------------------------------------------------------------------
+c) İsimsiz Sınıflar (Anonymous Classes)
+    (bknz: JLS 15.9.5) (Expression!)
+    İsimsiz bir sınıf, bir sınıfın örneğini (instance) oluşturma ifadesinin bir parçası olarak bildirilen, adı olmayan
+    yerel bir sınıftır. **Genellikle mevcut bir sınıfı genişletmek veya bir interface'i uygulamak için kullanılır.
+
+   - Hem sınıf tanımının hem de nesne üretiminin aynı anda yapıldığı ifadelerdir.
+   - Genellikle tek seferlik implementasyonlar için ( örn: bir butona tıklandığında ne olacağını belirten kod)
+      kullanılır.
+   - Lambda ifadeleri, büyük ölçüde bu yapıların yerini almıştır.
+
+
+public interface Greeter {
+
+    void greet();
+
+}
+
+
+public class GreetManager {
+
+
+    public Greeter sayHello(Language language) {
+        class GreeterTR implements Greeter {
+
+            @Override
+            public void greet() {
+                System.out.println("Merhaba :)");
+            }
+        }
+
+        class GreeterEN implements Greeter {
+
+            @Override
+            public void greet() {
+                System.out.println("Hello :)");
+            }
+        }
+
+        return switch (language) {
+            case EN -> new GreeterEN();
+            case TR -> new GreeterTR();
+            default -> new GreeterEN();
+        };
+    }
+
+}
+
+
+
 
 
