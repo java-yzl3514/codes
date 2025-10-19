@@ -327,6 +327,26 @@ public class GreetManager {
 
 }
 
+  ### Qualified this (Nitelikli this)
+     Bu yapı, bir iç sınıf içinden, kendisini kapsayan dış/sarmalayan sınıfın nesnesine nasıl erişileceğini tanımlar.
+
+    # this Anahtar Kelimesi (JLS 15.8.3)
+     JLS, bu bölüm, this anahtar kelimesinin, içinde bulunduğu sınıfın mevcut nesnesine bir referans olduğunu belirtir.
+     Statik bir bağlamda kullanılamaz.
+
+     Anlamı: this, "bu nesne" demektir
+
+
+    # Nitelikli this (JLS 15.8.4)
+     JLS, bu bölüm, "TypeName . this" söz dizimini tanımlar.
+     Bu ifade, TypeName ile adlandırılan sınıfın sözcüksel olarak kapsayan (lexically enclosing instance) nesnesini
+     temsil eder.
+
+     Bu söz dizimi, bir iç sınıfın içindeyken, this anahtar kelimesinin normalde işaret edeceği, "en içteki nesne" yerine,
+     "dışarıdaki nesnelerden birine" erişmek için kullanılır.
+
+     NOT : İlgili sınıf içinde this, sınıfın kendi adıyla nitelendirilebilir. Bu söz dizim geçerlidir fakat gereksizdir.
+
 
 
 
