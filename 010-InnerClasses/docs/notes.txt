@@ -347,6 +347,66 @@ public class GreetManager {
 
      NOT : İlgili sınıf içinde this, sınıfın kendi adıyla nitelendirilebilir. Bu söz dizim geçerlidir fakat gereksizdir.
 
+ ### Qualified super() call
+
+ Aşağıdaki örneği düşününüz. Ve neden derleme zamanı hatası verdiğini aşağıdaki açıklamayı okumadan açıklamaya çalışınız.
+
+  public class Outer {
+
+      public class Inner{
+
+      }
+  }
+
+  public class InheritInner extends Outer.Inner{ // COMPILE-TIME ERROR
+
+  }
+
+  -----------------------------------------------------------------------------------
+
+  Sorunun kaynağı
+   JLS, 8.1.3, Inner Classes and Enclosing Instances
+   Bu bölüm, static olmayan bir iç sınıfın, bir nesnesinin onu kapsayan sınıfın bir nesnesine zımni (implicit) olarak
+   bağlı olduğunu belirtir.
+
+   Anlamı: Inner tipinde bir nesne, tek başına var olamaz. Mutlaka bir Outer nesnesine "ait" olmalıdır. Bu Outer
+   nesnesine "hemen kapsayan nesne" (JLS: immediately enclosing instance) denir.
+
+   Yukarıdaki kodda, InheritInner sınıfı Outer.Inner sınıfından miras alır. Bu şu demektir: Oluşturulan her InheritInner
+   nesnesi, aynı zamanda bir Outer.Inner nesnesidir. Dolayısıyla, JLS 8.1.3 gereği, her InheritInner nesnesinin bir de
+   Outer nesnesine "ait" olması zorunludur.
+
+   Bir de, JLS 8.8.7 bölümüne atıfta bulanabiliriz.
+    JLS, 8.8.7 - Explicit Constructor Invocations
+    Bu bölüm, super() çağrılarının iki formunu tanımlar:
+      1. Niteliksiz(Unqualified): [TypeArguments] super([ArgumentList]);
+      2. Nitelikli (Qualified): ExpressionName. [TypeArguments] super([ArgumentList]);
+                                veya
+                                Primary. [TypeArguments] super([ArgumentList]);
+
+       *Derleyicinin eklediği super(); niteliksiz formdur.
+        JLS, niteliksiz bir super() çağrısı yapıldığında, üst sınıfın (yani Outer.Inner) ihtiyaç duyduğu kapsayan
+        nesneyi (yani Outer) sözcüksel kapsamadan (lexical scope) bulmaya çalışır.
+
+        Çözüm : JLS,8.8.7.1-2
+
+      public class InheritInner extends Outer.Inner{
+
+          public InheritInner(Outer outer){
+                  outer.super();
+          }
+
+      //    public InheritInner(){
+      //        new Outer().super();
+      //    }
+      }
+--------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 
 
