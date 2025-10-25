@@ -23,12 +23,17 @@ public class Driver {
 
         System.out.println(cart);
 
+        cart.add(3);
 
-        ArrayList<String> list = new ArrayList<>();
+
+
+        ArrayList list = new ArrayList();
         list.add("Water");
         list.add("Apple");
         list.add("Milk");
         list.add("Soap");
         System.out.println(list);
+
+        list.add(3);
     }
 }

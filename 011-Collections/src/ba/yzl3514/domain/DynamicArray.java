@@ -21,6 +21,7 @@ public class DynamicArray {
     public DynamicArray(int capacity) {
         if (capacity < DEFAULT_CAPACITY)
             capacity = DEFAULT_CAPACITY;
+        // TODO : Implement Lazy Initialization : Gerçekten ihtiyaç duyulduğunda array oluşturulmalı
         data = new Object[capacity];
     }
 
@@ -55,8 +56,8 @@ public class DynamicArray {
 
 
     public Object get(int index){
-        if(index < 0 || index >= size){
-            // TODO throw illegal index
+        if(index < 0 || index >= size){  // ! can be use : Objects.checkIndex();
+            // TODO throw illegal index : IndexOutOfBoundsException
             return null;
         }
         return data[index];
