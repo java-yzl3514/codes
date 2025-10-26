@@ -83,6 +83,29 @@ evrimindeki en önemli adımdır.Bu konuyu, bu anlamda tarihsel bağlamda anlama
   --------------------------------------------------------
 
 
+  Parametric Polymorphism
+   Bilgisayar bilimlerinde, bir fonksiyonun ya da bir veri yapısının, üzerinde işlem yaptığı verinin spesifik tipinden
+   bağımsız olarak yazılabilmesini sağlayan bir programlama dili özelliğidir.
+    Bu anlamda, bir kod bloğunu, daha sonra belirlenecek bir tip parametresi alacak şekilde yazmaktır denilebilir.
+
+
+
+ ----------------------------------------------------------------
+  The null ambiguity
+  Tell, Don't Ask Principle
+  Business Logic Leakage
+-------------------------------------------------------------------------
+ "Bir nesne kendi geçerli durumunu doğrulatmak zorunda kalmamalıdır"
+  Bu
+   - Encapsulation
+   - Object Invariants
+   ilkelerini birleştiren özetleyici bir tanımlamadır.
+   Yani, bir nesne dış dünyaya "ben tutarlıyım ve geçerliyim" garantisi vermeli
+
+---------------------------------------------------------------------
+
+
+
  PreJava5.class
  ...
 public static void doProcessOnList(java.util.List);

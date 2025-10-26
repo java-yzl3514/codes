@@ -1,0 +1,31 @@
+
+0-
+   Programlama dillerinde "tuple" adı verilen bir veri yapısı vardır.
+   Tuple, birden fazla değeri tek bir nesne altında birleştiren yapıdır.Genellikle her bir eleman farklı türde olabilir.
+   Tuple sabit uzunluktadır. (Örn: TwoTuple, ThreeTuple gibi)
+
+   Bazı durumlarda bir metottan birden fazla değer döndürmek istenebilir.
+
+   Generic kullanarak, iki farklı türde değer tutabilen TwoTuple adında bir sınıf tasarlayınız.
+0.1- Yukarıdaki alt yapıyı kullanarak ThreeTuple ve FourTuple sınıflarını tasarlayınız.
+
+
+1-
+   Bir stack veri yapısını Java'da LinkedList kullanmadan tasarlamak istiyoruz.
+
+   Sınıf Yapısı:
+    - Sınıfın adı LinkedStack olmalıdır.
+    - Sınıf generic olmalıdır.
+    - İçinde stack'in düğümlerini temsil eden bir sınıf bulunmalıdır (Node)
+    - Node sınıfı her bir düğümün verisini ve bir sonraki düğüme olan bağlantısını tutmalıdır.
+    - "End Sentinel" düğümü, yığının sonunu temsil etmeli ve boşluğu belirlemek için kullanılmalı
+
+    Alanlar :
+     - Yığının tepesini temsil eden bir alan (top) bulunmalıdır.
+     Davranışlar :
+     - push(item): Yeni bir düğüm oluşturup "top" üzerine ekler.
+     - pop(): top'daki veriyi döndürür ve top'ı bir sonraki düğüme kaydırır.
+              Eğer top end sentinel ise, null'a geri dönmelidir.
+     - isEmpty(): top'ın end sentinel'i gösterip göstermediğine geri dönmeli.
+
+
