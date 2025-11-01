@@ -28,4 +28,9 @@
               Eğer top end sentinel ise, null'a geri dönmelidir.
      - isEmpty(): top'ın end sentinel'i gösterip göstermediğine geri dönmeli.
 
+2- RandomList adında bir sınıf tasarlayınız. Sınıfın select() adında bir metodu olmalı. Bu metot list içerisinde store
+edilmiş veriler üzerinden rastgele seçim yaparak geriye dönmelidir.
+(Hint:Reusability)
+
+
 
