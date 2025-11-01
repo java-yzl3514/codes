@@ -1,4 +1,4 @@
-Java 1.5 Generics
+## Java 1.5 Generics
 
 Bu, Java'nın en temel ve en dönüştürücü özelliklerinden biridir. Java Generic'ler, dilin tip sisteminin (type system)
 evrimindeki en önemli adımdır.Bu konuyu, bu anlamda tarihsel bağlamda anlamak önemlidir.
@@ -8,105 +8,128 @@ evrimindeki en önemli adımdır.Bu konuyu, bu anlamda tarihsel bağlamda anlama
   (Hala bu yönetim arka tarafta Object türü üzerinden işletilir.
   Burada kastedilen Object tipinin gerektirdiği tür dönüşüm işlemlerinin hesaba katılarak kod yazılmasıdır.)
 
-  Bu durum bazı sorunları ortaya çıkarmıştır:
-   1. Tip güvenliği yoktu: Bir collection'a (örneğin ArrayList) herhangi bir türde nesne eklenebilirdi. (Bknz: PreJava5.java)
-   2. Açık tip dönüşümü (Explicit Casting) zorunluluğu: Collection'dan bir nesne alındığında, genelde onu tekrar orijinal
-   tipine dönüştürmek  (cast) zorunluydu ve asıl yapılacak iş için verbose kodların oluşmasına neden oluyordu.
-   3. Hataların çalışma zamanında ortaya çıkması: Yanlış tipte bir nesne collection'a eklendiğinde, bu bir derleme zamanı
-   hatası vermezdi. Hata, ancak o nesneyi alıp yanlış bir tipe dönüştürmeye çalışıldığında, çalışma zamanında bir
-   "ClassCastException" olarak ortaya çıkardı.
+Bu durum bazı sorunları ortaya çıkarmıştır:
+1. **Tip güvenliği yoktu:** Bir collection'a (örneğin ArrayList) herhangi bir türde nesne eklenebilirdi. (Bknz: PreJava5.java)
+2. **Açık tip dönüşümü (Explicit Casting) zorunluluğu:** Collection'dan bir nesne alındığında, genelde onu tekrar orijinal
+tipine dönüştürmek  (cast) zorunluydu ve asıl yapılacak iş için verbose kodların oluşmasına neden oluyordu.
+3. **Hataların çalışma zamanında ortaya çıkması:** Yanlış tipte bir nesne collection'a eklendiğinde, bu bir derleme zamanı
+hatası vermezdi. Hata, ancak o nesneyi alıp yanlış bir tipe dönüştürmeye çalışıldığında, çalışma zamanında bir
+<code style="color: red">**ClassCastException**</code> olarak ortaya çıkardı.
 
-   Bu durum, "programcının hafızasına güvenen" bir sistem yaratıyordu ve büyük ölçekli uygulamalarda ciddi bir hata
+   Bu durum, _"programcının hafızasına güvenen"_ bir sistem yaratıyordu ve büyük ölçekli uygulamalarda ciddi bir hata
    kayanağı oluşturuyordu.
+ 
+### Çözümün doğuşu - JSR 14
 
-   # Çözümün doğuşu - JSR 14
-    Generics, modern JEP (Java Enhancement Proposal) sisteminden önce, JSR(Java Specification Request) süreciyle dile
-    eklendi.
+Generics, modern JEP (Java Enhancement Proposal) sisteminden önce, JSR(Java Specification Request) süreciyle dile eklendi.
 
-    - https://jcp.org/aboutJava/communityprocess/final/jsr014/index.html
-    - https://jcp.org/en/jsr/detail?id=14
-    Ana Spesifikasyon: JSR 14 : Add Generic Types To The Java Programming Language
-    Yayın: J2SE 5.0 (Kod Adı "Tiger")- 2004
+* https://jcp.org/aboutJava/communityprocess/final/jsr014/index.html
+* https://jcp.org/en/jsr/detail?id=14 
 
-    JSR 14 Temel Gerekçeleri
-     1. Derleme Zamanı Tip Güvenliğinin Sağlanması(Compile-Time Type Safety): En temel gerekçedir.Yukarıda
-     belirtilen ClassCastException hatasını çalışma zamanından derleme zamanına taşımak.
+**Ana Spesifikasyon:** _**JSR 14**_ : _Add Generic Types To The Java Programming Language_ \
+**Yayın:** J2SE 5.0 (Kod Adı _"Tiger"_) - 2004 
+ #### JSR 14 Temel Gerekçeleri
+ 1. **Derleme Zamanı Tip Güvenliğinin Sağlanması(Compile-Time Type Safety):** En temel gerekçedir.Yukarıda  belirtilen ClassCastException hatasını çalışma zamanından derleme zamanına taşımak.
 
-     2. İfade gücünü artırmak: Kodun "niyetini" daha açık hale getirmek. List<String> tanımı, "bu liste sadece String
-     nesneleri içerir" demektedir.Bu, hem kodu okuyan geliştirici hem de derleyici için açık bir sözleşmedir.
+ 2. **İfade gücünü artırmak:** Kodun "niyetini" daha açık hale getirmek. List<String> tanımı, "bu liste sadece String  nesneleri içerir" demektedir.Bu, hem kodu okuyan geliştirici hem de derleyici için açık bir sözleşmedir.
 
-     3. Yeniden Kullanılabilirliği ve Soyutlamayı Artırmak(Reusability & Abstraction): List gibi veri yapılarını,
-      içerdikleri tipten bağımsız olarak(tip parametresi alarak) yazabilmeyi sağlamak. Bu bilgisayar bilimlerinde
-      Parametrik Polimorfizm(Parametric Polymorphism)* olarak bilinen kavramın Java'ya uygulanmasıdır.
+ 3. **Yeniden Kullanılabilirliği ve Soyutlamayı Artırmak(Reusability & Abstraction):** List gibi veri yapılarını,
+ içerdikleri tipten bağımsız olarak(tip parametresi alarak) yazabilmeyi sağlamak. Bu bilgisayar bilimlerinde
+ ***Parametrik Polimorfizm(Parametric Polymorphism)*** olarak bilinen kavramın Java'ya uygulanmasıdır.
 
-       Örn:
-          // Tip güvenli bir liste
+Örn:
+```java
+      // Tip güvenli bir liste
 
-          List<String> list = new ArrayList<String>();
-          list.add("Hello");
-          // list.add(1); Compile-Time Error
+        List<String> list = new ArrayList<String>();
+        list.add("Hello");
+        // list.add(1); Compile-Time Error
 
-          Object o = list.get(0); // OK
+        Object o = list.get(0); // OK
 
-          String s = list.get(0); // OK
+        String s = list.get(0); // OK
+```        
+        
 
-        Temel Kavramlar ve JLS Referansları
+ #### Temel Kavramlar ve JLS Referansları
 
-        1. Tip Değişkenleri (Type Variables)
-        JLS 4.4
-        T,K,V,E gibi "yer tutucu" tiplerdir
-        Örnek :  public class Box<T>{
-                    private T t;
-                 }
-        Buradaki <T>, bu sınıfın bir tip değişkeni aldığını belirtir.
-        2. Parametrelendirilmiş Tipler (Parameterized Types)
-           JLS 4.5
-         Generic bir tipin, gerçek bir tip argümanıyla kullanılmasıdır.
-         Örn:  Box<Pencil>, List<Integer>..
-         - List<Integer> bir tiptir, List bir generic tip bildirimidir.
-           List<List<Integer>>
-        3. Ham Tipler (Raw Types)
-           JLS 4.8
-           Generic bir tipin, tip argümanı olmadan kullanılmasıdır
-            Örn: List list = ....
-             Gerekçe: Geriye Yönelik Uyumluluk (Backward Compatibility). Generic öncesi kodların (legacy code) generic
-             sonrası kodlarla çalışabilmesi için yapılmıştır.
-       4. Joker Karakterler (Wildcards)
-          JLS 4.5.1
-          Generic'lerin daha esnek kullanılmasını sağlar. "?" ile ifade edilir.
+1. **Tip Değişkenleri (Type Variables)** \
+    **JLS 4.4**\
+    T,K,V,E gibi "yer tutucu" tiplerdir
+      
+Örn:
+```java 
+    public class Box<T>{
+        private T t;
+    }
+```
+Buradaki \<T>, bu sınıfın bir tip değişkeni aldığını belirtir.
+
+2. **Parametrelendirilmiş Tipler (Parameterized Types)**\
+   **JLS 4.5**\
+Generic bir tipin, gerçek bir tip argümanıyla kullanılmasıdır.
+
+ Örn:
+```text
+   Box<Pencil>, List<Integer>..
+   List<Integer> bir tiptir, List bir generic tip bildirimidir.
+   List<List<Integer>>
+```
+  
+
+3. **Ham Tipler (Raw Types)**\
+   **JLS 4.8**\
+   Generic bir tipin, tip argümanı olmadan kullanılmasıdır
+Örn: 
+```
+   List list = ....
+```
+>**Gerekçe**: Geriye Yönelik Uyumluluk (Backward Compatibility). Generic öncesi kodların (legacy code) generic
+sonrası kodlarla çalışabilmesi için yapılmıştır.
+     
+4. **Joker Karakterler (Wildcards)**\
+     **JLS 4.5.1**\
+     Generic'lerin daha esnek kullanılmasını sağlar. "?" ile ifade edilir.
 
 
-  -------------------------------------------------------
-  ### JEP Tarihçesi:
+---
+### JEP Tarihçesi: [JEP 1](https://openjdk.org/jeps/1 "JEP 1")
 
-  [https://openjdk.org/jeps/1](URL "JEP 1")
-
-  --------------------------------------------------------
+---
 
 
-  ### Parametric Polymorphism
+### Parametric Polymorphism
    Bilgisayar bilimlerinde, bir fonksiyonun ya da bir veri yapısının, üzerinde işlem yaptığı verinin spesifik tipinden
    bağımsız olarak yazılabilmesini sağlayan bir programlama dili özelliğidir.
     Bu anlamda, bir kod bloğunu, daha sonra belirlenecek bir tip parametresi alacak şekilde yazmaktır denilebilir.
 
+--- 
+**Exercises_0 Notları**
 
+ LinkedStack.java
 
- ----------------------------------------------------------------
+---
   * The null ambiguity
   * Tell, Don't Ask Principle
   * Business Logic Leakage
--------------------------------------------------------------------------
- "Bir nesne kendi geçerli durumunu doğrulatmak zorunda kalmamalıdır"
-  Bu
+---
+ >"Bir nesne kendi geçerli durumunu doğrulatmak zorunda kalmamalıdır"
+
+  Bu,
    - Encapsulation
    - Object Invariants
+
    ilkelerini birleştiren özetleyici bir tanımlamadır.
-   Yani, bir nesne dış dünyaya "ben tutarlıyım ve geçerliyim" garantisi vermeli
 
----------------------------------------------------------------------
-```
+>Yani, bir nesne dış dünyaya "ben tutarlıyım ve geçerliyim" garantisi vermeli
 
- PreJava5.class
+---
+
+PreJava5.java ve Java5Generics.java sınıflarının derleme çıktıları:
+ 
+```terminaloutput
+
+[PreJava5.class]
  ...
 public static void doProcessOnList(java.util.List);
     Code:
@@ -125,8 +148,8 @@ public static void doProcessOnList(java.util.List);
       24: ifeq          42
       27: getstatic     #48                 // Field java/lang/System.out:Ljava/io/PrintStream;
       30: aload_2
-      31: checkcast     #11                 // class java/lang/Integer
-      34: invokevirtual #54                 // Method java/lang/Integer.intValue:()I
+      > 31: checkcast     #11                 // class java/lang/Integer
+      > 34: invokevirtual #54                 // Method java/lang/Integer.intValue:()I
       37: iconst_2
       38: imul
       39: invokevirtual #57                 // Method java/io/PrintStream.println:(I)V
@@ -135,7 +158,7 @@ public static void doProcessOnList(java.util.List);
       48: return
 
 
-Java5Generics
+[Java5Generics.class]
 ...
  public static void doProcessOnList(java.util.List<java.lang.Integer>);
     Code:
@@ -149,8 +172,8 @@ Java5Generics
       15: aload_0
       16: iload_1
       17: invokeinterface #45,  2           // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
-      22: checkcast     #11                 // class java/lang/Integer
-      25: invokevirtual #49                 // Method java/lang/Integer.intValue:()I
+      > 22: checkcast     #11                 // class java/lang/Integer
+      > 25: invokevirtual #49                 // Method java/lang/Integer.intValue:()I
       28: iconst_2
       29: imul
       30: invokevirtual #52                 // Method java/io/PrintStream.println:(I)V
@@ -168,20 +191,20 @@ Java5Generics
   Bu desen, bir sınıfın, hangi somut sınıftan nesne üreteceğini bilemediği ve "bilmek zorunda olmadığı/bilmek istemediği"
   durumlarda kullanılır.Sorumluluğu kendisinden miras alan alt sınıflara bırakır.
 
-  Ana Bileşenler:
-    Product: Fabrika metodunun üreteceği nesneler için ortak arayüz.
-    ConcreteProduct: Product arayüzünü uygulayan gerçek nesneler
-    Creator: "factoryMethod" olarak adlandırılan* soyut bir metodu bildirir. Bu metodun geri dönüş türü Product arayüzüdür.
-    ConcreteCreator: Creator sınıfından miras alır ve factoryMethod'u override ederek belli bir ConcreteProduct nesnesini
+  **Ana Bileşenler:**
+  * **Product:** Fabrika metodunun üreteceği nesneler için ortak arayüz. 
+  * **ConcreteProduct:** Product arayüzünü uygulayan gerçek nesneler
+  * **Creator:** _'factoryMethod'_ olarak adlandırılan[^1] soyut bir metodu bildirir. Bu metodun geri dönüş türü Product arayüzüdür.
+  * **ConcreteCreator:** Creator sınıfından miras alır ve factoryMethod'u override ederek belli bir ConcreteProduct nesnesini
     üretip geri döner.
 
-  * Bu adlandırma bire bir metot adını nitelendirmez
+[^1]: Bu adlandırma bire bir metot adını nitelendirmez
 
- ---------------------------------------------------------------------------------------------------------------------------
- ```java
-    Generic parametreleri new operatörüyle kullanılamazlar.
+ ---
+> Generic parametreleri new operatörüyle kullanılamazlar.
 
-    Örn:
+Örn:
+```java
 
     public interface GenericDocumentFactory<T> {
 
@@ -215,8 +238,9 @@ Java5Generics
 
     }
 ```
-  Yukarıdaki tasarım kısıtını düşününüz.
----------------------------------------------------------------------
+Yukarıdaki tasarım kısıtını düşününüz.
+
+---
 ```java
         public interface GenericDocumentFactory<T> {
 
@@ -269,8 +293,10 @@ Java5Generics
 
  }
 ```
-----------------------------------------------------------------------------------------------------------------------
-  Yukarıdaki tasarımın aşağıdaki şekilde yeniden yapıldığına dikkat ediniz.
+---
+
+Yukarıdaki tasarımın aşağıdaki şekilde yeniden yapıldığına dikkat ediniz.
+
 ```java
    // GenericDocumentFactory.java
    public interface GenericDocumentFactory {
@@ -305,35 +331,35 @@ Java5Generics
    }
 ```
 --------------------------------------------------------------------------------------------------------------------
-  # Generic Methods
+  ## Generic Methods
 
    JLS, (özellikle Bölüm 8.4.4), generic bir metodu kendi biçimsel tip parametrelerini (formal type parameters)
    deklare eden bir metot olarak tanımlar.
 
-   Tanım: Bir metodun imzası, dönüş tipinden önce açılı parantezler (<>) içinde bir veya daha fazla tip parametresi listesi
+   **Tanım:** Bir metodun imzası, dönüş tipinden önce açılı parantezler (<>) içinde bir veya daha fazla tip parametresi listesi
    içeriyorsa, bu bir generic metotdur.
 
-   Kapsam(Scope): Bu tip parametreleri, yalnızca deklare edildikleri ilgili metodun kapsamı boyunca geçerlidir.
+   **Kapsam(Scope):** Bu tip parametreleri, yalnızca deklare edildikleri ilgili metodun kapsamı boyunca geçerlidir.
 
-   Bağımsızlık: Bir metodun generic olması, içinde bulunduğu sınıfın veya arayüzün generic olup olmamasından bağımsızdır.
+   **Bağımsızlık:** Bir metodun generic olması, içinde bulunduğu sınıfın veya arayüzün generic olup olmamasından bağımsızdır.
 
-   ```java
+```java
    public class Util{
       public static <T> T foo(T t){
             // Bu bir generic metotdur.
       }
    }
-   ```
+```
 
- Burada <T>, bu metodun bir generic metot olduğunu ve T adında bir tip parametresi aldığını bildirir.
+ Burada <T>, bu metodun bir generic metot olduğunu ve *T* adında bir tip parametresi aldığını bildirir.
 
  Generic metotlar tip güvenliğini (type safety) korurken, farklı tipler üzerinde çalışabilen genelleştirilmiş metotlar
  olarak da tanımlanabilir.
-   "Kendi tip parametrelerini bildiren metotlar"
+ >"Kendi tip parametrelerini bildiren metotlar"
 
  Yukarıdaki "Bağımsızlık" bölümü üzerine: Generic metotlar bir sınıfın tamamını generic yapmaya gerek kalmadan, tek bir
  metodun güvenli bir şekilde farklı tiplerle çalışmasına olanak tanır.
- Tekrar söylemek gerekerse burada generic metotlar için sınıfın generic olması zorunluluğu YOKTUR.
+ Tekrar söylemek gerekerse burada generic metotlar için sınıfın generic olması zorunluluğu YOKTUR
 
   ### Tip Çıkarımı (Type Inference):
   ```java
@@ -436,7 +462,6 @@ public class Driver {
     }
 }
 ```
-
 ---
 
 
