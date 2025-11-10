@@ -272,3 +272,44 @@ at ba.yzl3514.main.LoggingExceptionApp.main(LoggingExceptionApp.java:18)
 > 
 > Handler : ba.yzl3514.exceptions.LoggingException
 ---
+
+> **Checked Exception'ları** Derleyici kontrol eder. Bağlamın doğru yönetilmesi için derleyici zorlar. Aksi durumda derleme 
+> zamanı hatası verir.\
+> **Uncheked Exception'ları** geliştirici kontrol etmeli, derleyici bağlamın yönetilmesi için zorlamaz.
+> Çünkü ideal bir dünyada, iyi yazılmış bir kodda bu hataların hiç oluşmaması gerekir.
+> Bu hatalar ```try-catch``` ile yakalanabilir. Ancak genel olarak en iyi pratik, bu hataların oluşmanı en baştan engelleyecek 
+> **savunmacı kodlama(defensive coding)** yapmaktır.
+
+> **Temel felsefe**, kodun üzerindeki olası, öngörülebilir (programlama hatası dışındaki durumlar) durumların mümkün olduğunca 
+> derleme zamanında çözümlenmesinin sağlanmasıdır. Bu durumu önceki dersimiz Generic konusunda da görebiliriz. Derleyici 
+> çalışma zamanına mümkün olduğunca ***"güvenli"*** kod bırakmaya çalışır.
+
+--- 
+>**System.out** ve **System.err**\
+>  java MyApplication > output.txt \
+>  log 4J -> for Java
+> 
+> https://logback.qos.ch/manual/mdc.html \
+> https://www.slf4j.org/ \
+> https://docs.oracle.com/en/java/javase/21/core/java-logging-overview.html#GUID-B83B652C-17EA-48D9-93D2-563AE1FF8EDA
+
+
+
+```java
+try{
+            int a = 0;
+            int b = 100 / a;
+        }catch (Exception e){
+            log.severe(e.getMessage());
+        }
+        /*
+          Bu catch hiç bir zaman çalıştırılamaz.
+          Çünkü ArithmeticException Exception sınıfının dolaylı alt sınıfıdır.
+          // COMPILE-TIME ERROR : Unreachable
+         */
+        catch (ArithmeticException e){
+            log.severe(e.getMessage());
+        }
+```
+
+> "Unwind"

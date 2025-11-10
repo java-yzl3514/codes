@@ -4,6 +4,7 @@ import ba.yzl3514.exceptions.CustomException;
 import ba.yzl3514.exceptions.SimpleRuntimeException;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,18 +15,28 @@ import java.io.IOException;
  */
 public class ZeroDivisionApp {
 
+    private static Logger logger = Logger.getLogger("ZeroDivisionApp");
+
     public static void main(String[] args) {
 
-        System.out.println("flow is started...");
+        logger.info("flow is started...");
+        System.out.println("---This is sys.out message---");
 
         try {
             //throw new Error();
-            // System.out.println(division(5, 0));
-        } catch (ArithmeticException e) {
-            System.out.println("divided by 0(zero)");
+            System.out.println(division(5, 0));
+        } catch (SimpleRuntimeException e) {
+            logger.severe(e.toString());
+            //e.printStackTrace();
+            // call recoveryMethod() !!!
         }
 
-        System.out.println("flow is continue...");
+        logger.info("After try/catch block");
+
+        division(10, 0);
+
+        logger.info("flow is continue...");
+
 
     }
 
