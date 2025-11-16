@@ -313,3 +313,203 @@ try{
 ```
 
 > "Unwind"
+
+
+> Deterministic Resource Management
+> 
+> Resource Leak (Kaynak Sızıntısı)
+
+
+```java
+
+public class HelloFinally {
+
+    public static void main(String[] args) {
+
+        System.out.println("Main thread is started...");
+          try{
+              System.out.println("try block");
+          }catch (Exception e){
+              System.out.println("catch block");
+          }finally {
+              System.out.println("Finally Block !");
+          }
+
+
+        System.out.println("main thread is continue...");
+    }
+}
+```
+
+```java
+public class FinallyBlockWithException {
+
+    public static void main(String[] args) {
+
+        System.out.println("Main thread is started...");
+        try{
+            System.out.println("try block");
+            throw new Exception();
+        }catch (Exception e){
+            System.out.println("catch block");
+        }finally {
+            System.out.println("Finally Block !");
+        }
+
+
+        System.out.println("main thread is continue...");
+    }
+}
+```
+
+
+```java
+public class FinallyBlockWithUnhandledException {
+
+    public static void main(String[] args) {
+
+        System.out.println("Main thread is started...");
+        try{
+            System.out.println("try block");
+            doSomething();
+        }catch (IOException e){
+            System.out.println("catch block");
+        }finally {
+            System.out.println("Finally Block !");
+        }
+
+
+        System.out.println("main thread is continue...");
+    }
+
+
+    public static void doSomething() throws IOException{
+        Random random = new Random();
+        boolean b = random.nextBoolean();
+        if(b) throw new IOException();
+        throw new RuntimeException();
+    }
+}
+
+```
+
+```java
+public class FinallyBlockWithReturnStatement {
+
+
+    public static void main(String[] args) {
+
+
+        System.out.println("thread is started...");
+
+        try{
+            System.out.println("trying...");
+            Exceptions.throwRuntimeException();
+            return;
+        }catch (Exception e){
+            System.out.println("Exception Handled");
+            Exceptions.throwUncheckedException();
+            return;
+        }finally {
+            System.out.println("Finally block !");
+        }
+
+        //System.out.println("thread is continue...");
+
+    }
+}
+```
+
+
+```java
+public class FinallyBlockWithBreakStatement {
+
+
+    public static void main(String[] args) {
+
+
+        System.out.println("thread is started...");
+
+        while(true) {
+            try {
+                System.out.println("trying...");
+                Exceptions.throwRuntimeException();
+                break;
+            } catch (Exception e) {
+                System.out.println("Exception Handled");
+                Exceptions.throwUncheckedException();
+                return;
+            } finally {
+                System.out.println("Finally block !");
+            }
+        }
+
+        //System.out.println("thread is continue...");
+
+    }
+}
+
+```
+
+
+```java
+/**
+ *
+ * !! ATTENTION  !!  : PITFALL !!!!
+ *
+ * @author Onder Sahin
+ *
+ */
+public class TryFinallyBlocks {
+    public static void main(String[] args) {
+
+        System.out.println("thread is started...");
+
+        try {
+            try {
+                System.out.println("trying...");
+                Exceptions.throwNoSuchFieldException();
+            } finally {
+                System.out.println("Finally block !");
+                Exceptions.throwCheckedException();
+            }
+        } catch (Exception e) {
+            System.out.println("Outer handler...");
+            e.printStackTrace(System.out);
+        }
+    }
+}
+
+```
+
+
+> PROJECT Coin
+> 
+> 
+
+```java
+public class FinallyDoesNotExecuted {
+
+    public static void main(String[] args) {
+
+
+        System.out.println("Main thread is started...");
+        try{
+            System.out.println("try block");
+            System.exit(1); // Stops the JVM!!!!
+        }catch (Exception e){
+            System.out.println("catch block");
+        }finally {
+            System.out.println("Finally Block !");
+        }
+
+        System.out.println("main thread is continue...");
+
+    }
+}
+```
+
+
+>  try-with-resources
+> 
+> 
