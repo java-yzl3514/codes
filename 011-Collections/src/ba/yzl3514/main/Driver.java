@@ -1,8 +1,7 @@
 package ba.yzl3514.main;
 
-import ba.yzl3514.domain.DynamicArray;
-
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -15,25 +14,21 @@ public class Driver {
 
     public static void main(String[] args) {
 
-        DynamicArray cart = new DynamicArray(3);
-        cart.add("Water");
-        cart.add("Apple");
-        cart.add("Milk");
-        cart.add("Soap");
+        Collection<Integer> collection = new ArrayList<>();
 
-        System.out.println(cart);
+        addIntegersToCollection(collection);
 
-        cart.add(3);
+        for(Integer i : collection){
+            System.out.println(i);
+        }
 
 
+    }
 
-        ArrayList list = new ArrayList();
-        list.add("Water");
-        list.add("Apple");
-        list.add("Milk");
-        list.add("Soap");
-        System.out.println(list);
-
-        list.add(3);
+    //public static void addIntegersToCollection(Collection<? super Integer> collection) {
+    public static void addIntegersToCollection(Collection<Integer> collection) {
+        for(int i = 0; i < 10; i++) {
+            collection.add(i); // Autoboxing
+        }
     }
 }
