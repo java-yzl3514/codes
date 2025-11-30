@@ -26,6 +26,9 @@ Nasıl yapılacağı değil, Ne yapılacağının söylenmesi
 > - Lambda ifadeleri sınıf değil, fonksiyon üretir.
 > - Lambda sözdizimi mümkün olduğunca yalındır. 
 
+Poly Expressions
+https://cr.openjdk.org/~dlsmith/jsr335/jsr335-0.6.2/D.html
 
 
 
+Func(Arg0, Arg1) -> Arg0.method(Arg1)
