@@ -10,7 +10,15 @@ package ba.yzl3514.functional_interface;
 @FunctionalInterface
 public interface MyFunctionalInterface {
 
-    void foo();
+    String foo(String arg);
 
     //int bar();
+
+    boolean equals(Object o);
+
+    int hashCode();
+
+    default void bar(){
+        System.out.println("default method");
+    }
 }
