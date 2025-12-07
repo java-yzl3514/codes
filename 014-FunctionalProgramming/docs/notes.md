@@ -151,6 +151,106 @@ Temel isimlendirme kuralları şöyledir:
 
 
 
+> 
+> https://www.cs.kent.ac.uk/people/staff/dat/miranda/whyfp90.pdf
+> https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
+
+
+### Streams
+
+>1. Akış Oluşturma
+>2. Akış elemanlarını değiştirme (ara işlemler- intermadiate operations)
+>3. Akış elemanlarını tüketme (sonlandırıcı işlemler- terminal operations)
+
+#### Akış Oluşturma
+
+```Stream.of()```  metodunu kullanarak bir grup öğeyi kolayca akışa çevirebiliriz.
+
+```java
+public class StreamOf {
+
+
+    public static void main(String[] args) {
+
+        Stream.of("It", "is ", " a ", " wonderful ", "day", "for", "learning", "Java", "Stream", " API")
+                .forEach(System.out::println);
+        Stream.of(1,45,123,63547).forEach(System.out::println);
+
+    }
+
+}
+```
+
+
+>https://www.lipsum.com/
+
+Her ```Collection```, ```stream()``` metodunu kullanarak bir akış üretebilir.
+
+```java
+public class CollectionToStream {
+
+    public static void main(String[] args) {
+
+        List<Data> dataList = Arrays.asList(new Data(1), new Data(2), new Data(1000), new Data(400));
+
+        System.out.println(dataList.stream().mapToInt(Data::getI).sum());
+
+        Set<String> strings =
+                new HashSet<>(
+                        Arrays.asList("Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                                .split(" ")));
+
+        strings.stream().map(string -> string + "-").forEach(System.out::println);
+
+
+        Map<String, Double> map = new HashMap<>();
+
+        map.put("pi", 3.14159);
+        map.put("e", 2.718);
+        map.put("avagadro's number", 6.022e23);
+
+        map.entrySet()
+                .stream().map(e -> e.getKey() + ": " + e.getValue()).forEach(System.out::println);
+
+
+    }
+}
+/*
+1403
+industry.-
+is-
+typesetting-
+printing-
+dummy-
+the-
+Lorem-
+and-
+of-
+text-
+Ipsum-
+simply-
+avagadro's number: 6.022E23
+e: 2.718
+pi: 3.14159
+        
+ */
+```
+
+Random sınıfı, akış üretmek için bir dizi metotla geliştirilmiştir.
+
+```java
+
+
+```
+
+
+
+
+
+
+
+
+
 
 
 
