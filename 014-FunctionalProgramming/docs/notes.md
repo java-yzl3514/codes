@@ -240,9 +240,58 @@ Random sınıfı, akış üretmek için bir dizi metotla geliştirilmiştir.
 
 ```java
 
+public class RandomText implements Supplier<String> {
 
+    private List<String> words = new ArrayList<>();
+    private Random random= new Random();
+
+    public RandomText(String filePath) throws IOException{
+        List<String> allLines = Files.readAllLines(Path.of(filePath));
+        for(String line : allLines){
+            for(String word : line.split("[ .?,]+")){
+                    words.add(word.toLowerCase());
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        // TODO
+        return "";
+    }
+
+    @Override
+    public String get() {
+        return words.get(random.nextInt(words.size()));
+    }
+}
 ```
 
+
+```IntStream``` interface'i, int dizisi olan bir akış üretmek için ```range()``` metodunu sağlar.
+
+```java
+public class RangeOfInt {
+
+    public static void main(String[] args) {
+
+        int sum = 0;
+        for(int i = 10; i < 20; i++){
+            sum += i;
+        }
+        System.out.println(sum);
+
+        sum = 0;
+        for(int i : IntStream.range(10, 20).toArray()){
+            sum += i;
+        }
+        System.out.println(sum);
+
+        System.out.println(IntStream.range(10, 20).sum());
+
+    }
+}
+```
 
 
 
