@@ -104,3 +104,43 @@ DELETE FROM employee WHERE ssn = 'SSN-1000';
 
 ```
 
+
+### SQL JOIN 
+
+```sql
+SELECT * FROM ap.invoice_line_items;
+
+SELECT * FROM ap.general_ledger_accounts;
+
+SELECT COUNT(invoice_id) FROM ap.invoices;
+SELECT COUNT(invoice_id) FROM ap.invoice_line_items;
+
+SELECT * FROM ap.invoices, ap.invoice_line_items WHERE ap.invoices.invoice_id = ap.invoice_line_items.invoice_id;
+
+-- 114 * 118
+SELECT 114 * 118;
+
+SELECT * FROM
+             (ap.invoices i JOIN ap.invoice_line_items ili ON i.invoice_id = ili.invoice_id );
+
+SELECT * FROM
+    (ap.invoices i INNER JOIN ap.invoice_line_items ili ON i.invoice_id = ili.invoice_id );
+
+SELECT * FROM ap.invoices, ap.invoice_line_items; -- CARTESIAN PRODUCT
+
+SELECT * FROM ap.invoices CROSS JOIN ap.invoice_line_items;
+
+```
+
+
+```sql
+-- Aşağıdaki iki sorgunun aynı çözüm kümesini üretteğine dikkat ediniz.
+SELECT *
+     FROM ap.general_ledger_accounts gla LEFT OUTER JOIN ap.invoice_line_items ili ON gla.account_number = ili.account_number
+     WHERE ili.account_number IS NOT NULL;
+
+SELECT *
+FROM ap.general_ledger_accounts gla JOIN ap.invoice_line_items ili ON gla.account_number = ili.account_number;
+```
+
+> https://learn.microsoft.com/tr-tr/sql/relational-databases/query-processing-architecture-guide?view=sql-server-ver17
