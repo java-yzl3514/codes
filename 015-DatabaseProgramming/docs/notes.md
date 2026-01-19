@@ -412,3 +412,125 @@ EXPLAIN SELECT student.name FROM student WHERE id = 2;
 CREATE INDEX idx_std_email ON student(email);
 
 ```
+
+---
+
+ ### JAR (Java ARchive)
+ 
+
+ #### JDBC 1.0 (JDK 1.1)
+ Proof of Concept
+- Amaç sadece bağlantı kurmak.
+
+#### JDBC 2.0 - Enterprise (JDK 1.2 & 1.3)
+ - İki parçaya ayrıldı :
+    - Core API (java.sql)
+    - Optional Package (javax.sql)
+ - Batch (Toplu) İşlemler Devrimi 
+
+#### JDBC 3.0 (JDK 1.4)
+ - Savepoints
+ - Auto-Generated Keys
+
+#### JDBC 4.0 (JDK-6)
+ - Auto-Loading Drivers (ServiceLoader)
+ - Wrapper Interfaces (Unwrapping Proxies)
+ - SQLXML -> java.sql.SQLXML
+
+#### JDBC 4.1 (JDK 7)
+   - Resource Management
+   - RowSet - Disconnected Data oluşturmak için standart bir factory deseni
+
+#### JDBC 4.2 (JDK 8)
+   
+   - Java Time API(JSR 330) : java.util.Date ve java.sql.Date karmaşası bitti.
+      LocalDate, LocalDateTime, LocalTime getObject ve setObject ile desteklendi.
+
+   - executeLargeUpdate(): long
+
+
+
+ #### JDBC Connection URL
+
+     <protocol>:<sub-protocol>:<data-source-details>
+
+
+ ```java
+// Before JDBC 4.1 - JDK 7
+public static void main(String[] args) {
+
+    Connection connection = null;
+    try {
+        // Class.forName("org.postgresql.Driver"); // Before JDBC 4.0
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/yzl3514", "devlab", "S3cR3t");
+        System.out.println("Database connection established: " + connection);
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }finally {
+        if(connection != null){
+            try{
+                connection.close();
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+} 
+
+ ```
+
+
+```java
+    try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/yzl3514", "devlab", "S3cR3t")) {
+            System.out.println("Database connection is established");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+```
+
+
+
+```text
+
+      | JDBC Type |             | Java Type |        
+        ARRAY                  java.sql.Array
+        BIGINT                      long
+        BINARY                      byte[]
+        BIT                         boolean
+        BLOB                        java.sql.Blob
+        BOOLEAN                     boolean
+        CHAR                        String
+        CLOB                        java.sql.Clob
+        DATALINK                    java.net.URL
+        DATE                        java.sql.Date
+        DATE                        java.time.LocalDate
+        DECIMAL                     java.math.BigDecimal
+        DOUBLE                      double
+        FLOAT                       double
+        INTEGER                     int
+        JAVA_OBJECT                 --- (any underlying Java Class)
+        LONGVARCHAR                 String
+        LONGVARBINARY               byte[]
+        LONGNVARCHAR                String
+        NCHAR                       String
+        NCLOB                       java.sql.NClob
+        NUMERIC                     java.math.BigDecimal
+        NVARCHAR                    String
+        REAL                        float
+        REF                         java.sql.Ref
+        REF_CURSOR                  java.sql.ResultSet
+        ROWID                       java.sql.RowId
+        SMALLINT                    short
+        SQLXML                      java.sql.SQLXML
+        TIME                        java.sql.Time
+        TIME                        java.time.LocalTime
+        TIME_WITH_TIMEZONE          java.time.OffsetTime
+        TIMESTAMP                   java.sql.Timestamp
+        TIMESTAMP_WITH_TIMEZONE     java.time.OffsetDateTime
+        VARCHAR                     String
+
+```
+
+
+
