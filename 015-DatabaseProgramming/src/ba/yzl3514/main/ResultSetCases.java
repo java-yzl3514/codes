@@ -41,10 +41,15 @@ public class ResultSetCases {
                 personList.add(person);
             }
             personList.forEach(System.out::println);
+
+            while(resultSet.previous()){
+                System.out.println("test");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
+
+
 }

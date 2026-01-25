@@ -552,3 +552,18 @@ PREPARE insertPerson(varchar, varchar, varchar, varchar) AS
 EXECUTE insertPerson('Tom', 'Stone', 'tom.stone@email.com', 'secret6');
 
 ```
+
+https://www.cybertec-postgresql.com/en/with-hold-cursors-and-transactions-in-postgresql/
+
+
+CHUNK Processing
+
+##### Pagination 
+```sql
+SELECT * FROM person;
+
+SELECT * FROM person LIMIT 2; -- pagination
+SELECT * FROM person OFFSET 2 LIMIT 2;
+SELECT * FROM person OFFSET 4 LIMIT 2;
+
+```

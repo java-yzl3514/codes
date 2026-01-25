@@ -1,9 +1,6 @@
 package ba.yzl3514.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  *
@@ -21,10 +18,9 @@ public class JDBCUtil {
         return connection;
     }
 
-
-    public static void commit(Connection connection){
+    public static void commit(Connection connection) {
         try {
-            if(connection != null){
+            if (connection != null) {
                 connection.commit();
             }
         } catch (SQLException e) {
@@ -35,8 +31,18 @@ public class JDBCUtil {
 
     public static void closeConnection(Connection connection) {
         try {
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void closeResultSet(ResultSet resultSet) {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,7 +51,7 @@ public class JDBCUtil {
 
     public static void closeStatement(Statement statement) {
         try {
-            if(statement != null){
+            if (statement != null) {
                 statement.close();
             }
         } catch (SQLException e) {
