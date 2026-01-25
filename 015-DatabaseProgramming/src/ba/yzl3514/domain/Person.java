@@ -9,6 +9,7 @@ package ba.yzl3514.domain;
  */
 public class Person {
 
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -21,6 +22,14 @@ public class Person {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -58,9 +67,11 @@ public class Person {
     @Override
     public String toString() {
         return "Person{" +
-                "firstName='" + firstName + '\'' +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
