@@ -534,3 +534,21 @@ public static void main(String[] args) {
 
 
 
+Statement
+PreparedStatement
+CallableStatement
+
+--
+
+##### Prepared Statement
+    Bir SQL ifadesinin, parametre alabilen, önceden derlenmiş ve veri tabanı tabanı tarafında optimize edilmiş halini temsil eder.
+
+```sql
+
+PREPARE insertPerson(varchar, varchar, varchar, varchar) AS
+     INSERT INTO person(first_name, last_name, email, password) VALUES ($1, $2,$3,$4);
+
+
+EXECUTE insertPerson('Tom', 'Stone', 'tom.stone@email.com', 'secret6');
+
+```
