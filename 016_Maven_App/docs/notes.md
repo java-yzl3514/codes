@@ -39,3 +39,9 @@ https://www.asciiart.eu/text-to-ascii-art
 ### ANSI CODES
 
 https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+
+
+Inversion of Control- IoC
+Dependency Injection- DI
+
+https://start.spring.io/

@@ -1,6 +1,9 @@
 package ba.yzl3514.framework;
 
+import ba.yzl3514.app.InvoiceInsertRunner;
 import ba.yzl3514.jdbc.DBConnectionManager;
+import ba.yzl3514.repository.InvoiceJdbcRepositoryImpl;
+import ba.yzl3514.repository.InvoiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +40,13 @@ public class Framework {
         try {
             logger.info("[Framework] starting...");
             DBConnectionManager.start();
-            // TODO
+
+            // Dependency Injection View....
+            InvoiceRepository invoiceRepository = new InvoiceJdbcRepositoryImpl(DBConnectionManager.getDataSource());
+
+            ApplicationRunner runner = new InvoiceInsertRunner(invoiceRepository);
+            runner.run();
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("[ERROR] The Application could not started");
