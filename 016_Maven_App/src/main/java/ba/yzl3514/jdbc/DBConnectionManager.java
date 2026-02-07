@@ -53,12 +53,6 @@ public class DBConnectionManager {
         return dataSource;
     }
 
-    public static Connection getConnection() throws SQLException {
-        if (dataSource == null) {
-            throw new RuntimeException("[ERROR] Database is not configurated");
-        }
-        return dataSource.getConnection();
-    }
 
     public static void shutdown(){
         if(dataSource != null && !((HikariDataSource)dataSource).isClosed()){

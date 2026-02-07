@@ -2,8 +2,8 @@ package ba.yzl3514.app;
 
 import ba.yzl3514.domain.Invoice;
 import ba.yzl3514.framework.ApplicationRunner;
-import ba.yzl3514.repository.InvoiceJdbcRepositoryImpl;
 import ba.yzl3514.repository.InvoiceRepository;
+import ba.yzl3514.service.InvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +17,13 @@ import java.time.LocalDate;
  * @author Onder Sahin
  *
  */
-public class InvoiceInsertRunner implements ApplicationRunner {
+public class InvoiceInsertCase implements ApplicationRunner {
 
     private Logger logger = LoggerFactory.getLogger(InvoiceRepository.class);
-    private InvoiceRepository invoiceRepository;
+    private InvoiceService invoiceService;
 
-    public InvoiceInsertRunner(InvoiceRepository invoiceRepository) {
-        this.invoiceRepository = invoiceRepository;
+    public InvoiceInsertCase(InvoiceService invoiceService) {
+        this.invoiceService = invoiceService;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class InvoiceInsertRunner implements ApplicationRunner {
         invoice.setInvoiceDueDate(LocalDate.of(2026, 2, 1));
         invoice.setPaymentDate(LocalDate.of(2026, 1, 31));
 
-        Invoice saved = invoiceRepository.save(invoice);
+        Invoice saved = invoiceService.saveInvoice(invoice);
         logger.info("Invoice is inserted with id : {}", saved.getId());
     }
 }

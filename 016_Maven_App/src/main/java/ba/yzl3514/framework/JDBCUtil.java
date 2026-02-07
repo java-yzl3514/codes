@@ -1,7 +1,6 @@
-package ba.yzl3514.jdbc;
+package ba.yzl3514.framework;
 
 import java.sql.*;
-import java.util.Properties;
 
 /**
  *
@@ -23,16 +22,6 @@ public class JDBCUtil {
         }
     }
 
-
-    public static void closeConnection(Connection connection) {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void closeResultSet(ResultSet resultSet) {
         try {

@@ -18,7 +18,7 @@ public interface CrudRepository<T, ID> {
     List<T> findAll(); // Read
 
 
-    Optional<T> findById(); // Read
+    Optional<T> findById(ID id); // Read
 
 
     boolean deleteById(ID id); // Delete

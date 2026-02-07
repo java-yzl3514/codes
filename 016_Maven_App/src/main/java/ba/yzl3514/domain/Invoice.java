@@ -94,4 +94,19 @@ public class Invoice extends AbstractEntity<Long> {
     public void setVendorId(long vendorId) {
         this.vendorId = vendorId;
     }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "invoiceNumber='" + invoiceNumber + '\'' +
+                ", invoiceDate=" + invoiceDate +
+                ", invoiceTotal=" + invoiceTotal +
+                ", paymentTotal=" + paymentTotal +
+                ", creditTotal=" + creditTotal +
+                ", invoiceDueDate=" + invoiceDueDate +
+                ", paymentDate=" + paymentDate +
+                ", termsId=" + termsId +
+                ", vendorId=" + vendorId +
+                '}';
+    }
 }

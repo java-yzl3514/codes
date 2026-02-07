@@ -8,8 +8,6 @@ import ba.yzl3514.framework.Framework;
  */
 public class App {
     public static void main(String[] args) {
-
         Framework.run();
-
     }
 }
