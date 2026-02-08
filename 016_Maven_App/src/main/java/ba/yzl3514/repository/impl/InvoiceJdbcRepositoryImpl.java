@@ -1,16 +1,14 @@
-package ba.yzl3514.repository;
+package ba.yzl3514.repository.impl;
 
 import ba.yzl3514.domain.Invoice;
-import ba.yzl3514.framework.JDBCUtil;
-import ba.yzl3514.jdbc.core.JdbcTemplate;
-import ba.yzl3514.jdbc.core.ResultSetExtractor;
+import ba.yzl3514.framework.jdbc.core.JdbcTemplate;
+import ba.yzl3514.framework.jdbc.core.ResultSetRowMapper;
+import ba.yzl3514.repository.InvoiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -84,7 +82,6 @@ public class InvoiceJdbcRepositoryImpl implements InvoiceRepository {
 
     @Override
     public Invoice save(Invoice entity) {
-        logger.info("save method ");
         return jdbcTemplate.execute(connection -> connection.prepareStatement(SQL_INSERT,
                 Statement.RETURN_GENERATED_KEYS), statement -> {
             statement.setLong(1, entity.getVendorId());
@@ -108,40 +105,32 @@ public class InvoiceJdbcRepositoryImpl implements InvoiceRepository {
 
     @Override
     public List<Invoice> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, new InvoiceResultSetExtractor());
+        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
     }
 
     @Override
     public Optional<Invoice> findById(Long id) {
-        return Optional.empty();
+        return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, rowMapper, id);
     }
-
 
     @Override
     public boolean deleteById(Long id) {
-        return false;
+        return jdbcTemplate.update(SQL_DELETE_BY_ID, id) > 0;
     }
 
-
-    private static class InvoiceResultSetExtractor implements ResultSetExtractor<List<Invoice>> {
-
-        @Override
-        public List<Invoice> extract(ResultSet resultSet) throws SQLException {
-            List<Invoice> invoices = new ArrayList<>();
-            while (resultSet.next()) {
-                Invoice invoice = new Invoice();
-                invoice.setId(resultSet.getLong("invoice_id"));
-                invoice.setInvoiceNumber(resultSet.getString("invoice_number"));
-                invoice.setInvoiceTotal(resultSet.getBigDecimal("invoice_total"));
-                invoice.setInvoiceDate(resultSet.getObject("invoice_date", LocalDate.class));
-                invoice.setPaymentDate(resultSet.getObject("payment_date",LocalDate.class));
-                invoice.setCreditTotal(resultSet.getBigDecimal("credit_total"));
-                invoice.setVendorId(resultSet.getLong("vendor_id"));
-                invoice.setInvoiceDueDate(resultSet.getObject("invoice_due_date",LocalDate.class));
-                invoice.setTermsId(resultSet.getLong("terms_id"));
-                invoices.add(invoice);
-            }
-            return invoices;
-        }
-    }
+    private final ResultSetRowMapper<Invoice> rowMapper = (resultSet, rowNumber) -> {
+        Invoice invoice = new Invoice();
+        invoice.setId(resultSet.getLong("invoice_id"));
+        invoice.setInvoiceNumber(resultSet.getString("invoice_number"));
+        invoice.setInvoiceTotal(resultSet.getBigDecimal("invoice_total"));
+        //invoice.setInvoiceDate(resultSet.getDate("invoice_date").toLocalDate());
+        invoice.setInvoiceDate(resultSet.getObject("invoice_date", LocalDate.class));
+        invoice.setPaymentDate(resultSet.getObject("payment_date", LocalDate.class));
+        invoice.setCreditTotal(resultSet.getBigDecimal("credit_total"));
+        invoice.setVendorId(resultSet.getLong("vendor_id"));
+        invoice.setPaymentTotal(resultSet.getBigDecimal("payment_total"));
+        invoice.setInvoiceDueDate(resultSet.getObject("invoice_due_date", LocalDate.class));
+        invoice.setTermsId(resultSet.getLong("terms_id"));
+        return invoice;
+    };
 }

@@ -1,7 +1,7 @@
 package ba.yzl3514.repository;
 
 import ba.yzl3514.domain.Invoice;
-import ba.yzl3514.jdbc.repository.CrudRepository;
+import ba.yzl3514.framework.jdbc.repository.CrudRepository;
 
 /**
  *

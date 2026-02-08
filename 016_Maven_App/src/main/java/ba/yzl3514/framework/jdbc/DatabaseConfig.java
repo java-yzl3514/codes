@@ -1,4 +1,4 @@
-package ba.yzl3514.jdbc;
+package ba.yzl3514.framework.jdbc;
 
 /**
  *

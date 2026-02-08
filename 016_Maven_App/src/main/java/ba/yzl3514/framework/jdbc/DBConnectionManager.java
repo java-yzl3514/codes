@@ -1,4 +1,4 @@
-package ba.yzl3514.jdbc;
+package ba.yzl3514.framework.jdbc;
 
 import ba.yzl3514.framework.ConfigLoader;
 import com.zaxxer.hikari.HikariConfig;
@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Properties;
 
 /**

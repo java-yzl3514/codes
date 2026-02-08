@@ -1,14 +1,14 @@
-package ba.yzl3514.jdbc.core;
+package ba.yzl3514.framework.jdbc.core;
 
+import ba.yzl3514.framework.CollectionUtils;
 import ba.yzl3514.framework.DatasourceUtil;
-import ba.yzl3514.framework.JDBCUtil;
 import ba.yzl3514.framework.exception.SQLWarningException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.Objects;
+import java.util.*;
 
 /**
  *
@@ -62,6 +62,10 @@ public class JdbcTemplate {
         }
     }
 
+    /**
+     *
+     * @param sql
+     */
     public void execute(String sql) {
         Objects.requireNonNull(sql, "SQL must not be null");
         // <check> debugging
@@ -78,6 +82,13 @@ public class JdbcTemplate {
     }
 
 
+    /**
+     *
+     * @param sql
+     * @param resultSetExtractor
+     * @return
+     * @param <T>
+     */
     public <T> T query(String sql, ResultSetExtractor<T> resultSetExtractor) {
         Objects.requireNonNull(sql, "SQL must not be null");
         Objects.requireNonNull(resultSetExtractor, "ResultSetExtractor must not be null");
@@ -99,6 +110,36 @@ public class JdbcTemplate {
         return execute(new LocalQueryStatementAction());
     }
 
+    /**
+     *
+     * @param preparedStatementCreator
+     * @param preparedStatementSetter
+     * @return
+     */
+    public int update(PreparedStatementCreator preparedStatementCreator, PreparedStatementSetter preparedStatementSetter) {
+        Objects.requireNonNull(preparedStatementCreator, "PreparedStatementCreator must not be null");
+        Objects.requireNonNull(preparedStatementSetter, "PreparedStatementSetter must not be null");
+        return execute(preparedStatementCreator, preparedStatement -> {
+            try{
+                preparedStatementSetter.setValues(preparedStatement);
+                return preparedStatement.executeUpdate();
+            }finally {
+                // preparedStatement.clearParameters();
+            }
+        });
+    }
+
+    /**
+     *
+     * @param sql
+     * @param args
+     * @return
+     */
+    public int update(String sql, Object... args) {
+        Objects.requireNonNull(sql, "Sql must not be null");
+        Objects.requireNonNull(args, "args must not be null");
+        return update(connection -> connection.prepareStatement(sql), new PreparedStatementArgumentSetter(args));
+    }
 
     public int update(String sql) {
         Objects.requireNonNull(sql, "SQL must not be null");
@@ -116,6 +157,13 @@ public class JdbcTemplate {
         return execute(new LocalUpdateStatementAction());
     }
 
+    /**
+     *
+     * @param preparedStatementCreator
+     * @param action
+     * @return
+     * @param <T>
+     */
     public <T> T execute(PreparedStatementCreator preparedStatementCreator, PreparedStatementAction<T> action) {
         Objects.requireNonNull(preparedStatementCreator, "PreparedStatementCreator must not be null");
         Objects.requireNonNull(action, "PreparedStatementAction must not be null");
@@ -142,12 +190,27 @@ public class JdbcTemplate {
         }
     }
 
+    /**
+     *
+     * @param sql
+     * @param action
+     * @return
+     * @param <T>
+     */
     public <T> T execute(String sql, PreparedStatementAction<T> action) {
         Objects.requireNonNull(sql, "SQL must not be null");
         return execute((connection) -> connection.prepareStatement(sql), action);
     }
 
 
+    /**
+     *
+     * @param preparedStatementCreator
+     * @param preparedStatementSetter
+     * @param resultSetExtractor
+     * @return
+     * @param <T>
+     */
     public <T> T query(PreparedStatementCreator preparedStatementCreator, PreparedStatementSetter preparedStatementSetter, ResultSetExtractor<T> resultSetExtractor) {
         Objects.requireNonNull(preparedStatementCreator, "PreparedStatementCreator must not be null");
         Objects.requireNonNull(preparedStatementSetter, "PreparedStatementSetter must not be null");
@@ -164,11 +227,34 @@ public class JdbcTemplate {
         });
     }
 
+    /**
+     *
+     * @param sql
+     * @param preparedStatementSetter
+     * @param resultSetExtractor
+     * @return
+     * @param <T>
+     */
     public <T> T query(String sql, PreparedStatementSetter preparedStatementSetter, ResultSetExtractor<T> resultSetExtractor) {
         Objects.requireNonNull(sql, "SQL must not be null");
-        return query((connection) -> connection.prepareStatement(sql),preparedStatementSetter,resultSetExtractor);
+        return query((connection) -> connection.prepareStatement(sql), preparedStatementSetter, resultSetExtractor);
     }
 
+    public <T> List<T> query(String sql, PreparedStatementSetter preparedStatementSetter, ResultSetRowMapper<T> rowMapper) {
+        return query(sql, preparedStatementSetter, new RowMapperResultSetExtractor<T>(rowMapper));
+    }
+
+    public <T> List<T> query(String sql, ResultSetRowMapper<T> rowMapper) {
+        return query(sql, new RowMapperResultSetExtractor<>(rowMapper));
+    }
+
+    public <T> Optional<T> queryForObject(String sql, ResultSetRowMapper<T> rowMapper, Object... args) {
+        List<T> results = query(sql, new PreparedStatementArgumentSetter(args), new RowMapperResultSetExtractor<>(rowMapper));
+        Iterator<T> iterator = results.iterator();
+        T result = iterator.hasNext() ? iterator.next() : null;
+        if (iterator.hasNext()) throw new RuntimeException("Illegal result size");
+        return Optional.ofNullable(result);
+    }
 
     private void configureStatement(Statement statement) throws SQLException {
         if (fetchSize != -1) {
@@ -176,7 +262,6 @@ public class JdbcTemplate {
         }
         // max row
     }
-
 
     private void handleWarnings(Statement statement, SQLException exception) {
         try {

@@ -98,7 +98,8 @@ public class Invoice extends AbstractEntity<Long> {
     @Override
     public String toString() {
         return "Invoice{" +
-                "invoiceNumber='" + invoiceNumber + '\'' +
+                "invoice_id=" + getId() +
+                ", invoiceNumber='" + invoiceNumber + '\'' +
                 ", invoiceDate=" + invoiceDate +
                 ", invoiceTotal=" + invoiceTotal +
                 ", paymentTotal=" + paymentTotal +

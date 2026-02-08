@@ -1,9 +1,11 @@
 package ba.yzl3514.framework;
 
+import ba.yzl3514.app.InvoiceDeleteByIdCase;
 import ba.yzl3514.app.InvoiceFindAllCase;
-import ba.yzl3514.jdbc.DBConnectionManager;
-import ba.yzl3514.jdbc.core.JdbcTemplate;
-import ba.yzl3514.repository.InvoiceJdbcRepositoryImpl;
+import ba.yzl3514.app.InvoiceFindByIdCase;
+import ba.yzl3514.framework.jdbc.DBConnectionManager;
+import ba.yzl3514.framework.jdbc.core.JdbcTemplate;
+import ba.yzl3514.repository.impl.InvoiceJdbcRepositoryImpl;
 import ba.yzl3514.repository.InvoiceRepository;
 import ba.yzl3514.service.InvoiceService;
 import org.slf4j.Logger;
@@ -48,7 +50,7 @@ public class Framework {
             InvoiceRepository invoiceRepository = new InvoiceJdbcRepositoryImpl(jdbcTemplate);
             InvoiceService invoiceService = new InvoiceService(invoiceRepository);
 
-            ApplicationRunner runner = new InvoiceFindAllCase(invoiceService);
+            ApplicationRunner runner = new InvoiceDeleteByIdCase(invoiceService);
             runner.run();
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {

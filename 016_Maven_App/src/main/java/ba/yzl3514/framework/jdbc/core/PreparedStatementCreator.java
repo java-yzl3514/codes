@@ -1,4 +1,4 @@
-package ba.yzl3514.jdbc.core;
+package ba.yzl3514.framework.jdbc.core;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

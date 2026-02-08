@@ -1,4 +1,4 @@
-package ba.yzl3514.framework;
+package ba.yzl3514.framework.jdbc.core;
 
 import java.sql.*;
 
@@ -11,6 +11,7 @@ import java.sql.*;
  */
 public class JDBCUtil {
 
+    static final int UNKNOWN_TYPE = Integer.MIN_VALUE;
 
     public static void commit(Connection connection) {
         try {

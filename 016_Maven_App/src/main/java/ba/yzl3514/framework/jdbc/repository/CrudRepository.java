@@ -1,4 +1,4 @@
-package ba.yzl3514.jdbc.repository;
+package ba.yzl3514.framework.jdbc.repository;
 
 import java.util.List;
 import java.util.Optional;
